@@ -1,0 +1,24 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+# IDE's
+**/.idea
+**/.project
+**/*.sublime-*
+**/.vscode
+
+# Operating system
+**/.DS_Store
+**/Thumbs.db
+
+# Visual Studio
+**/.vs
+**/packages
+**/bin
+**/obj
+**/*.DotSettings
+**/*.DotSettings.user
+**/project.lock.json
+**/*.csproj.user
+
