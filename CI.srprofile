@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestProfile xmlns="http://www.specflow.org/schemas/plus/TestProfile/1.5">
+	<Settings projectName="Defra.TestAutomation.Specs" />
+	<Execution stopAfterFailures="0" testThreadCount="15" testSchedulingMode="Random" retryFor="Failing" retryCount="1" />
+	<TestAssemblyPaths>
+		<TestAssemblyPath>Defra.TestAutomation.Specs.dll</TestAssemblyPath>
+	</TestAssemblyPaths>
+	<Report>
+		<Template name="Report\ReportTemplate.cshtml"/>
+	</Report>
+	<VSTest testRetryResults="Unified" passRateAbsolute="1"/>
+</TestProfile>

@@ -1,0 +1,10 @@
+﻿2024-03-05T20:11:41.4684290+00:00;Thread#1;Info;Reading test run result from Json file "C:\Users\748263\AppData\Local\Temp\6e069d0a-fe71-4697-85b7-0409793e5d3a".
+2024-03-05T20:11:41.4684290+00:00;Thread#1;Info;Successfully read test run result from Json file "C:\Users\748263\AppData\Local\Temp\6e069d0a-fe71-4697-85b7-0409793e5d3a"
+2024-03-05T20:11:41.4684290+00:00;Thread#1;Info;Deserializing test run result
+2024-03-05T20:11:41.8011748+00:00;Thread#1;Info;Successfully deserialized test run result
+2024-03-05T20:11:41.8011748+00:00;Thread#1;Info;Loading test run result
+2024-03-05T20:11:41.8170260+00:00;Thread#1;Info;Successfully loaded test run result
+2024-03-05T20:11:41.8170260+00:00;Thread#1;Info;creating 1 report(s)
+2024-03-05T20:11:41.8170260+00:00;Thread#1;Info;generate Report using template C:\AutomationWorkspace\Defra.TestAutomation.Specs\bin\Debug\net461\Report\ReportTemplate.cshtml
+2024-03-05T20:11:43.2992231+00:00;Thread#1;Info;Finished generating reports.
+========== End of log file ==========

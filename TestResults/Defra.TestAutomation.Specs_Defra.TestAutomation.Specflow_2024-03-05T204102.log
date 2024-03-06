@@ -1,0 +1,56 @@
+﻿2024-03-05T20:41:02.5419685+00:00;VSTestExecutionThread;Info;SpecFlow+Runner execution started
+2024-03-05T20:41:02.5419685+00:00;VSTestExecutionThread;Info;SpecFlow+Runner 3.9.7 in Framework clr40 in x64 mode execution started
+2024-03-05T20:41:02.5419685+00:00;VSTestExecutionThread;Info;TestAdapter Location: C:\Users\748263\.nuget\packages\specrun.runner\3.9.7\tools\net461\TechTalk.SpecRun.VisualStudio.TestAdapter.dll
+2024-03-05T20:41:02.5429519+00:00;VSTestExecutionThread;Info;Current UserName: '748263', MachineName: 'LTGB005804'
+2024-03-05T20:41:02.7173475+00:00;VSTestExecutionThread;Info;SpecRun: running tests in C:\AutomationWorkspace\Defra.TestAutomation.Specs\bin\Debug\net461\Defra.TestAutomation.Specs.dll
+2024-03-05T20:41:02.7173475+00:00;VSTestExecutionThread;Info;Output folder configured to "C:\AutomationWorkspace\Defra.TestAutomation.Specs\TestResults" (default)
+2024-03-05T20:41:02.7173475+00:00;VSTestExecutionThread;Info;Profile: Defra.TestAutomation.Specflow
+2024-03-05T20:41:02.7862539+00:00;VSTestExecutionThread;Info;Log file path: C:\AutomationWorkspace\Defra.TestAutomation.Specs\TestResults\Defra.TestAutomation.Specs_Defra.TestAutomation.Specflow_2024-03-05T204102.log
+2024-03-05T20:41:02.7980420+00:00;Thread#15;Info;Checking activation
+2024-03-05T20:41:02.8913613+00:00;Thread#15;Info;Activated.
+2024-03-05T20:41:02.8913613+00:00;Thread#15;Info;Activation check completed
+2024-03-05T20:41:02.8913613+00:00;Thread#15;Info;Starting test run
+2024-03-05T20:41:02.9921240+00:00;Thread#15;Info;Discovering target: Edge
+2024-03-05T20:41:02.9921240+00:00;Thread#15;Info;Discovering tests from assembly: C:\AutomationWorkspace\Defra.TestAutomation.Specs\bin\Debug\net461\Defra.TestAutomation.Specs.dll
+2024-03-05T20:41:03.6051864+00:00;Thread#15;Info;Discovered tests from assembly: C:\AutomationWorkspace\Defra.TestAutomation.Specs\bin\Debug\net461\Defra.TestAutomation.Specs.dll
+2024-03-05T20:41:03.6051864+00:00;Thread#15;Info;Discovering target: Chrome
+2024-03-05T20:41:03.6051864+00:00;Thread#15;Info;Discovering tests from assembly: C:\AutomationWorkspace\Defra.TestAutomation.Specs\bin\Debug\net461\Defra.TestAutomation.Specs.dll
+2024-03-05T20:41:03.7758073+00:00;Thread#15;Info;Discovered tests from assembly: C:\AutomationWorkspace\Defra.TestAutomation.Specs\bin\Debug\net461\Defra.TestAutomation.Specs.dll
+2024-03-05T20:41:03.7758073+00:00;Thread#15;Info;Discovering target: Firefox
+2024-03-05T20:41:03.7758073+00:00;Thread#15;Info;Discovering tests from assembly: C:\AutomationWorkspace\Defra.TestAutomation.Specs\bin\Debug\net461\Defra.TestAutomation.Specs.dll
+2024-03-05T20:41:03.9497686+00:00;Thread#15;Info;Discovered tests from assembly: C:\AutomationWorkspace\Defra.TestAutomation.Specs\bin\Debug\net461\Defra.TestAutomation.Specs.dll
+2024-03-05T20:41:03.9497686+00:00:Test Suite Dump
+2024-03-05T20:41:03.9497686+00:00:#0: Defra.TestAutomation.Specs/Defra.TestAutomation.Specflow - 
+2024-03-05T20:41:03.9497686+00:00:#1: Edge - 
+2024-03-05T20:41:03.9497686+00:00:#9: Chrome - 
+2024-03-05T20:41:03.9497686+00:00:#17: Firefox - 
+2024-03-05T20:41:03.9497686+00:00:#2: Defra.TestAutomation.Specs - 
+2024-03-05T20:41:03.9497686+00:00:#10: Defra.TestAutomation.Specs - 
+2024-03-05T20:41:03.9497686+00:00:#18: Defra.TestAutomation.Specs - 
+2024-03-05T20:41:03.9497686+00:00:#11: LoginTest - 
+2024-03-05T20:41:03.9817011+00:00:#12: Validate Login test for test application 'Chrome' - Target:Chrome/TestAssembly:Defra.TestAutomation.Specs/Feature:LoginTest/Scenario:Validate+Login+test+for+test+application+%27Chrome%27
+2024-03-05T20:41:03.9817011+00:00:End: Test Suite Dump
+2024-03-05T20:41:04.0285341+00:00:Thread#0:Scheduler: get next test for thread 0
+2024-03-05T20:41:04.0285341+00:00:Thread#:Scheduler: testitem #12 from normal test queue 
+2024-03-05T20:41:04.0285341+00:00:Thread#0:Scheduler: considering testitem #12 for thread 0
+2024-03-05T20:41:04.0285341+00:00:Thread#0:TestItem#12:testItemMatchesCurrentTestThread:UnSpecific
+2024-03-05T20:41:04.0285341+00:00:Thread#0:TestItem#12:runsOnOneOtherThreadSpecific:False
+2024-03-05T20:41:04.0285341+00:00:Thread#0:TestItem#12:runsOnOneOtherThreadUnspecific:True
+2024-03-05T20:41:04.0285341+00:00:Thread#0:Scheduler: using testitem #12 for thread 0
+2024-03-05T20:41:04.0285341+00:00:Thread#0:Scheduler: Test #12 is scheduled for thread
+2024-03-05T20:41:04.0285341+00:00:Thread#0:Scheduler: with testItemExecutionIndex 0
+2024-03-05T20:41:04.0285341+00:00:Thread#1:Scheduler: get next test for thread 1
+2024-03-05T20:41:04.0285341+00:00:Thread#:Scheduler: at the end of normal test queue
+2024-03-05T20:41:04.0285341+00:00:Thread#1:Scheduler: enumerator for thread is at end
+2024-03-05T20:41:04.0285341+00:00:Thread#1:Scheduler: No more tests for thread
+2024-03-05T20:41:04.0455904+00:00:Thread #0: creating new test thread executor for Defra.TestAutomation.Specs, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null (target: Chrome)
+2024-03-05T20:41:04.3018719+00:00:Thread #0: Creating test assembly executor for execution model AppDomain
+2024-03-05T20:41:04.3990613+00:00:Thread #0: Creating test assembly executor for execution model AppDomain
+2024-03-05T20:41:04.4020111+00:00:Thread #0: using TechTalk.SpecRun.Framework.Execution.InProcess.InProcAppDomainTestAssemblyExecutorHost to execute tests
+2024-03-05T20:41:07.9682226+00:00:Thread#0:T:-> Loading plugin C:\AutomationWorkspace\Defra.TestAutomation.Specs\bin\Debug\net461\LivingDoc.SpecFlowPlugin.dll
+2024-03-05T20:41:09.4374146+00:00:Thread#0:T:-> Loading plugin C:\AutomationWorkspace\Defra.TestAutomation.Specs\bin\Debug\net461\SpecRun.Runtime.SpecFlowPlugin.dll
+2024-03-05T20:41:09.4533568+00:00:Thread#0:T:-> Loading plugin C:\AutomationWorkspace\Defra.TestAutomation.Specs\bin\Debug\net461\Defra.TestAutomation.Specs.dll
+2024-03-05T20:41:09.4533568+00:00:Thread#0:T:-> Missing [assembly:RuntimePlugin] attribute in Defra.TestAutomation.Specs, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null. Please check https://go.specflow.org/doc-plugins for details.
+2024-03-05T20:41:09.4533568+00:00:Thread#0:T:-> Using default config
+2024-03-05T20:41:14.6891918+00:00:Thread#0: Test #12/0 is started on thread #0
+2024-03-05T20:41:21.0343173+00:00:Thread#0:B:Given User open the url "chrome://settings/cookies"
