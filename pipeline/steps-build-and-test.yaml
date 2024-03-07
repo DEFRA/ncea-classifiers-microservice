@@ -1,0 +1,56 @@
+steps:
+
+  - task: UseDotNet@2
+    inputs:
+      version: '5.x'
+
+  - task: SonarCloudPrepare@1
+    displayName: 'Prepare analysis on SonarCloud'
+    inputs:
+      SonarCloud: 'defra-sonarcloud'
+      organization: 'ncea-test-automation'
+      projectKey: 'DEFRA_ncea-test-automation'
+      projectName: '$(sonarProjectNameEnricher)'
+      extraProperties: |
+          sonar.exclusions=**/obj/**,**/*.dll,**/*.xml,**/*.yaml,**/DockerFile
+          sonar.coverage.exclusions=**/*.xml,**/*.yaml,**/DockerFile,**/Program.cs
+          sonar.dotnet.excludeGeneratedCode=true
+          sonar.cs.opencover.reportsPaths=$(Agent.TempDirectory)/*/coverage.opencover.xml
+          sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)/*.trx
+
+  - task: DotNetCoreCLI@2
+    displayName: Restore
+    inputs:
+      command: restore
+      projects: '**/*.sln'
+      feedsToUse: 'select'
+
+  - task: DotNetCoreCLI@2
+    displayName: 'dotnet build'
+    inputs:
+      command: 'build'
+      configuration: $(buildConfiguration)
+      projects: '**/*.sln'
+
+  - task: DotNetCoreCLI@2
+    displayName: 'dotnet test'
+    inputs:
+      command: 'test'
+      arguments: '--configuration $(buildConfiguration) --collect:"XPlat Code Coverage" -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=cobertura,opencover'
+      publishTestResults: true
+      projects: '**/*.tests.csproj'
+
+  - task: PublishCodeCoverageResults@1
+    displayName: 'Publish code coverage report'
+    condition: succeededOrFailed()
+    inputs:
+      codeCoverageTool: 'Cobertura'
+      summaryFileLocation: '$(Agent.TempDirectory)/**/coverage.cobertura.xml'
+
+  - task: SonarCloudAnalyze@1
+    displayName: 'Run Code Analysis'
+
+  - task: SonarCloudPublish@1
+    displayName: 'Publish Quality Gate Result'
+    inputs:
+      pollingTimeoutSec: '300'

@@ -29,7 +29,7 @@ namespace Defra.TestAutomation.Specs.FrameworkUtilities
         [ThreadStatic]
         public static ExtentSparkReporter? _extentSparkReportMerger;
 
-        public static string rootFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        public static string rootFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
         public static string testResultPath = Path.Combine(rootFolder, "TestResults");
 
         protected ExtentReporter()

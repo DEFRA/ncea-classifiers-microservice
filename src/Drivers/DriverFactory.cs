@@ -15,7 +15,7 @@ namespace Defra.TestAutomation.Specs.Drivers
             if (_driver == null)
             {
                 var browserType = ConfigurationManager.AppSettings["Browser"];
-                _driver = CreateWebDriverInstance(browserType);
+                _driver = CreateWebDriverInstance(browserType!);
                 _driver.Manage().Window.Maximize();
             }
             return _driver;

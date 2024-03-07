@@ -15,8 +15,8 @@ namespace Defra.TestAutomation.Specs.FrameworkUtilities
         }
 
         /*** Timeout Declaration ***/
-        public static readonly double timeOutInSeconds = double.Parse(ConfigurationManager.AppSettings["ObjectSyncTimeout"]);
-        public static readonly double pageTimeOutInSeconds = double.Parse(ConfigurationManager.AppSettings["PageLoadTimeout"]);
+        public static readonly double timeOutInSeconds = double.Parse(ConfigurationManager.AppSettings["ObjectSyncTimeout"]!);
+        public static readonly double pageTimeOutInSeconds = double.Parse(ConfigurationManager.AppSettings["PageLoadTimeout"]!);
 
         /// <summary>
         ///  Function to input the value using sendkeys   

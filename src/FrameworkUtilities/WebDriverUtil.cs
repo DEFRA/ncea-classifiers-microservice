@@ -13,9 +13,9 @@ namespace Defra.TestAutomation.Specs.FrameworkUtilities
         }
 
         /*** Timeouts Declaration ***/
-        public static readonly double pageloadTimeout = double.Parse(ConfigurationManager.AppSettings["PageLoadTimeout"]);
-        public static readonly double invisibilityTimeout = double.Parse(ConfigurationManager.AppSettings["InvisibilityTimeout"]);
-        public static readonly double StaleTimeout = double.Parse(ConfigurationManager.AppSettings["StaleTimeout"]);
+        public static readonly double pageloadTimeout = double.Parse(ConfigurationManager.AppSettings["PageLoadTimeout"]!);
+        public static readonly double invisibilityTimeout = double.Parse(ConfigurationManager.AppSettings["InvisibilityTimeout"]!);
+        public static readonly double StaleTimeout = double.Parse(ConfigurationManager.AppSettings["StaleTimeout"]!);
 
         /// <summary>
         /// Function to pause the execution for the specified time period
