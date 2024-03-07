@@ -1,12 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
+  
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net481</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-	<LangVersion>preview</LangVersion>
-	<SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
-	<OutputType>Library</OutputType>
+    <LangVersion>preview</LangVersion>
+    <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
   </PropertyGroup>
 
   <ItemGroup>

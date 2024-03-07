@@ -7,6 +7,14 @@ trigger:
       - main
       - feature/*
 
+variables:
+  - name: solution
+    value: '**/*.sln'
+  - name: buildPlatform
+    value: Any CPU
+  - name: buildConfiguration
+    value: Release
+
 stages:
 - stage: 'Build'
   displayName: 'Build Test Automation'
