@@ -1,0 +1,29 @@
+
+name: $(Date:yyyyMMdd)$(Rev:.r)
+
+trigger:
+  branches:
+    include:
+      - main
+      - feature/*
+
+variables:
+  - name: solution
+    value: '**/*.sln'
+  - name: buildPlatform
+    value: Any CPU
+  - name: buildConfiguration
+    value: Release
+
+stages:
+- stage: 'Build'
+  displayName: 'Build Test Automation'
+  jobs: 
+  - job: 'Build'
+    displayName: 'Build job'
+    pool:
+      vmImage: 'windows-latest'
+    variables:
+      - template: templates/variables-build.yml      
+    steps:
+      - template: steps-build-and-test.yaml

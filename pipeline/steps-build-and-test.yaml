@@ -1,0 +1,38 @@
+steps:
+
+  - task: SonarCloudPrepare@1
+    displayName: 'Prepare analysis on SonarCloud'
+    inputs:
+      SonarCloud: 'defra-sonarcloud'
+      organization: '$(sonarCloudOrganization)'
+      projectKey: 'DEFRA_ncea-test-automation'
+      projectName: 'ncea-test-automation'
+      extraProperties: |
+          sonar.exclusions=**/obj/**,**/*.dll,**/*.xml,**/*.yaml,**/DockerFile
+          sonar.coverage.exclusions=**/*.xml,**/*.yaml,**/DockerFile,**/Program.cs
+          sonar.dotnet.excludeGeneratedCode=true
+          sonar.cs.opencover.reportsPaths=$(Agent.TempDirectory)/*/coverage.opencover.xml
+          sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)/*.trx
+
+  - task: NuGetToolInstaller@1
+    displayName: Install NuGet
+
+  - task: NuGetCommand@2
+    displayName: NuGet restore
+    inputs:
+      restoreSolution: $(solution)
+
+  - task: VSBuild@1
+    displayName: Build solution
+    inputs:
+      solution: $(solution)
+      platform: $(buildPlatform)
+      configuration: $(buildConfiguration)
+
+  - task: SonarCloudAnalyze@1
+    displayName: 'Run Code Analysis'
+
+  - task: SonarCloudPublish@1
+    displayName: 'Publish Quality Gate Result'
+    inputs:
+      pollingTimeoutSec: '300'
