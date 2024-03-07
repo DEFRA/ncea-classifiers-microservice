@@ -9,7 +9,7 @@ trigger:
 
 stages:
 - stage: 'Build'
-  displayName: 'Build Enricher Service'
+  displayName: 'Build Test Automation'
   jobs: 
   - job: 'Build'
     displayName: 'Build job'
