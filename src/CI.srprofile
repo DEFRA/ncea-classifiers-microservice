@@ -5,7 +5,36 @@
 	<TestAssemblyPaths>
 		<TestAssemblyPath>Defra.TestAutomation.Specs.dll</TestAssemblyPath>
 	</TestAssemblyPaths>
-	<Report>
+  <Targets>
+    <Target name="Edge">
+      <Filter>Browser_Edge</Filter>
+    </Target>
+    <Target name="Chrome">
+      <Filter>Browser_Chrome</Filter>
+    </Target>
+    <Target name="Firefox">
+      <Filter>Browser_Firefox</Filter>
+    </Target>
+  </Targets>
+  <DeploymentTransformation>
+    <Steps>
+      <RelocateConfigurationFile target="Defra.TestAutomation.Specs.dll.{TestThreadId}.config" />
+      <ConfigFileTransformation configFile="app.config">
+        <Transformation>
+          <![CDATA[<?xml version="1.0" encoding="utf-8"?>
+					<configuration xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
+					  <appSettings>
+						<add key="Browser" value="{Target}"
+						xdt:Locator="Match(key)"
+						xdt:Transform="SetAttributes(value)" />
+					  </appSettings>
+					</configuration>
+				  ]]>
+        </Transformation>
+      </ConfigFileTransformation>
+    </Steps>
+  </DeploymentTransformation>
+  <Report>
 		<Template name="Report\ReportTemplate.cshtml"/>
 	</Report>
 	<VSTest testRetryResults="Unified" passRateAbsolute="1"/>
