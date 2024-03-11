@@ -36,3 +36,9 @@ steps:
     displayName: 'Publish Quality Gate Result'
     inputs:
       pollingTimeoutSec: '300'
+
+  - task: PublishPipelineArtifact@1
+    condition: and(succeeded(), or(eq(variables['isMain'], 'true'), eq(variables['isPullRequest'], 'true')))
+    inputs:
+      targetPath: $(Build.SourcesDirectory)/src/bin/$(buildConfiguration)/net481
+      artifactName: tests
