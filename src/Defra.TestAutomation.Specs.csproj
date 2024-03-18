@@ -27,7 +27,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update=".runsettings">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="App.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="CI.srprofile">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Default.srprofile">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Defra.TestAutomation.Specs.dll.config">
