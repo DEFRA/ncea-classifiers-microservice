@@ -33,6 +33,9 @@
     <None Update="App.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="CI.runsettings">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="CI.srprofile">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
