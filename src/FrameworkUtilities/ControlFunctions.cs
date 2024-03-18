@@ -39,11 +39,6 @@ namespace Defra.TestAutomation.Specs.FrameworkUtilities
                         try
                         {
                             _driver?.FindElement(locator).SendKeys(Text);
-                            Assert.Pass($"User entered the value '{Text}' for '{elementName}' on '{pageName}'");
-                        }
-                        catch (SuccessException)
-                        {
-                            //no exception to be thrown
                         }
                         catch (Exception e)
                         {
@@ -79,8 +74,7 @@ namespace Defra.TestAutomation.Specs.FrameworkUtilities
                     {
                         try
                         {
-                            _driver?.FindElement(locator).Click();
-                            Assert.Pass($"'{elementName}' in '{pageName}' is clicked successfully");
+                            _driver?.FindElement(locator).Click();                            
                         }
                         catch (Exception e)
                         {

@@ -35,12 +35,9 @@ namespace Defra.TestAutomation.Specs.StepDefinitions
         {
             string url = ConfigReader.ReadConfig(URLType);
             _driver?.Navigate().GoToUrl(url);
-            if (_ctrlFunc.objectExists(HomePage.SearchTextBox, "isDisplayed", timeOutInSeconds, HomePage.TxtSearch, HomePage.pgeHome))
+            if (!(_ctrlFunc.objectExists(HomePage.SearchTextBox, "isDisplayed", timeOutInSeconds, HomePage.TxtSearch, HomePage.pgeHome)))
             {
-                Assert.That(true, "User landed onto Home page successfully");
-            }else
-            {
-                throw new Exception($"Home Page is not displayed after launching the URL - '{url}'");
+                Assert.Fail($"User is not navigated to Home Page by launching the URL - '{url}'");
             }
         }
 
