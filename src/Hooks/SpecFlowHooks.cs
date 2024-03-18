@@ -2,15 +2,19 @@
 using AventStack.ExtentReports.Gherkin.Model;
 using Defra.TestAutomation.Specs.Drivers;
 using Defra.TestAutomation.Specs.FrameworkUtilities;
+using NUnit.Framework;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using TechTalk.SpecFlow.Infrastructure;
 
 namespace Defra.TestAutomation.Specs.Hooks
 {
     [Binding]
+    [Parallelizable]
     public class SpecFlowHooks : ExtentReporter
     {
         private readonly DriverFactory _driverFactory;
-        private readonly IWebDriver _driver;
+        private IWebDriver? _driver;
         private readonly ScenarioContext _scenarioContext;
         public static readonly object _lockObject = new object();
         public static string PassStatus = "PASS";
@@ -19,25 +23,32 @@ namespace Defra.TestAutomation.Specs.Hooks
         public SpecFlowHooks(DriverFactory driverFactory, ScenarioContext scenarioContext)
         {
             _driverFactory = driverFactory;
-            _driver = driverFactory.GetWebDriver();
             _scenarioContext = scenarioContext;
         }
 
         [BeforeTestRun]
         public static void BeforeTestRun()
         {
-            /*** Initialize the Extent Reports before the Test Runs ***/
-            lock (_lockObject)
-            {
-                InitExtentReport();
-            }
+            InitExtentReport();
         }
 
         [BeforeScenario]
         public void BeforeScenario(ScenarioContext scenarioContext)
         {
-            _driverFactory.GetWebDriver();
             _extentTestScenario = _extentTestFeature?.CreateNode<Scenario>(scenarioContext.ScenarioInfo.Title);
+        }
+
+        [BeforeScenario("Chrome")]
+        public void BeforeChromeScenario()
+        {
+            
+            _driver = _driverFactory.GetWebDriver("Chrome");
+        }
+
+        [BeforeScenario("Edge")]
+        public void BeforeEdgeScenario()
+        {
+            _driver = _driverFactory.GetWebDriver("Edge");
         }
 
         [BeforeFeature]
@@ -127,10 +138,7 @@ namespace Defra.TestAutomation.Specs.Hooks
         public static void AfterTestRun()
         {
             /*** Flush the extent report ***/
-            lock (_lockObject)
-            {
-                FlushExtentReport();
-            }
+            FlushExtentReport();
             FlushConsolidateReport();
         }
 
@@ -146,7 +154,7 @@ namespace Defra.TestAutomation.Specs.Hooks
         /// <returns>Screenshot Location Path</returns>
         public string addScreenshot()
         {
-            ITakesScreenshot takesScreenshot = (ITakesScreenshot)_driver;
+            ITakesScreenshot takesScreenshot = (ITakesScreenshot)_driver!;
             Screenshot screenshot = takesScreenshot.GetScreenshot();
             string timeStamp = DateTime.Now.ToString("yyyyMMddHHmmssfff");
             string screenshotName = $"screenShotName_{timeStamp}";
@@ -257,6 +265,11 @@ namespace Defra.TestAutomation.Specs.Hooks
                     _extentTestScenario?.CreateNode<But>(stepName).Fail(ReportDescription, MediaEntityBuilder.CreateScreenCaptureFromPath(screenshotLocation).Build());
                 }
             }
+        }
+
+        public ExtentTest GetExtentTest()
+        {
+            return _extentTestFeature!;
         }
     }
 }

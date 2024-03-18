@@ -1,21 +1,28 @@
-﻿using OpenQA.Selenium.DevTools;
+﻿using NUnit.Framework;
+using OpenQA.Selenium.DevTools;
 
 namespace Defra.TestAutomation.Specs.Drivers
 {
+    [Binding]
+    [Parallelizable]
     public class DriverFactory
     {
         public IWebDriver? _driver;
+
+        public IWebDriver? GetWebDriver()
+        {
+            return _driver;
+        }
 
         /// <summary>
         /// Function to get driver instance
         /// </summary>
         /// <returns></returns>
-        public IWebDriver GetWebDriver()
+        public IWebDriver GetWebDriver(string browserType)
         {
             if (_driver == null)
             {
-                var browserType = ConfigurationManager.AppSettings["Browser"];
-                _driver = CreateWebDriverInstance(browserType!);
+                _driver = CreateWebDriverInstance(browserType);
                 _driver.Manage().Window.Maximize();
             }
             return _driver;
@@ -32,8 +39,6 @@ namespace Defra.TestAutomation.Specs.Drivers
             switch (browserType)
             {
                 case "Chrome":
-                    
-
                     new WebDriverManager.DriverManager().SetUpDriver(new ChromeConfig(), VersionResolveStrategy.MatchingBrowser);
                     ChromeOptions options = new();
                     options.AddArgument("no-sandbox");

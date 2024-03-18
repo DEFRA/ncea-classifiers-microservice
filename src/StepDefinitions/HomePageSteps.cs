@@ -2,28 +2,23 @@
 using Defra.TestAutomation.Specs.FrameworkUtilities;
 using Defra.TestAutomation.Specs.PageObjects;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Defra.TestAutomation.Specs.StepDefinitions
 {
     [Binding]
     [Parallelizable]
-    public sealed class LoginSteps
+    public sealed class HomePageSteps
     {
         /****** Section Start: Common to all Step Defn.class files *******/
 
         /// <summary>
         /// Please copy the entire section from Start to End during creation of new step definition files and rename the constructor name to actual class name
         /// </summary>
-        
+
         private readonly IWebDriver? _driver;
         private readonly ControlFunctions _ctrlFunc;
-        
-        public LoginSteps(DriverFactory driverFactory, ControlFunctions ctrlFunc, WebDriverUtil webDriverUtil)
+
+        public HomePageSteps(DriverFactory driverFactory, ControlFunctions ctrlFunc, WebDriverUtil webDriverUtil)
         {
             _driver = driverFactory.GetWebDriver();
             _ctrlFunc = ctrlFunc;
@@ -35,25 +30,32 @@ namespace Defra.TestAutomation.Specs.StepDefinitions
 
         /****** Section End *******/
 
-        [Given(@"User open the url ""([^""]*)""")]
-        public void GivenUserOpenTheUrl(string URLType)
+        [Given(@"User navigate to homepage by launching ""([^""]*)""")]
+        public void GivenUserNavigateToHomepageByLaunching(string URLType)
         {
             string url = ConfigReader.ReadConfig(URLType);
             _driver?.Navigate().GoToUrl(url);
-            _ctrlFunc.click(LoginPage.AcceptTandC, timeOutInSeconds, "Search Bar", "Google Home Page");
+            if (_ctrlFunc.objectExists(HomePage.SearchTextBox, "isDisplayed", timeOutInSeconds, HomePage.TxtSearch, HomePage.pgeHome))
+            {
+                Assert.That(true, "User landed onto Home page successfully");
+            }else
+            {
+                throw new Exception($"Home Page is not displayed after launching the URL - '{url}'");
+            }
         }
 
-        [When(@"the user enters search term ""([^""]*)"" and clicks search button")]
-        public void WhenTheUserEntersSearchTermAndClicksSearchButton(string strSearchText)
+        [When(@"user enters search term less than four characters ""([^""]*)"" excluding separators")]
+        public void WhenUserEntersSearchTermLessThanFourCharactersExcludingSeparators(string TextInput)
         {
-            _ctrlFunc.sendKeys(LoginPage.SearchTextBox, timeOutInSeconds, strSearchText, "Search Text", "Google Home Page");
+            _ctrlFunc.sendKeys(HomePage.SearchTextBox, timeOutInSeconds, TextInput, HomePage.TxtSearch, HomePage.pgeHome);
         }
 
-        [Then(@"the search results page is displayed")]
-        public void ThenTheSearchResultsPageIsDisplayed()
+        [Then(@"user observes the dormant behavior of search button")]
+        public void ThenUserObservesTheDormantBehaviorOfSearchButton()
         {
-            _ctrlFunc.click(LoginPage.SearchButton, timeOutInSeconds, "Search Button", "Google Home Page");
+            //Method
         }
+
 
     }
 }

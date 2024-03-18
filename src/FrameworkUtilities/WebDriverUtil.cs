@@ -1,11 +1,13 @@
 ﻿using Defra.TestAutomation.Specs.Drivers;
+using NUnit.Framework;
 
 namespace Defra.TestAutomation.Specs.FrameworkUtilities
 {
     [Binding]
+    [Parallelizable]
     public sealed class WebDriverUtil
     {
-        private readonly IWebDriver _driver;
+        private readonly IWebDriver? _driver;
 
         public WebDriverUtil(DriverFactory driverFactory)
         {
@@ -13,9 +15,9 @@ namespace Defra.TestAutomation.Specs.FrameworkUtilities
         }
 
         /*** Timeouts Declaration ***/
-        public static readonly double pageloadTimeout = double.Parse(ConfigurationManager.AppSettings["PageLoadTimeout"]!);
-        public static readonly double invisibilityTimeout = double.Parse(ConfigurationManager.AppSettings["InvisibilityTimeout"]!);
-        public static readonly double StaleTimeout = double.Parse(ConfigurationManager.AppSettings["StaleTimeout"]!);
+        public static readonly double pageloadTimeout = double.Parse(ConfigReader.ReadConfig("PageLoadTimeout"));
+        public static readonly double invisibilityTimeout = double.Parse(ConfigReader.ReadConfig("InvisibilityTimeout"));
+        public static readonly double StaleTimeout = double.Parse(ConfigReader.ReadConfig("StaleTimeout"));
 
         /// <summary>
         /// Function to pause the execution for the specified time period
@@ -24,7 +26,7 @@ namespace Defra.TestAutomation.Specs.FrameworkUtilities
         /// <param name="elementName"></param>
         /// <param name="elementType"></param>
         /// <exception cref="Exception"></exception>
-        public void waitFor(int milliSeconds, string elementName, string pageName)
+        public void WaitFor(int milliSeconds, string elementName, string pageName)
         {
             try
             {
@@ -45,7 +47,7 @@ namespace Defra.TestAutomation.Specs.FrameworkUtilities
         /// <param name="pageName"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public bool waitUntilElementLocated(By locator, double timeOutInSeconds, string elementName, string pageName)
+        public bool WaitUntilElementLocated(By locator, double timeOutInSeconds, string elementName, string pageName)
         {
             try
             {
@@ -67,7 +69,7 @@ namespace Defra.TestAutomation.Specs.FrameworkUtilities
         /// <param name="pageName"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public bool waitUntilElementToBeClickable(By locator, double timeOutInSeconds, string elementName, string pageName)
+        public bool WaitUntilElementToBeClickable(By locator, double timeOutInSeconds, string elementName, string pageName)
         {
             try
             {
@@ -89,7 +91,7 @@ namespace Defra.TestAutomation.Specs.FrameworkUtilities
         /// <param name="pageName"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public bool waitUntilElementVisible(By locator, double timeOutInSeconds, string elementName, string pageName)
+        public bool WaitUntilElementVisible(By locator, double timeOutInSeconds, string elementName, string pageName)
         {
             try
             {
@@ -111,7 +113,7 @@ namespace Defra.TestAutomation.Specs.FrameworkUtilities
         /// <param name="pageName"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public bool waitUntilElementInVisible(By locator, double timeOutInSeconds, string elementName, string pageName)
+        public bool WaitUntilElementInVisible(By locator, double timeOutInSeconds, string elementName, string pageName)
         {
             try
             {
@@ -132,7 +134,7 @@ namespace Defra.TestAutomation.Specs.FrameworkUtilities
         /// <param name="pageName"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public bool waitUntilElementInVisible(By locator, string elementName, string pageName)
+        public bool WaitUntilElementInVisible(By locator, string elementName, string pageName)
         {
             try
             {
@@ -151,11 +153,11 @@ namespace Defra.TestAutomation.Specs.FrameworkUtilities
         /// <param name="locator"></param>
         /// <param name="elementName"></param>
         /// <param name="pageName"></param>
-        public void waitUntilStalenessOfElement(By locator, string elementName, string pageName)
+        public void WaitUntilStalenessOfElement(By locator, string elementName, string pageName)
         {
             try
             {
-                IWebElement webElement = _driver.FindElement(locator);
+                IWebElement webElement = _driver!.FindElement(locator);
                 new WebDriverWait(_driver, TimeSpan.FromSeconds(StaleTimeout)).Until(ExpectedConditions.StalenessOf(webElement));
             }
             catch (Exception)
@@ -170,7 +172,7 @@ namespace Defra.TestAutomation.Specs.FrameworkUtilities
         /// <param name="element"></param>
         /// <param name="elementName"></param>
         /// <param name="pageName"></param>
-        public void waitUntilStalenessOfElement(IWebElement element, string elementName, string pageName)
+        public void WaitUntilStalenessOfElement(IWebElement element, string elementName, string pageName)
         {
             try
             {
@@ -189,11 +191,11 @@ namespace Defra.TestAutomation.Specs.FrameworkUtilities
         /// <param name="StaleTimeoutInSeconds"></param>
         /// <param name="elementName"></param>
         /// <param name="pageName"></param>
-        public void waitUntilStalenessOfElement(By locator, double StaleTimeoutInSeconds, string elementName, string pageName)
+        public void WaitUntilStalenessOfElement(By locator, double StaleTimeoutInSeconds, string elementName, string pageName)
         {
             try
             {
-                IWebElement webElement = _driver.FindElement(locator);
+                IWebElement webElement = _driver!.FindElement(locator);
                 new WebDriverWait(_driver, TimeSpan.FromSeconds(StaleTimeoutInSeconds)).Until(ExpectedConditions.StalenessOf(webElement));
             }
             catch (Exception)
@@ -209,11 +211,11 @@ namespace Defra.TestAutomation.Specs.FrameworkUtilities
         /// <param name="pageName"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public bool waitUntilPageReadyStateComplete(double timeOutInSeconds, string pageName)
+        public bool WaitUntilPageReadyStateComplete(double timeOutInSeconds, string pageName)
         {
             try
             {
-                IJavaScriptExecutor _jsExec = (IJavaScriptExecutor)_driver;
+                IJavaScriptExecutor _jsExec = (IJavaScriptExecutor)_driver!;
                 new WebDriverWait(_driver, TimeSpan.FromSeconds(timeOutInSeconds)).Until(_driver => _jsExec.ExecuteScript("return document.readyState").ToString() == "complete");
                 bool jQueryDefined = (bool)_jsExec.ExecuteScript("return typeof jQuery != 'undefined' && jQuery !== 'null'");
                 if (jQueryDefined)

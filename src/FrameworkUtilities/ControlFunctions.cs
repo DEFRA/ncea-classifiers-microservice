@@ -1,11 +1,13 @@
 ﻿using Defra.TestAutomation.Specs.Drivers;
+using NUnit.Framework;
 
 namespace Defra.TestAutomation.Specs.FrameworkUtilities
 {
     [Binding]
+    [Parallelizable]
     public sealed class ControlFunctions
     {
-        private readonly IWebDriver _driver;
+        private readonly IWebDriver? _driver;
         private readonly WebDriverUtil _driverUtil;
 
         public ControlFunctions(DriverFactory driverFactory, WebDriverUtil driverUtil)
@@ -15,8 +17,8 @@ namespace Defra.TestAutomation.Specs.FrameworkUtilities
         }
 
         /*** Timeout Declaration ***/
-        public static readonly double timeOutInSeconds = double.Parse(ConfigurationManager.AppSettings["ObjectSyncTimeout"]!);
-        public static readonly double pageTimeOutInSeconds = double.Parse(ConfigurationManager.AppSettings["PageLoadTimeout"]!);
+        public static readonly double timeOutInSeconds = double.Parse(ConfigReader.ReadConfig("ObjectSyncTimeout"));
+        public static readonly double pageTimeOutInSeconds = double.Parse(ConfigReader.ReadConfig("PageLoadTimeout"));
 
         /// <summary>
         ///  Function to input the value using sendkeys   
@@ -28,15 +30,20 @@ namespace Defra.TestAutomation.Specs.FrameworkUtilities
         /// <exception cref="Exception"></exception>
         public void sendKeys(By locator, double timeOutInSeconds, string Text, string elementName, string pageName)
         {
-            if (_driverUtil.waitUntilElementLocated(locator, timeOutInSeconds, elementName, pageName))
+            if (_driverUtil.WaitUntilElementLocated(locator, timeOutInSeconds, elementName, pageName))
             {
-                if (_driverUtil.waitUntilElementVisible(locator, timeOutInSeconds, elementName, pageName))
+                if (_driverUtil.WaitUntilElementVisible(locator, timeOutInSeconds, elementName, pageName))
                 {
-                    if (_driverUtil.waitUntilElementToBeClickable(locator, timeOutInSeconds, elementName, pageName))
+                    if (_driverUtil.WaitUntilElementToBeClickable(locator, timeOutInSeconds, elementName, pageName))
                     {
                         try
                         {
-                            _driver.FindElement(locator).SendKeys(Text);
+                            _driver?.FindElement(locator).SendKeys(Text);
+                            Assert.Pass($"User entered the value '{Text}' for '{elementName}' on '{pageName}'");
+                        }
+                        catch (SuccessException)
+                        {
+                            //no exception to be thrown
                         }
                         catch (Exception e)
                         {
@@ -64,15 +71,16 @@ namespace Defra.TestAutomation.Specs.FrameworkUtilities
         /// <exception cref="Exception"></exception>
         public void click(By locator, double timeOutInSeconds, string elementName, string pageName)
         {
-            if (_driverUtil.waitUntilElementLocated(locator, timeOutInSeconds, elementName, pageName))
+            if (_driverUtil.WaitUntilElementLocated(locator, timeOutInSeconds, elementName, pageName))
             {
-                if (_driverUtil.waitUntilElementVisible(locator, timeOutInSeconds, elementName, pageName))
+                if (_driverUtil.WaitUntilElementVisible(locator, timeOutInSeconds, elementName, pageName))
                 {
-                    if (_driverUtil.waitUntilElementToBeClickable(locator, timeOutInSeconds, elementName, pageName))
+                    if (_driverUtil.WaitUntilElementToBeClickable(locator, timeOutInSeconds, elementName, pageName))
                     {
                         try
                         {
-                            _driver.FindElement(locator).Click();
+                            _driver?.FindElement(locator).Click();
+                            Assert.Pass($"'{elementName}' in '{pageName}' is clicked successfully");
                         }
                         catch (Exception e)
                         {
@@ -92,14 +100,38 @@ namespace Defra.TestAutomation.Specs.FrameworkUtilities
         }
 
 
-        public ISearchContext GetShadowRootHost(IWebElement webElement)
+        public bool objectExists(By locator, string condition, double timeOutInSeconds, string elementName, string pageName)
         {
-            IJavaScriptExecutor js = (IJavaScriptExecutor)_driver;
-            ISearchContext shadowRootElement = (ISearchContext)js.ExecuteScript("return arguments[0].shadowRoot", webElement);
-            return shadowRootElement;
+            bool StatusFlag = false;
+            if (_driverUtil.WaitUntilElementLocated(locator, timeOutInSeconds, elementName, pageName))
+            {
+                if (_driverUtil.WaitUntilElementVisible(locator, timeOutInSeconds, elementName, pageName))
+                {
+                    switch (condition)
+                    {
+                        case "isDisplayed":
+                            StatusFlag = _driver!.FindElement(locator).Displayed;
+                            break;
+                        case "isEnabled":
+                            StatusFlag = _driver!.FindElement(locator).Enabled;
+                            break;
+                        case "isSelected":
+                            StatusFlag = _driver!.FindElement(locator).Selected;
+                            break;
+                        default:
+                            throw new Exception($"This operation '{condition}' are not allowed. Change the pre-defined options as per switch case");
+                    }
+                }
+                else
+                {
+                    //false block to avoid warnings
+                }
+            }
+            else
+            {
+                //false block to avoid warnings
+            }
+            return StatusFlag;
         }
-
-        
-
     }
 }

@@ -1,6 +1,9 @@
-﻿namespace Defra.TestAutomation.Specs.PageObjects
+﻿using NUnit.Framework;
+
+namespace Defra.TestAutomation.Specs.PageObjects
 {
     [Binding]
+    [Parallelizable]
     public sealed class LoginPage
     {
         private LoginPage()

@@ -1,11 +1,14 @@
 ﻿using AventStack.ExtentReports;
 using AventStack.ExtentReports.Reporter;
 using AventStack.ExtentReports.Reporter.Config;
+using NUnit.Framework;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace Defra.TestAutomation.Specs.FrameworkUtilities
 {
     [Binding]
+    [Parallelizable]
     public class ExtentReporter
     {
         [ThreadStatic]
@@ -30,6 +33,7 @@ namespace Defra.TestAutomation.Specs.FrameworkUtilities
         public static ExtentSparkReporter? _extentSparkReportMerger;
 
         public static string rootFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
+
         public static string testResultPath = Path.Combine(rootFolder, "TestResults");
 
         protected ExtentReporter()
@@ -91,14 +95,24 @@ namespace Defra.TestAutomation.Specs.FrameworkUtilities
                     throw new Exception($"Error in consolidating Extent Report - {ex.Message}");
                 }
             }
-            _extentReportMerger.AttachReporter(_extentSparkReportMerger);
-            _extentReportMerger.Flush();
+
+            try
+            {
+                _extentReportMerger.AttachReporter(_extentSparkReportMerger);
+                _extentReportMerger.Flush();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error in attaching Extent Report - {ex.Message}");
+            }
+
         }
 
         /// <summary>
         /// Function to clean-up the files inside the specified directory
         /// </summary>
         /// <exception cref="Exception"></exception>
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public static void CleanUpResultFolder()
         {
             string[] jsonFiles = Directory.GetFiles(testResultPath + $"\\ExtentJson", "*.json");

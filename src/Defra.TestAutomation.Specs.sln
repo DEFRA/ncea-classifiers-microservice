@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Defra.TestAutomation.Specs", "Defra.TestAutomation.Specs.csproj", "{BBFE8FF5-3A10-43B7-9F50-3C460C82EC31}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Defra.TestAutomation.Specs", "Defra.TestAutomation.Specs.csproj", "{B0768011-6FCF-4085-9816-CDC7053D2129}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{BBFE8FF5-3A10-43B7-9F50-3C460C82EC31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BBFE8FF5-3A10-43B7-9F50-3C460C82EC31}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BBFE8FF5-3A10-43B7-9F50-3C460C82EC31}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BBFE8FF5-3A10-43B7-9F50-3C460C82EC31}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B0768011-6FCF-4085-9816-CDC7053D2129}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0768011-6FCF-4085-9816-CDC7053D2129}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0768011-6FCF-4085-9816-CDC7053D2129}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0768011-6FCF-4085-9816-CDC7053D2129}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {F2132FBA-5E02-460A-ADBF-6A128A84BF9F}
+		SolutionGuid = {B0C827CB-06B3-4F7B-8C6C-6706F3E2827D}
 	EndGlobalSection
 EndGlobal
