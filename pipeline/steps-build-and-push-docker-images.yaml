@@ -1,0 +1,21 @@
+steps:
+
+- task: AzureCLI@2
+  displayName: 'Docker Build And Push'
+  condition: succeeded()
+  inputs:
+    azureSubscription: $(azureServiceConnectionForAcr) 
+    scriptType: bash
+    scriptLocation: inlineScript
+    inlineScript: |
+      echo "setting Azure Subscription"
+      az account set --subscription $(azureServiceConnectionForAcr)
+      PASSWORD=$(az acr login --name $(acrContainerRegistry) --expose-token --output tsv --query accessToken)
+      echo "Logging into ACR"
+      docker login $(acrContainerRegistry) -u $(acrUser) -p $PASSWORD
+      echo "Change directory"
+      cd src/ncea-classifier-microservice
+      echo "Building Container"      
+      docker build -f Dockerfile -t '$(acrContainerRegistry)/$(acrContainerRepositoryEnricher):$(imageTag)' .
+      echo "Pushing Container"
+      docker push '$(acrContainerRegistry)/$(acrContainerRepositoryEnricher):$(imageTag)'

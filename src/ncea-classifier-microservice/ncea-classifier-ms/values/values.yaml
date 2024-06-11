@@ -1,0 +1,64 @@
+replicaCount: 1
+
+image:
+  repository: $(containerRepositoryFullPath)
+  pullPolicy: IfNotPresent
+  tag: $(imageTag)
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:  
+  create: false 
+  automount: false  
+  annotations: {}  
+  name: 
+
+podAnnotations: {}
+podLabels: 
+  azure.workload.identity/use: "true"
+
+podSecurityContext: {}
+
+securityContext: {}
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: true
+  className: nginx
+  annotations: 
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/use-regex: "true"
+  hosts:
+    - host: 
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
+
+resources: {}
+
+autoscaling:
+  enabled: $(autoScalingEnabled)
+  minReplicas: 1
+  maxReplicas: $(autoScalingMaxReplicas)
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+volumes: []
+
+volumeMounts: []
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+env:
+  PORT: $(port)
+  ELASTICSEARCH_API: $(elasticSearchApi)

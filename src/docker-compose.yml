@@ -1,0 +1,46 @@
+version: '3.4'
+
+services:
+  web:
+    build:
+      context: ..
+      dockerfile: ncea-classifier-microservice\Dockerfile
+    depends_on:
+      - "postgresql_database"
+    networks:
+      - mynetwork
+
+  postgresql_database:
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=password-1
+      - POSTGRES_DB=nceaclassifiers
+    ports:
+      - "5432:5432"
+    restart: always
+    volumes:
+      - database-data:/var/lib/postgresql/data/
+    networks:
+      - mynetwork
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=pgadmin@admin.org
+      - PGADMIN_DEFAULT_PASSWORD=password
+    ports:
+      - "5050:80"
+    restart: always
+    volumes:
+      - pgadmin:/root/.pgadmin
+    networks:
+      - mynetwork
+
+volumes:
+  database-data:
+  pgadmin:
+
+networks:
+  mynetwork:
+    driver: bridge

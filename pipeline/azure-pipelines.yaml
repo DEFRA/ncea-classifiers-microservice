@@ -1,0 +1,72 @@
+
+name: $(Date:yyyyMMdd)$(Rev:.r)
+
+trigger:
+  branches:
+    include:
+      - main
+      - feature/*
+
+variables: 
+  - template: templates/variables-global.yml
+  - name : azureServiceConnectionForAcr
+    value: AZR-NCE-DEV1
+  - name : deployToDev
+    value: true
+  - name : deployToTest
+    value: true
+
+stages:
+- stage: 'Build'
+  displayName: 'Build Classifier Microservice'
+  jobs: 
+  - job: 'Build'
+    displayName: 'Build job'
+    pool:
+      name: DEFRA-COMMON-ubuntu2204-SSV3
+    variables:
+      - template: templates/variables-build.yml      
+    steps:
+      - template: steps-build-and-test.yaml
+      - template: steps-build-and-push-docker-images.yaml
+      - template: steps-package-and-push-helm-charts.yaml
+
+- stage: 'dev'
+  displayName: 'Deploy to Dev'
+  dependsOn: Build
+  condition: and(succeeded(), and(eq(variables.isMain, true), eq(variables.deployToDev, true)))
+  jobs:
+  - deployment: Deploy
+    pool:
+      name: DEFRA-COMMON-ubuntu2204-SSV3
+    variables:
+      - template: templates/variables-dev.yml
+    environment: dev 
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - template: steps-deploy-helm-charts.yaml
+              parameters:
+                releaseName: ncea-classifier-microservice-dev
+                armServiceConnection: AZR-NCE-DEV1
+
+- stage: 'test'
+  displayName: 'Deploy to test'
+  dependsOn: dev
+  condition: and(succeeded(), eq(variables.deployToTest, true))
+  jobs:
+  - deployment: Deploy
+    pool:
+      name: DEFRA-COMMON-ubuntu2204-SSV3
+    variables:
+      - template: templates/variables-test.yml
+    environment: test 
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - template: steps-deploy-helm-charts.yaml
+              parameters:
+                releaseName: ncea-classifier-microservice-test
+                armServiceConnection: AZR-NCE-TST
