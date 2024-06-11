@@ -10,33 +10,25 @@ using HealthChecks.UI.Client;
 using HealthChecks.UI.Configuration;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Azure.Core;
+using Npgsql;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Identity.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 var Configuration = builder.Configuration;
 
-builder.Services.AddNpgsqlDataSource(Configuration.GetConnectionString("DefaultConnection")!, dataSourceBuilder =>
-{
-    dataSourceBuilder.UsePeriodicPasswordProvider(async (_, ct) =>
-    {
-        DefaultAzureCredential credential = new();
-        TokenRequestContext ctx = new(["https://ossrdbms-aad.database.windows.net/.default"]);
-        AccessToken tokenResponse = await credential.GetTokenAsync(ctx, ct);
-        return tokenResponse.Token;
-    }, TimeSpan.FromHours(4), TimeSpan.FromSeconds(10));
-});
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddMicrosoftIdentityWebApi(builder.Configuration);
 
-builder.Services.AddDbContext<AppDbContext>(options =>
-{
-    options.UseNpgsql();
-    options.AddInterceptors(new AadAuthenticationInterceptor());
-});
-
+ConfigureDataServices(builder, Configuration);
 ConfigureKeyVault(builder);
 ConfigureLogging(builder);
 builder.Services.ConfigureHealthChecks(Configuration);
+
 builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
@@ -95,4 +87,33 @@ static void ConfigureLogging(WebApplicationBuilder builder)
         module.EnableSqlCommandTextInstrumentation = true;
         o.ConnectionString = builder.Configuration.GetValue<string>("ApplicationInsights:ConnectionString");
     });
+}
+
+static void ConfigureDataServices(WebApplicationBuilder builder, ConfigurationManager Configuration)
+{
+    var dataSourceBuilder = new NpgsqlDataSourceBuilder(Configuration.GetConnectionString("DefaultConnection"));
+    SetUpDataSourceBuilderConfig(dataSourceBuilder);
+    
+    var datasource = dataSourceBuilder.Build();
+    builder.Services.AddDbContext<AppDbContext>(options =>
+    {
+        options.UseNpgsql(datasource);
+        options.AddInterceptors(new AadAuthenticationInterceptor());
+    });
+
+    builder.Services.AddNpgsqlDataSource(Configuration.GetConnectionString("DefaultConnection")!, (Action<NpgsqlDataSourceBuilder>)(dataSourceBuilder =>
+    {
+        SetUpDataSourceBuilderConfig(dataSourceBuilder);
+    }));    
+}
+
+static NpgsqlDataSourceBuilder SetUpDataSourceBuilderConfig(NpgsqlDataSourceBuilder dataSourceBuilder)
+{
+    return dataSourceBuilder.UsePeriodicPasswordProvider(async (_, ct) =>
+    {
+        DefaultAzureCredential credential = new();
+        TokenRequestContext ctx = new(["https://ossrdbms-aad.database.windows.net/.default"]);
+        AccessToken tokenResponse = await credential.GetTokenAsync(ctx, ct);
+        return tokenResponse.Token;
+    }, TimeSpan.FromHours(4), TimeSpan.FromSeconds(10));
 }

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Ncea.Classifier.Microservice.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class NceaClassifiersController : ControllerBase
 {
     private readonly ILogger<NceaClassifiersController> _logger;

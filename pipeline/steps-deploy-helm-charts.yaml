@@ -29,7 +29,7 @@ steps:
     azureResourceGroup: $(aksResourceGroupName)
     kubernetesCluster : $(aksClusterName)
     command: lint
-    arguments: '$(Pipeline.Workspace)/chart/ncea-classifier-microservice -f $(Pipeline.Workspace)/chart/ncea-classifier-microservice/values/values.yaml'
+    arguments: '$(Pipeline.Workspace)/chart/ncea-classifier-ms -f $(Pipeline.Workspace)/chart/ncea-classifier-ms/values/values.yaml'
 
 - task: KubeloginInstaller@0
   inputs:
@@ -47,8 +47,8 @@ steps:
     namespace: $(aksNamespace)
     command: 'upgrade'
     chartType: 'FilePath'
-    chartPath: '$(Pipeline.Workspace)/ncea-classifier-microservice-$(Build.BuildNumber).tgz'
-    valueFile: $(Pipeline.Workspace)/chart/ncea-classifier-microservice/values/values.yaml
+    chartPath: '$(Pipeline.Workspace)/ncea-classifier-ms-$(Build.BuildNumber).tgz'
+    valueFile: $(Pipeline.Workspace)/chart/ncea-classifier-ms/values/values.yaml
     overrideValues: |
         image.repository=$(containerRepositoryFullPath)
         image.tag=$(imageTag)
