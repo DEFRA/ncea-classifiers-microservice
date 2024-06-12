@@ -2,10 +2,13 @@
 
 namespace Ncea.Classifier.Microservice.Data.Entities;
 
-public class PageContent : BaseEntity
+public class SearchPageContent : BaseEntity
 {
     public string SectionTitle { get; set; } = string.Empty;
     public string SectionIntroduction { get; set; } = string.Empty;
-    public Level Level { get; set; }
-    public bool IsActive { get; set; }
+
+    public string? ThemeCode { get; set; }
+    public Theme? Theme { get; set; }
+
+    public SearchStep Step { get; set; }
 }

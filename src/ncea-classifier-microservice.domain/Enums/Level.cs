@@ -1,4 +1,4 @@
-﻿namespace Ncea.Classifier.Microservice.Data.Enums;
+﻿namespace Ncea.Classifier.Microservice.Domain.Enums;
 
 public enum Level
 {

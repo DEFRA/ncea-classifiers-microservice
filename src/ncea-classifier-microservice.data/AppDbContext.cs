@@ -12,7 +12,7 @@ public class AppDbContext : DbContext
     public DbSet<Theme> Themes { get; set; }
     public DbSet<Category> Categories { get; set; }
     public DbSet<SubCategory> SubCategories { get; set; }
-    public DbSet<PageContent> PageContents { get; set; }
+    public DbSet<SearchPageContent> SearchPageContentBlocks { get; set; }
     public DbSet<ThemeCategory> ThemeCategory { get; set; }
     public DbSet<CategorySubCategory> CategorySubCategory { get; set; }
 

@@ -17,4 +17,8 @@
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.Design" Version="1.1.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ncea-classifier-microservice.domain\ncea-classifier-microservice.domain.csproj" />
+  </ItemGroup>
+
 </Project>

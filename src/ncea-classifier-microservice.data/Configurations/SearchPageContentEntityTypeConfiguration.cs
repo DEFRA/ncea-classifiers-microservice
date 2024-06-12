@@ -1,13 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 using Ncea.Classifier.Microservice.Data.Entities;
-using Ncea.Classifier.Microservice.Data.Enums;
 
 namespace Ncea.Classifier.Microservice.Data.Configurations;
 
-public class PageContentEntityTypeConfiguration : IEntityTypeConfiguration<PageContent>
+public class SearchPageContentEntityTypeConfiguration : IEntityTypeConfiguration<SearchPageContent>
 {
-    public void Configure(EntityTypeBuilder<PageContent> builder)
+    public void Configure(EntityTypeBuilder<SearchPageContent> builder)
     {
         builder
             .HasKey(c => c.Id);
@@ -31,17 +30,20 @@ public class PageContentEntityTypeConfiguration : IEntityTypeConfiguration<PageC
             .HasColumnOrder(3);
 
         builder
-            .Property(b => b.Level)
-            .IsRequired()
-            .HasColumnOrder(4)
-            .HasConversion(v => v.ToString(), v => (Level)Enum.Parse(typeof(Level), v));
+            .Property(b => b.ThemeCode)
+            .HasColumnOrder(4);
 
         builder
-            .Property(b => b.CreatedAt)
+            .Property(b => b.Step)
+            .IsRequired()
             .HasColumnOrder(5);
 
         builder
-            .Property(b => b.UpdatedAt)
+            .Property(b => b.CreatedAt)
             .HasColumnOrder(6);
+
+        builder
+            .Property(b => b.UpdatedAt)
+            .HasColumnOrder(7);
     }
 }

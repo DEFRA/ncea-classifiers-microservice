@@ -16,6 +16,9 @@ using Microsoft.Identity.Web;
 using FluentValidation;
 using Ncea.Classifier.Microservice.Models;
 using Ncea.Classifier.Microservice.Validations;
+using Ncea.Classifier.Microservice.Data.Services.Contracts;
+using Microsoft.CodeAnalysis.Classification;
+using Ncea.Classifier.Microservice.Data.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -140,4 +143,5 @@ void ApplyMigrations()
 static void ConfigureServices(WebApplicationBuilder builder)
 {
     builder.Services.AddScoped<IValidator<ClassifierCriteria>, ClassifierCriteriaValidator>();
+    builder.Services.AddScoped<IClassifierService, ClassifierService>();
 }

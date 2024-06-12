@@ -12,6 +12,12 @@ public class ThemeEntityTypeConfiguration : ClassifierBaseEntityTypeConfiguratio
             .WithMany(x => x.Themes)
             .UsingEntity<ThemeCategory>(
                 l => l.HasOne<Category>().WithMany().HasForeignKey(e => e.CategoryCode),
-                r => r.HasOne<Theme>().WithMany().HasForeignKey(e => e.ThemeCode));        
+                r => r.HasOne<Theme>().WithMany().HasForeignKey(e => e.ThemeCode));
+
+        builder
+            .HasMany(x => x.SearchPageContentBlocks)
+            .WithOne(x => x.Theme)
+            .HasForeignKey(x => x.ThemeCode)
+            .IsRequired(false);
     }
 }
