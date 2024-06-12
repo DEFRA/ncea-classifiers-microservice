@@ -13,18 +13,22 @@ using Azure.Core;
 using Npgsql;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Identity.Web;
+using FluentValidation;
+using Ncea.Classifier.Microservice.Models;
+using Ncea.Classifier.Microservice.Validations;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 var Configuration = builder.Configuration;
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddMicrosoftIdentityWebApi(builder.Configuration);
+//builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+//    .AddMicrosoftIdentityWebApi(builder.Configuration);
 
-ConfigureDataServices(builder, Configuration);
 ConfigureKeyVault(builder);
 ConfigureLogging(builder);
+ConfigureDataServices(builder, Configuration);
+ConfigureServices(builder);
 builder.Services.ConfigureHealthChecks(Configuration);
 
 builder.Services.AddControllers();
@@ -59,6 +63,7 @@ app.UseHealthChecksUI(delegate (Options options)
 
 });
 
+//ApplyMigrations();
 app.Run();
 
 static void ConfigureKeyVault(WebApplicationBuilder builder)
@@ -98,7 +103,6 @@ static void ConfigureDataServices(WebApplicationBuilder builder, ConfigurationMa
     builder.Services.AddDbContext<AppDbContext>(options =>
     {
         options.UseNpgsql(datasource);
-        options.AddInterceptors(new AadAuthenticationInterceptor());
     });
 
     builder.Services.AddNpgsqlDataSource(Configuration.GetConnectionString("DefaultConnection")!, (Action<NpgsqlDataSourceBuilder>)(dataSourceBuilder =>
@@ -116,4 +120,24 @@ static NpgsqlDataSourceBuilder SetUpDataSourceBuilderConfig(NpgsqlDataSourceBuil
         AccessToken tokenResponse = await credential.GetTokenAsync(ctx, ct);
         return tokenResponse.Token;
     }, TimeSpan.FromHours(4), TimeSpan.FromSeconds(10));
+}
+
+void ApplyMigrations()
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        var _Db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        if (_Db != null)
+        {
+            if (_Db.Database.GetPendingMigrations().Any())
+            {
+                _Db.Database.Migrate();
+            }
+        }
+    }
+}
+
+static void ConfigureServices(WebApplicationBuilder builder)
+{
+    builder.Services.AddScoped<IValidator<ClassifierCriteria>, ClassifierCriteriaValidator>();
 }
