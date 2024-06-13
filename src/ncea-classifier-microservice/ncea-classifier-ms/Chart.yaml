@@ -1,5 +1,5 @@
 apiVersion: v2
-name: ncea-fe
+name: ncea-classifier-ms
 description: A Helm chart for ncea classifier microservice
 type: application
 version: 1.0.0
