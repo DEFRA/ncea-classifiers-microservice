@@ -11,22 +11,21 @@ using HealthChecks.UI.Configuration;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Azure.Core;
 using Npgsql;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Identity.Web;
 using FluentValidation;
 using Ncea.Classifier.Microservice.Models;
 using Ncea.Classifier.Microservice.Validations;
 using Ncea.Classifier.Microservice.Data.Services.Contracts;
-using Microsoft.CodeAnalysis.Classification;
 using Ncea.Classifier.Microservice.Data.Services;
+using Microsoft.Extensions.Hosting;
+using Ncea.Classifier.Microservice.Services.Contracts;
+using Ncea.Classifier.Microservice.Services;
+using Ncea.Classifier.Microservice.Middlewares;
+using Ncea.Classifier.Microservice.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 var Configuration = builder.Configuration;
-
-//builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-//    .AddMicrosoftIdentityWebApi(builder.Configuration);
 
 ConfigureKeyVault(builder);
 ConfigureLogging(builder);
@@ -36,7 +35,7 @@ builder.Services.ConfigureHealthChecks(Configuration);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(o => o.OperationFilter<AddRequiredHeaderParameter>());
 
 var app = builder.Build();
 
@@ -46,12 +45,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
 
 //HealthCheck Middleware
 app.MapHealthChecks("/api/isAlive", new HealthCheckOptions()
@@ -63,10 +56,20 @@ app.UseHealthChecksUI(delegate (Options options)
 {
     options.UIPath = "/healthcheck-ui";
     //options.AddCustomStylesheet("./HealthCheck/Custom.css");
-
 });
 
-//ApplyMigrations();
+app.UseWhen(context => context.Request.Path.StartsWithSegments("/api/classifiers"), appBuilder =>
+{
+    appBuilder.UseMiddleware<ApiKeyAuthMiddleware>();
+});
+
+app.UseHttpsRedirection();
+
+app.UseAuthorization();
+
+app.MapControllers();
+
+ApplyMigrations();
 app.Run();
 
 static void ConfigureKeyVault(WebApplicationBuilder builder)
@@ -124,24 +127,22 @@ static NpgsqlDataSourceBuilder SetUpDataSourceBuilderConfig(NpgsqlDataSourceBuil
         return tokenResponse.Token;
     }, TimeSpan.FromHours(4), TimeSpan.FromSeconds(10));
 }
-
 void ApplyMigrations()
 {
+
     using (var scope = app.Services.CreateScope())
     {
-        var _Db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-        if (_Db != null)
+        var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        if(dbContext != null)
         {
-            if (_Db.Database.GetPendingMigrations().Any())
-            {
-                _Db.Database.Migrate();
-            }
+            dbContext.Database.Migrate();
         }
     }
 }
 
 static void ConfigureServices(WebApplicationBuilder builder)
 {
+    builder.Services.AddTransient<IApiKeyValidationService, ApiKeyValidationService>();
     builder.Services.AddScoped<IValidator<ClassifierCriteria>, ClassifierCriteriaValidator>();
     builder.Services.AddScoped<IClassifierService, ClassifierService>();
 }
