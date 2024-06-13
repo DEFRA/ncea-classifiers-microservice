@@ -10,7 +10,7 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY . .
-RUN dotnet restore ". ncea-classifier-microservice/ncea-classifier-microservice.csproj"
+RUN dotnet restore "ncea-classifier-microservice/ncea-classifier-microservice.csproj"
 WORKDIR "/src/ncea-classifier-microservice"
 RUN dotnet build "ncea-classifier-microservice.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
