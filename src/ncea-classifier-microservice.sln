@@ -7,11 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ncea-classifier-microservic
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ncea-classifier-microservice.tests", "ncea-classifier-microservice.tests\ncea-classifier-microservice.tests.csproj", "{05903E5D-446F-429D-8076-4F23F4617B33}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ncea-classifier-microservice.data", "ncea-classifier-microservice.data\ncea-classifier-microservice.data.csproj", "{E0BEDA88-256E-4703-9DAB-B408B1CA79CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ncea-classifier-microservice-data", "ncea-classifier-microservice-data\ncea-classifier-microservice-data.csproj", "{E0BEDA88-256E-4703-9DAB-B408B1CA79CA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ncea-classifier-microservice.data.tests", "ncea-classifier-microservice.data.tests\ncea-classifier-microservice.data.tests.csproj", "{2B14650C-CC31-41C9-AA69-8BA3F53C5176}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ncea-classifier-microservice-data.tests", "ncea-classifier-microservice-data.tests\ncea-classifier-microservice-data.tests.csproj", "{2B14650C-CC31-41C9-AA69-8BA3F53C5176}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ncea-classifier-microservice.domain", "ncea-classifier-microservice.domain\ncea-classifier-microservice.domain.csproj", "{6B901767-93B6-4868-B5FD-CC0DAF573786}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ncea-classifier-microservice-domain", "ncea-classifier-microservice-domain\ncea-classifier-microservice-domain.csproj", "{6B901767-93B6-4868-B5FD-CC0DAF573786}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -12,7 +12,6 @@
     <UserSecretsId>67561bbc-9b35-4476-94bc-03b5855ce1bd</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>.</DockerfileContext>
-    <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -41,7 +40,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ncea-classifier-microservice.data\ncea-classifier-microservice.data.csproj" />
+    <ProjectReference Include="..\ncea-classifier-microservice-data\ncea-classifier-microservice-data.csproj" />
   </ItemGroup>
 
 </Project>

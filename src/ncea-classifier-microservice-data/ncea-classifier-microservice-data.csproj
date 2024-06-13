@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ncea-classifier-microservice.domain\ncea-classifier-microservice.domain.csproj" />
+    <ProjectReference Include="..\ncea-classifier-microservice-domain\ncea-classifier-microservice-domain.csproj" />
   </ItemGroup>
 
 </Project>

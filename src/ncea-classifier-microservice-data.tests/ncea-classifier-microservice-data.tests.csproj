@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ncea-classifier-microservice.data\ncea-classifier-microservice.data.csproj" />
+    <ProjectReference Include="..\ncea-classifier-microservice-data\ncea-classifier-microservice-data.csproj" />
   </ItemGroup>
 
   <ItemGroup>
