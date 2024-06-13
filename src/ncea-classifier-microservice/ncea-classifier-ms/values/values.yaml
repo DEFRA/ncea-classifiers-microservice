@@ -60,5 +60,4 @@ tolerations: []
 affinity: {}
 
 env:
-  PORT: $(port)
   ELASTICSEARCH_API: $(elasticSearchApi)

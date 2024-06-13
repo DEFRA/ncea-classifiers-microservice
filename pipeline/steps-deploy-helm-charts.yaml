@@ -52,7 +52,9 @@ steps:
     overrideValues: |
         image.repository=$(containerRepositoryFullPath)
         image.tag=$(imageTag)
-        serviceAccount.name=$(serviceAccountClassifier)        
+        serviceAccount.name=$(serviceAccountClassifier)
+        ingress.hosts[0].host=$(hostName)
+        env.keyVaultUri=$(keyVaultUri)
         autoscaling.enabled=$(autoScalingEnabled)
         autoscaling.maxReplicas=$(autoScalingMaxReplicas)
     install: true

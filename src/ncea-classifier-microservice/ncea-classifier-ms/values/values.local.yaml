@@ -60,5 +60,4 @@ tolerations: []
 affinity: {}
 
 env:
-  PORT: 80
   AZURE_KEYVAULT_URL: https://devnceinfkvt1401.vault.azure.net/

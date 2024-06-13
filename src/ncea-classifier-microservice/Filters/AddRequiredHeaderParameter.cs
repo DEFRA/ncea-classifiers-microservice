@@ -3,7 +3,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Ncea.Classifier.Microservice.Filters;
 
-public class AddRequiredHeaderParameter : IOperationFilter   // as a nested class in script config file.
+public class AddRequiredHeaderParameter : IOperationFilter
 {
     public void Apply(OpenApiOperation operation, OperationFilterContext context)
     {
@@ -14,7 +14,6 @@ public class AddRequiredHeaderParameter : IOperationFilter   // as a nested clas
         {            
             Name = Constants.ApiKeyHeaderName,
             In = ParameterLocation.Header,
-            Description = "Provide Api Key",
             Required = true
         });
     }

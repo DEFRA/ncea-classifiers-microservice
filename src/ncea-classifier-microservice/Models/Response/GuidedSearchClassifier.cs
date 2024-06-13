@@ -1,12 +1,10 @@
-﻿namespace Ncea.Classifier.Microservice.Models
+﻿namespace Ncea.Classifier.Microservice.Models.Response
 {
-    public class Classifier
-    {        
+    public class GuidedSearchClassifier
+    {
         public string Code { get; set; } = null!;
         public string Name { get; set; } = null!;
         public string Description { get; set; } = string.Empty;
-        public List<Classifier> Classifiers { get; set; } = [];
-
         public string? ParentCode { get; set; }
         public string? ParentName { get; set; }
     }

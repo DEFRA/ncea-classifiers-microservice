@@ -21,6 +21,7 @@ using Ncea.Classifier.Microservice.Services.Contracts;
 using Ncea.Classifier.Microservice.Services;
 using Ncea.Classifier.Microservice.Middlewares;
 using Ncea.Classifier.Microservice.Filters;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -142,7 +143,11 @@ void ApplyMigrations()
 
 static void ConfigureServices(WebApplicationBuilder builder)
 {
+    builder.Services.Configure<ApiBehaviorOptions>(options =>
+    {
+        options.SuppressInferBindingSourcesForParameters = true;
+    });
     builder.Services.AddTransient<IApiKeyValidationService, ApiKeyValidationService>();
-    builder.Services.AddScoped<IValidator<ClassifierCriteria>, ClassifierCriteriaValidator>();
+    builder.Services.AddScoped<IValidator<FilterCriteria>, FilterCriteriaValidator>();
     builder.Services.AddScoped<IClassifierService, ClassifierService>();
 }

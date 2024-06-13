@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Ncea.Classifier.Microservice.Models;
+using Ncea.Classifier.Microservice.Models.Response;
 
 namespace Ncea.Classifier.Microservice.Controllers;
 
@@ -15,14 +16,22 @@ public class ClassifiersController : ControllerBase
     }
 
     [HttpGet]
-    public string GetAllClassifiers()
+    [ProducesResponseType<IEnumerable<ClassifierHierarchy>>(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public IActionResult GetAllClassifiers()
     {
-        return "success";
+        return Ok(new List<ClassifierHierarchy>());
     }
     
-    [HttpGet("{levelId}")]
-    public string GetClassifiersByLevel(int levelId, [FromQuery] ClassifierCriteria classifierCriteria)
+    [HttpGet("level/{LevelId}")]
+    [ProducesResponseType<IEnumerable<GuidedSearchClassifiers>>(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public IActionResult GetClassifiersByLevel(FilterCriteria filetrCriteria)
     {
-        return "success";
+        return Ok(new List<GuidedSearchClassifiers>());
     }
 }

@@ -25,4 +25,4 @@ variables:
       value: $(Build.BuildNumber)_$(branch)
 
   - name : chartPath
-    value: 'src/ncea-enricher/ncea-enricher'
+    value: 'src/ncea-classifier-microservice/ncea-classifier-ms'
