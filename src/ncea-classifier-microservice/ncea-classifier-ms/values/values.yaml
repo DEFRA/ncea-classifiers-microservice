@@ -60,4 +60,4 @@ tolerations: []
 affinity: {}
 
 env:
-  ELASTICSEARCH_API: $(elasticSearchApi)
+  keyVaultUri:

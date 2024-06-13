@@ -59,7 +59,7 @@ spec:
           - name: APPINSIGHTS_SECRET_NAME
             value: "ApplicationInsights--ConnectionString"
           - name: AZURE_KEYVAULT_URL
-            value: "{{ .Values.env.AZURE_KEYVAULT_URL }}"
+            value: "{{ .Values.env.keyVaultUri }}"
       {{- with .Values.volumes }}
       volumes:
         {{- toYaml . | nindent 8 }}
