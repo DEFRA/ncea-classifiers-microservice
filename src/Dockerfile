@@ -9,22 +9,15 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-
-COPY . ./
-# Restore as distinct layers
-RUN dotnet restore
-
-#COPY ["ncea-classifier-microservice.csproj", "."]
-#RUN dotnet restore "./././ncea-classifier-microservice.csproj"
-
 COPY . .
-WORKDIR "/src/."
-RUN ls
-RUN dotnet build "./ncea-classifier-microservice.csproj" -c $BUILD_CONFIGURATION -o /app/build
+RUN dotnet restore ". ncea-classifier-microservice/ncea-classifier-microservice.csproj"
+WORKDIR "/src/ncea-classifier-microservice"
+RUN dotnet build "ncea-classifier-microservice.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./ncea-classifier-microservice.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+WORKDIR "/src/ncea-classifier-microservice"
+RUN dotnet publish "ncea-classifier-microservice.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
