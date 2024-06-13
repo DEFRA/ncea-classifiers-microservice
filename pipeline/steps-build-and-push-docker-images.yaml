@@ -14,8 +14,8 @@ steps:
       echo "Logging into ACR"
       docker login $(acrContainerRegistry) -u $(acrUser) -p $PASSWORD
       echo "Change directory"
-      cd src/ncea-classifier-microservice
+      cd src
       echo "Building Container"      
-      docker build -f Dockerfile -t '$(acrContainerRegistry)/$(acrContainerRepositoryEnricher):$(imageTag)' .
+      docker build -f Dockerfile -t '$(acrContainerRegistry)/$(acrContainerRepositoryClassifierMicroservice):$(imageTag)' .
       echo "Pushing Container"
-      docker push '$(acrContainerRegistry)/$(acrContainerRepositoryEnricher):$(imageTag)'
+      docker push '$(acrContainerRegistry)/$(acrContainerRepositoryClassifierMicroservice):$(imageTag)'
