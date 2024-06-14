@@ -11,7 +11,8 @@ public static class HealthCheck
 
         services.AddHealthChecksUI(opt =>
         {
-            opt.SetEvaluationTimeInSeconds(10); //time in seconds between check    
+            opt.DisableDatabaseMigrations();
+            opt.SetEvaluationTimeInSeconds(60); //time in seconds between check    
             opt.MaximumHistoryEntriesPerEndpoint(60); //maximum history of checks    
             opt.SetApiMaxActiveRequests(1); //api requests concurrency    
             opt.AddHealthCheckEndpoint("ncea classifiers api", "/api/isAlive"); //map health check api    
