@@ -24,6 +24,7 @@ public class ClassifiersController : ControllerBase
     {
         return Ok(new List<ClassifierHierarchy>());
     }
+
     
     [HttpGet("level/{LevelId}")]
     [ProducesResponseType<IEnumerable<GuidedSearchClassifiers>>(StatusCodes.Status200OK)]
