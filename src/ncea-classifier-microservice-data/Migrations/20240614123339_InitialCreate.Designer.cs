@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Ncea.Classifier.Microservice.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240612213854_InitialCreate")]
+    [Migration("20240614123339_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -50,7 +50,7 @@ namespace Ncea.Classifier.Microservice.Data.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("varchar(500)")
                         .HasColumnOrder(3);
 
                     b.Property<DateTime?>("UpdatedAt")
@@ -64,13 +64,35 @@ namespace Ncea.Classifier.Microservice.Data.Migrations
 
             modelBuilder.Entity("Ncea.Classifier.Microservice.Data.Entities.CategorySubCategory", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("Id")
+                        .HasColumnOrder(1);
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
                     b.Property<string>("CategoryCode")
-                        .HasColumnType("varchar(10)");
+                        .IsRequired()
+                        .HasColumnType("varchar(10)")
+                        .HasColumnOrder(2);
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnOrder(4);
 
                     b.Property<string>("SubCategoryCode")
-                        .HasColumnType("varchar(10)");
+                        .IsRequired()
+                        .HasColumnType("varchar(10)")
+                        .HasColumnOrder(3);
 
-                    b.HasKey("CategoryCode", "SubCategoryCode");
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnOrder(5);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryCode");
 
                     b.HasIndex("SubCategoryCode");
 
@@ -145,7 +167,7 @@ namespace Ncea.Classifier.Microservice.Data.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("varchar(500)")
                         .HasColumnOrder(3);
 
                     b.Property<DateTime?>("UpdatedAt")
@@ -182,7 +204,7 @@ namespace Ncea.Classifier.Microservice.Data.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("varchar(50)")
+                        .HasColumnType("varchar(500)")
                         .HasColumnOrder(3);
 
                     b.Property<DateTime?>("UpdatedAt")
@@ -196,13 +218,35 @@ namespace Ncea.Classifier.Microservice.Data.Migrations
 
             modelBuilder.Entity("Ncea.Classifier.Microservice.Data.Entities.ThemeCategory", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("Id")
+                        .HasColumnOrder(1);
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
                     b.Property<string>("CategoryCode")
-                        .HasColumnType("varchar(10)");
+                        .IsRequired()
+                        .HasColumnType("varchar(10)")
+                        .HasColumnOrder(3);
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnOrder(4);
 
                     b.Property<string>("ThemeCode")
-                        .HasColumnType("varchar(10)");
+                        .IsRequired()
+                        .HasColumnType("varchar(10)")
+                        .HasColumnOrder(2);
 
-                    b.HasKey("CategoryCode", "ThemeCode");
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnOrder(5);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryCode");
 
                     b.HasIndex("ThemeCode");
 

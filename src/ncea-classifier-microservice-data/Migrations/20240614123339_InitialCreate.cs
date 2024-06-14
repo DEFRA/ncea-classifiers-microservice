@@ -19,7 +19,7 @@ namespace Ncea.Classifier.Microservice.Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Code = table.Column<string>(type: "varchar(10)", nullable: false),
-                    Name = table.Column<string>(type: "varchar(50)", nullable: false),
+                    Name = table.Column<string>(type: "varchar(500)", nullable: false),
                     Definition = table.Column<string>(type: "text", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
@@ -36,7 +36,7 @@ namespace Ncea.Classifier.Microservice.Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Code = table.Column<string>(type: "varchar(10)", nullable: false),
-                    Name = table.Column<string>(type: "varchar(50)", nullable: false),
+                    Name = table.Column<string>(type: "varchar(500)", nullable: false),
                     Definition = table.Column<string>(type: "text", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
@@ -53,7 +53,7 @@ namespace Ncea.Classifier.Microservice.Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Code = table.Column<string>(type: "varchar(10)", nullable: false),
-                    Name = table.Column<string>(type: "varchar(50)", nullable: false),
+                    Name = table.Column<string>(type: "varchar(500)", nullable: false),
                     Definition = table.Column<string>(type: "text", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
@@ -67,12 +67,16 @@ namespace Ncea.Classifier.Microservice.Data.Migrations
                 name: "CategorySubCategory",
                 columns: table => new
                 {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     CategoryCode = table.Column<string>(type: "varchar(10)", nullable: false),
-                    SubCategoryCode = table.Column<string>(type: "varchar(10)", nullable: false)
+                    SubCategoryCode = table.Column<string>(type: "varchar(10)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CategorySubCategory", x => new { x.CategoryCode, x.SubCategoryCode });
+                    table.PrimaryKey("PK_CategorySubCategory", x => x.Id);
                     table.ForeignKey(
                         name: "FK_CategorySubCategory_Categories_CategoryCode",
                         column: x => x.CategoryCode,
@@ -114,12 +118,16 @@ namespace Ncea.Classifier.Microservice.Data.Migrations
                 name: "ThemeCategory",
                 columns: table => new
                 {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     ThemeCode = table.Column<string>(type: "varchar(10)", nullable: false),
-                    CategoryCode = table.Column<string>(type: "varchar(10)", nullable: false)
+                    CategoryCode = table.Column<string>(type: "varchar(10)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ThemeCategory", x => new { x.CategoryCode, x.ThemeCode });
+                    table.PrimaryKey("PK_ThemeCategory", x => x.Id);
                     table.ForeignKey(
                         name: "FK_ThemeCategory_Categories_CategoryCode",
                         column: x => x.CategoryCode,
@@ -135,6 +143,11 @@ namespace Ncea.Classifier.Microservice.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_CategorySubCategory_CategoryCode",
+                table: "CategorySubCategory",
+                column: "CategoryCode");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_CategorySubCategory_SubCategoryCode",
                 table: "CategorySubCategory",
                 column: "SubCategoryCode");
@@ -143,6 +156,11 @@ namespace Ncea.Classifier.Microservice.Data.Migrations
                 name: "IX_SearchPageContentBlocks_ThemeCode",
                 table: "SearchPageContentBlocks",
                 column: "ThemeCode");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ThemeCategory_CategoryCode",
+                table: "ThemeCategory",
+                column: "CategoryCode");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ThemeCategory_ThemeCode",

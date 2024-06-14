@@ -28,7 +28,7 @@ public abstract class ClassifierBaseEntityTypeConfiguration<T> : IEntityTypeConf
 
         builder
             .Property(b => b.Name)
-            .HasColumnType("varchar(50)")
+            .HasColumnType("varchar(500)")
             .HasColumnOrder(3)
             .IsRequired();
 

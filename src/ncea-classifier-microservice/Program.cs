@@ -65,6 +65,7 @@ app.UseAuthorization();
 app.MapControllers();
 
 ApplyMigrations();
+
 app.Run();
 
 static void ConfigureKeyVault(WebApplicationBuilder builder)
