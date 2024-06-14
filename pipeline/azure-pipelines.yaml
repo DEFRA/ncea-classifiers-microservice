@@ -49,7 +49,7 @@ stages:
           steps:
             - template: steps-deploy-helm-charts.yaml
               parameters:
-                releaseName: ncea-classifier-microservice-dev
+                releaseName: ncea-classifier-ms-dev
                 armServiceConnection: AZR-NCE-DEV1
 
 - stage: 'test'
@@ -69,5 +69,5 @@ stages:
           steps:
             - template: steps-deploy-helm-charts.yaml
               parameters:
-                releaseName: ncea-classifier-microservice-test
+                releaseName: ncea-classifier-ms-test
                 armServiceConnection: AZR-NCE-TST
