@@ -7,7 +7,6 @@ using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
 using Azure.Extensions.AspNetCore.Configuration.Secrets;
 using HealthChecks.UI.Client;
-using HealthChecks.UI.Configuration;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Azure.Core;
 using Npgsql;
@@ -16,7 +15,6 @@ using Ncea.Classifier.Microservice.Models;
 using Ncea.Classifier.Microservice.Validations;
 using Ncea.Classifier.Microservice.Data.Services.Contracts;
 using Ncea.Classifier.Microservice.Data.Services;
-using Microsoft.Extensions.Hosting;
 using Ncea.Classifier.Microservice.Services.Contracts;
 using Ncea.Classifier.Microservice.Services;
 using Ncea.Classifier.Microservice.Middlewares;
@@ -53,11 +51,6 @@ app.MapHealthChecks("/api/isAlive", new HealthCheckOptions()
 {
     Predicate = _ => true,
     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-});
-app.UseHealthChecksUI(delegate (Options options)
-{
-    options.UIPath = "/healthcheck-ui";
-    //options.AddCustomStylesheet("./HealthCheck/Custom.css");
 });
 
 //app.UseWhen(context => context.Request.Path.StartsWithSegments("/api/classifiers"), appBuilder =>
