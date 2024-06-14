@@ -35,7 +35,7 @@ builder.Services.ConfigureHealthChecks(Configuration);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-//builder.Services.AddSwaggerGen(o => o.OperationFilter<AddRequiredHeaderParameter>());
+builder.Services.AddSwaggerGen(o => o.OperationFilter<AddRequiredHeaderParameter>());
 
 var app = builder.Build();
 
@@ -53,10 +53,10 @@ app.MapHealthChecks("/api/isAlive", new HealthCheckOptions()
     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
 });
 
-//app.UseWhen(context => context.Request.Path.StartsWithSegments("/api/classifiers"), appBuilder =>
-//{
-//    appBuilder.UseMiddleware<ApiKeyAuthMiddleware>();
-//});
+app.UseWhen(context => context.Request.Path.StartsWithSegments("/api/classifiers"), appBuilder =>
+{
+    appBuilder.UseMiddleware<ApiKeyAuthMiddleware>();
+});
 
 app.UseHttpsRedirection();
 
