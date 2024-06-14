@@ -13,40 +13,6 @@ namespace Ncea.Classifier.Microservice.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Categories",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Code = table.Column<string>(type: "varchar(10)", nullable: false),
-                    Name = table.Column<string>(type: "varchar(500)", nullable: false),
-                    Definition = table.Column<string>(type: "text", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Categories", x => x.Code);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "SubCategories",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Code = table.Column<string>(type: "varchar(10)", nullable: false),
-                    Name = table.Column<string>(type: "varchar(500)", nullable: false),
-                    Definition = table.Column<string>(type: "text", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SubCategories", x => x.Code);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Themes",
                 columns: table => new
                 {
@@ -64,29 +30,25 @@ namespace Ncea.Classifier.Microservice.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CategorySubCategory",
+                name: "Categories",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    CategoryCode = table.Column<string>(type: "varchar(10)", nullable: false),
-                    SubCategoryCode = table.Column<string>(type: "varchar(10)", nullable: false),
+                    Code = table.Column<string>(type: "varchar(10)", nullable: false),
+                    Name = table.Column<string>(type: "varchar(500)", nullable: false),
+                    Definition = table.Column<string>(type: "text", nullable: false),
+                    ThemeCode = table.Column<string>(type: "varchar(10)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CategorySubCategory", x => x.Id);
+                    table.PrimaryKey("PK_Categories", x => x.Code);
                     table.ForeignKey(
-                        name: "FK_CategorySubCategory_Categories_CategoryCode",
-                        column: x => x.CategoryCode,
-                        principalTable: "Categories",
-                        principalColumn: "Code",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_CategorySubCategory_SubCategories_SubCategoryCode",
-                        column: x => x.SubCategoryCode,
-                        principalTable: "SubCategories",
+                        name: "FK_Categories_Themes_ThemeCode",
+                        column: x => x.ThemeCode,
+                        principalTable: "Themes",
                         principalColumn: "Code",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -115,42 +77,33 @@ namespace Ncea.Classifier.Microservice.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ThemeCategory",
+                name: "SubCategories",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    ThemeCode = table.Column<string>(type: "varchar(10)", nullable: false),
+                    Code = table.Column<string>(type: "varchar(10)", nullable: false),
+                    Name = table.Column<string>(type: "varchar(500)", nullable: false),
+                    Definition = table.Column<string>(type: "text", nullable: false),
                     CategoryCode = table.Column<string>(type: "varchar(10)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ThemeCategory", x => x.Id);
+                    table.PrimaryKey("PK_SubCategories", x => x.Code);
                     table.ForeignKey(
-                        name: "FK_ThemeCategory_Categories_CategoryCode",
+                        name: "FK_SubCategories_Categories_CategoryCode",
                         column: x => x.CategoryCode,
                         principalTable: "Categories",
-                        principalColumn: "Code",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ThemeCategory_Themes_ThemeCode",
-                        column: x => x.ThemeCode,
-                        principalTable: "Themes",
                         principalColumn: "Code",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_CategorySubCategory_CategoryCode",
-                table: "CategorySubCategory",
-                column: "CategoryCode");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CategorySubCategory_SubCategoryCode",
-                table: "CategorySubCategory",
-                column: "SubCategoryCode");
+                name: "IX_Categories_ThemeCode",
+                table: "Categories",
+                column: "ThemeCode");
 
             migrationBuilder.CreateIndex(
                 name: "IX_SearchPageContentBlocks_ThemeCode",
@@ -158,27 +111,16 @@ namespace Ncea.Classifier.Microservice.Data.Migrations
                 column: "ThemeCode");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ThemeCategory_CategoryCode",
-                table: "ThemeCategory",
+                name: "IX_SubCategories_CategoryCode",
+                table: "SubCategories",
                 column: "CategoryCode");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ThemeCategory_ThemeCode",
-                table: "ThemeCategory",
-                column: "ThemeCode");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "CategorySubCategory");
-
-            migrationBuilder.DropTable(
                 name: "SearchPageContentBlocks");
-
-            migrationBuilder.DropTable(
-                name: "ThemeCategory");
 
             migrationBuilder.DropTable(
                 name: "SubCategories");

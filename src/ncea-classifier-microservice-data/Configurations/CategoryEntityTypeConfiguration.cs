@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Ncea.Classifier.Microservice.Data.Entities;
 
 namespace Ncea.Classifier.Microservice.Data.Configurations;
@@ -9,9 +10,20 @@ public class CategoryEntityTypeConfiguration : ClassifierBaseEntityTypeConfigura
     {
         builder
             .HasMany(x => x.SubCategories)
-            .WithMany(x => x.Categories)
-            .UsingEntity<CategorySubCategory>(
-                l => l.HasOne<SubCategory>().WithMany().HasForeignKey(e => e.SubCategoryCode),
-                r => r.HasOne<Category>().WithMany().HasForeignKey(e => e.CategoryCode));
+            .WithOne(x => x.Category)
+            .HasForeignKey(x => x.CategoryCode)
+            .IsRequired(true);
+
+        builder
+            .Property(b => b.ThemeCode)
+            .HasColumnOrder(5);
+
+        builder
+            .Property(b => b.CreatedAt)
+            .HasColumnOrder(6);
+
+        builder
+            .Property(b => b.UpdatedAt)
+            .HasColumnOrder(7);
     }
 }
