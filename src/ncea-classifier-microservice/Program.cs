@@ -36,7 +36,7 @@ builder.Services.ConfigureHealthChecks(Configuration);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(o => o.OperationFilter<AddRequiredHeaderParameter>());
+//builder.Services.AddSwaggerGen(o => o.OperationFilter<AddRequiredHeaderParameter>());
 
 var app = builder.Build();
 
@@ -59,10 +59,10 @@ app.UseHealthChecksUI(delegate (Options options)
     //options.AddCustomStylesheet("./HealthCheck/Custom.css");
 });
 
-app.UseWhen(context => context.Request.Path.StartsWithSegments("/api/classifiers"), appBuilder =>
-{
-    appBuilder.UseMiddleware<ApiKeyAuthMiddleware>();
-});
+//app.UseWhen(context => context.Request.Path.StartsWithSegments("/api/classifiers"), appBuilder =>
+//{
+//    appBuilder.UseMiddleware<ApiKeyAuthMiddleware>();
+//});
 
 app.UseHttpsRedirection();
 
