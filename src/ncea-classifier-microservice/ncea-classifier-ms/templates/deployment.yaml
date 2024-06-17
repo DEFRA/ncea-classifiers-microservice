@@ -40,18 +40,19 @@ spec:
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}
+              protocol: TCP
           startupProbe:
             httpGet:
               path: /api/isAlive
-              port: 80
+              port: http
           livenessProbe:
             httpGet:
               path: /api/isAlive
-              port: 80
+              port: http
           readinessProbe:
             httpGet:
               path: /api/isAlive
-              port: 80
+              port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           {{- with .Values.volumeMounts }}
