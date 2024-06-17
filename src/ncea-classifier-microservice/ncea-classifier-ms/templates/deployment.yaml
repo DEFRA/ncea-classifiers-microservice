@@ -49,10 +49,10 @@ spec:
             httpGet:
               path: /api/isAlive
               port: http
-          readinessProbe:
-            httpGet:
-              path: /api/isAlive
-              port: http
+          # readinessProbe:
+          #   httpGet:
+          #     path: /api/isAlive
+          #     port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           {{- with .Values.volumeMounts }}
