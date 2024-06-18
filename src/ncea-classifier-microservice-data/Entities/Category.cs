@@ -2,6 +2,7 @@
 
 public class Category : ClassifierBaseEntity
 {
-    public List<Theme> Themes { get; set; } = [];
+    public string ThemeCode { get; set; } = null!;
+    public Theme Theme { get; set; } = null!;
     public List<SubCategory> SubCategories { get; set; } = [];
 }

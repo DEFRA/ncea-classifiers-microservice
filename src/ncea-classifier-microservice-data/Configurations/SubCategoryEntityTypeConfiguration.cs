@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Ncea.Classifier.Microservice.Data.Entities;
 
 namespace Ncea.Classifier.Microservice.Data.Configurations;
@@ -7,6 +8,16 @@ public class SubCategoryEntityTypeConfiguration : ClassifierBaseEntityTypeConfig
 {
     protected override void Configure(EntityTypeBuilder<SubCategory> builder)
     {
-        
+        builder
+            .Property(b => b.CategoryCode)
+            .HasColumnOrder(5);
+
+        builder
+            .Property(b => b.CreatedAt)
+            .HasColumnOrder(6);
+
+        builder
+            .Property(b => b.UpdatedAt)
+            .HasColumnOrder(7);
     }
 }

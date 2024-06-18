@@ -36,15 +36,7 @@ public abstract class ClassifierBaseEntityTypeConfiguration<T> : IEntityTypeConf
             .Property(b => b.Definition)
             .HasColumnType("text")
             .HasColumnOrder(4)
-            .IsRequired();
-
-        builder
-            .Property(b => b.CreatedAt)
-            .HasColumnOrder(5);
-
-        builder
-            .Property(b => b.UpdatedAt)
-            .HasColumnOrder(6);
+            .IsRequired();        
 
         Configure(builder);
     }

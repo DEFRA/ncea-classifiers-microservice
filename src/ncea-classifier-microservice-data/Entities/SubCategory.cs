@@ -2,5 +2,6 @@
 
 public class SubCategory : ClassifierBaseEntity
 {
-    public List<Category> Categories { get; set; } = [];
+    public string CategoryCode { get; set; } = null!;
+    public Category Category { get; set; } = null!;
 }

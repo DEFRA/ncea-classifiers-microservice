@@ -30,7 +30,7 @@ namespace Ncea.Classifier.Microservice.Data.Migrations
 
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnOrder(5);
+                        .HasColumnOrder(6);
 
                     b.Property<string>("Definition")
                         .IsRequired()
@@ -50,50 +50,20 @@ namespace Ncea.Classifier.Microservice.Data.Migrations
                         .HasColumnType("varchar(500)")
                         .HasColumnOrder(3);
 
+                    b.Property<string>("ThemeCode")
+                        .IsRequired()
+                        .HasColumnType("varchar(10)")
+                        .HasColumnOrder(5);
+
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnOrder(6);
+                        .HasColumnOrder(7);
 
                     b.HasKey("Code");
 
+                    b.HasIndex("ThemeCode");
+
                     b.ToTable("Categories");
-                });
-
-            modelBuilder.Entity("Ncea.Classifier.Microservice.Data.Entities.CategorySubCategory", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("Id")
-                        .HasColumnOrder(1);
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CategoryCode")
-                        .IsRequired()
-                        .HasColumnType("varchar(10)")
-                        .HasColumnOrder(2);
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnOrder(4);
-
-                    b.Property<string>("SubCategoryCode")
-                        .IsRequired()
-                        .HasColumnType("varchar(10)")
-                        .HasColumnOrder(3);
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnOrder(5);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CategoryCode");
-
-                    b.HasIndex("SubCategoryCode");
-
-                    b.ToTable("CategorySubCategory");
                 });
 
             modelBuilder.Entity("Ncea.Classifier.Microservice.Data.Entities.SearchPageContent", b =>
@@ -145,9 +115,14 @@ namespace Ncea.Classifier.Microservice.Data.Migrations
                         .HasColumnType("varchar(10)")
                         .HasColumnOrder(2);
 
+                    b.Property<string>("CategoryCode")
+                        .IsRequired()
+                        .HasColumnType("varchar(10)")
+                        .HasColumnOrder(5);
+
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnOrder(5);
+                        .HasColumnOrder(6);
 
                     b.Property<string>("Definition")
                         .IsRequired()
@@ -169,9 +144,11 @@ namespace Ncea.Classifier.Microservice.Data.Migrations
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone")
-                        .HasColumnOrder(6);
+                        .HasColumnOrder(7);
 
                     b.HasKey("Code");
+
+                    b.HasIndex("CategoryCode");
 
                     b.ToTable("SubCategories");
                 });
@@ -213,56 +190,15 @@ namespace Ncea.Classifier.Microservice.Data.Migrations
                     b.ToTable("Themes");
                 });
 
-            modelBuilder.Entity("Ncea.Classifier.Microservice.Data.Entities.ThemeCategory", b =>
+            modelBuilder.Entity("Ncea.Classifier.Microservice.Data.Entities.Category", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("Id")
-                        .HasColumnOrder(1);
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CategoryCode")
-                        .IsRequired()
-                        .HasColumnType("varchar(10)")
-                        .HasColumnOrder(3);
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnOrder(4);
-
-                    b.Property<string>("ThemeCode")
-                        .IsRequired()
-                        .HasColumnType("varchar(10)")
-                        .HasColumnOrder(2);
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnOrder(5);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CategoryCode");
-
-                    b.HasIndex("ThemeCode");
-
-                    b.ToTable("ThemeCategory");
-                });
-
-            modelBuilder.Entity("Ncea.Classifier.Microservice.Data.Entities.CategorySubCategory", b =>
-                {
-                    b.HasOne("Ncea.Classifier.Microservice.Data.Entities.Category", null)
-                        .WithMany()
-                        .HasForeignKey("CategoryCode")
+                    b.HasOne("Ncea.Classifier.Microservice.Data.Entities.Theme", "Theme")
+                        .WithMany("Categories")
+                        .HasForeignKey("ThemeCode")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Ncea.Classifier.Microservice.Data.Entities.SubCategory", null)
-                        .WithMany()
-                        .HasForeignKey("SubCategoryCode")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Theme");
                 });
 
             modelBuilder.Entity("Ncea.Classifier.Microservice.Data.Entities.SearchPageContent", b =>
@@ -274,23 +210,26 @@ namespace Ncea.Classifier.Microservice.Data.Migrations
                     b.Navigation("Theme");
                 });
 
-            modelBuilder.Entity("Ncea.Classifier.Microservice.Data.Entities.ThemeCategory", b =>
+            modelBuilder.Entity("Ncea.Classifier.Microservice.Data.Entities.SubCategory", b =>
                 {
-                    b.HasOne("Ncea.Classifier.Microservice.Data.Entities.Category", null)
-                        .WithMany()
+                    b.HasOne("Ncea.Classifier.Microservice.Data.Entities.Category", "Category")
+                        .WithMany("SubCategories")
                         .HasForeignKey("CategoryCode")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Ncea.Classifier.Microservice.Data.Entities.Theme", null)
-                        .WithMany()
-                        .HasForeignKey("ThemeCode")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("Ncea.Classifier.Microservice.Data.Entities.Category", b =>
+                {
+                    b.Navigation("SubCategories");
                 });
 
             modelBuilder.Entity("Ncea.Classifier.Microservice.Data.Entities.Theme", b =>
                 {
+                    b.Navigation("Categories");
+
                     b.Navigation("SearchPageContentBlocks");
                 });
 #pragma warning restore 612, 618

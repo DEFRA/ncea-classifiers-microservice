@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Ncea.Classifier.Microservice.Data.Entities;
 
 namespace Ncea.Classifier.Microservice.Data.Configurations;
@@ -9,15 +10,22 @@ public class ThemeEntityTypeConfiguration : ClassifierBaseEntityTypeConfiguratio
     {
         builder
             .HasMany(x => x.Categories)
-            .WithMany(x => x.Themes)
-            .UsingEntity<ThemeCategory>(
-                l => l.HasOne<Category>().WithMany().HasForeignKey(e => e.CategoryCode),
-                r => r.HasOne<Theme>().WithMany().HasForeignKey(e => e.ThemeCode));
+            .WithOne(x => x.Theme)
+            .HasForeignKey(x => x.ThemeCode)
+            .IsRequired(true);
 
         builder
             .HasMany(x => x.SearchPageContentBlocks)
             .WithOne(x => x.Theme)
             .HasForeignKey(x => x.ThemeCode)
             .IsRequired(false);
+
+        builder
+            .Property(b => b.CreatedAt)
+            .HasColumnOrder(5);
+
+        builder
+            .Property(b => b.UpdatedAt)
+            .HasColumnOrder(6);
     }
 }
