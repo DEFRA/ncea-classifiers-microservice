@@ -52,10 +52,10 @@ app.MapHealthChecks("/api/isAlive", new HealthCheckOptions()
     Predicate = _ => true,
     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
 });
-app.MapHealthChecks("/api/ready", new HealthCheckOptions
-{
-    Predicate = healthCheck => healthCheck.Tags.Contains("ready")
-});
+//app.MapHealthChecks("/api/ready", new HealthCheckOptions
+//{
+//    Predicate = healthCheck => healthCheck.Tags.Contains("ready")
+//});
 
 app.MapHealthChecks("/api/live", new HealthCheckOptions
 {
