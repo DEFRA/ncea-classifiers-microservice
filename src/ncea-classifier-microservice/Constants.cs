@@ -4,5 +4,5 @@ public static class Constants
 {
     public const string ApiKeyHeaderName = "X-API-Key";
 
-    public const string ApiKeyName = "NceaClassifierMicroServiceApiKey";
+    public const string ApiKeyName = "nceaClassifierMicroServiceApiKey";
 }

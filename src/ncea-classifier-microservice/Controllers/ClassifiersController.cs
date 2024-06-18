@@ -16,13 +16,13 @@ public class ClassifiersController : ControllerBase
     }
 
     [HttpGet]
-    [ProducesResponseType<IEnumerable<ClassifierHierarchy>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<IEnumerable<ClassifierInfo>>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public IActionResult GetAllClassifiers()
     {
-        return Ok(new List<ClassifierHierarchy>());
+        return Ok(new List<ClassifierInfo>());
     }
 
     
