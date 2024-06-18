@@ -12,15 +12,15 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Ncea.Classifier.Microservice.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240614125711_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20240618151039_InsertSeedData")]
+    partial class InsertSeedData
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.4")
+                .HasAnnotation("ProductVersion", "8.0.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);

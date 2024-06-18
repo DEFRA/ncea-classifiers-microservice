@@ -6,14 +6,14 @@ using System.Globalization;
 namespace Ncea.Classifier.Microservice.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class AddThemeData : Migration
+    public partial class InsertSeedData : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             var migrationAttribute = (MigrationAttribute)this.GetType()
-            .GetCustomAttributes(typeof(MigrationAttribute), false)
-            .Single();
+                .GetCustomAttributes(typeof(MigrationAttribute), false)
+                .Single();
 
             migrationBuilder.Sql(File.ReadAllText(string.Format(
                 CultureInfo.InvariantCulture,
@@ -21,6 +21,7 @@ namespace Ncea.Classifier.Microservice.Data.Migrations
                 Path.DirectorySeparatorChar,
                 AppContext.BaseDirectory,
                 $"{migrationAttribute.Id}.sql")));
+
         }
 
         /// <inheritdoc />
