@@ -20,8 +20,6 @@ WORKDIR "/src/ncea-classifier-microservice"
 RUN dotnet publish "ncea-classifier-microservice.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
-ENV ASPNETCORE_HTTPS_PORTS 8081
-ENV ASPNETCORE_HTTP_PORTS 8080
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "ncea-classifier-microservice.dll"]
