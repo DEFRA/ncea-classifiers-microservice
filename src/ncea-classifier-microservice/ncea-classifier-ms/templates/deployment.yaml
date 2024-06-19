@@ -45,10 +45,10 @@ spec:
           #   httpGet:
           #     path: /api/isAlive
           #     port: http
-          livenessProbe:
-            httpGet:
-              path: /api/live
-              port: http
+          # livenessProbe:
+          #   httpGet:
+          #     path: /api/live
+          #     port: http
           # readinessProbe:
           #   httpGet:
           #     path: /api/ready
