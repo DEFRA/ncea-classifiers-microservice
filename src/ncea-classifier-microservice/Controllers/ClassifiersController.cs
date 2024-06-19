@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Ncea.Classifier.Microservice.Models;
 using Ncea.Classifier.Microservice.Models.Response;
+using Ncea.Classifier.Microservice.Data.Services.Contracts;
+using AutoMapper;
 
 namespace Ncea.Classifier.Microservice.Controllers;
 
@@ -8,10 +10,14 @@ namespace Ncea.Classifier.Microservice.Controllers;
 [Route("api/classifiers")]
 public class ClassifiersController : ControllerBase
 {
+    private readonly IClassifierService _classifierService;
+    private readonly IMapper _mapper;
     private readonly ILogger<ClassifiersController> _logger;
 
-    public ClassifiersController(ILogger<ClassifiersController> logger)
+    public ClassifiersController(IClassifierService classifierService, IMapper mapper, ILogger<ClassifiersController> logger)
     {
+        _classifierService = classifierService;
+        _mapper = mapper;
         _logger = logger;
     }
 
@@ -20,19 +26,29 @@ public class ClassifiersController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult GetAllClassifiers()
+    public async Task<IActionResult> GetAllClassifiers(CancellationToken cancellationToken)
     {
-        return Ok(new List<ClassifierInfo>());
+        var result = await _classifierService.GetAllClassifiers(cancellationToken);
+
+        var classifiers = _mapper.Map<List<ClassifierInfo>>(result);
+
+        return Ok(classifiers);
     }
 
     
     [HttpGet("level/{LevelId}")]
-    [ProducesResponseType<IEnumerable<GuidedSearchClassifiers>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<IEnumerable<GuidedSearchClassifiersWithPageContent>>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult GetClassifiersByLevel(FilterCriteria filetrCriteria)
+    public async Task<IActionResult> GetClassifiersByLevel(FilterCriteria filterCriteria, CancellationToken cancellationToken)
     {
-        return Ok(new List<GuidedSearchClassifiers>());
+        var parentCodes = (filterCriteria.Parents != null) ? filterCriteria.Parents.Split(',').Select(x => x.Trim()).ToArray() : [];
+
+        var result = await _classifierService.GetGuidedSearchClassifiersByLevelAndParentCodes((Domain.Enums.Level)filterCriteria.LevelId, parentCodes, cancellationToken);
+
+        var classifiers = _mapper.Map<List<GuidedSearchClassifiersWithPageContent>>(result);
+
+        return Ok(classifiers);
     }
 }

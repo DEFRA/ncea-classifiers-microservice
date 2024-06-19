@@ -35,11 +35,10 @@ builder.Services.ConfigureHealthChecks(Configuration);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddSwaggerGen(o => o.OperationFilter<AddRequiredHeaderParameter>());
+//builder.Services.AddSwaggerGen(o => o.OperationFilter<AddRequiredHeaderParameter>());
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -52,20 +51,20 @@ app.MapHealthChecks("/api/isAlive", new HealthCheckOptions()
     Predicate = _ => true,
     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
 });
-//app.MapHealthChecks("/api/ready", new HealthCheckOptions
-//{
-//    Predicate = healthCheck => healthCheck.Tags.Contains("ready")
-//});
+app.MapHealthChecks("/api/ready", new HealthCheckOptions
+{
+    Predicate = healthCheck => healthCheck.Tags.Contains("ready")
+});
 
 app.MapHealthChecks("/api/live", new HealthCheckOptions
 {
     Predicate = _ => false
 });
 
-app.UseWhen(context => context.Request.Path.StartsWithSegments("/api/classifiers"), appBuilder =>
-{
-    appBuilder.UseMiddleware<ApiKeyAuthMiddleware>();
-});
+//app.UseWhen(context => context.Request.Path.StartsWithSegments("/api/classifiers"), appBuilder =>
+//{
+//    appBuilder.UseMiddleware<ApiKeyAuthMiddleware>();
+//});
 
 app.UseHttpsRedirection();
 
@@ -154,4 +153,5 @@ static void ConfigureServices(WebApplicationBuilder builder)
     builder.Services.AddTransient<IApiKeyValidationService, ApiKeyValidationService>();
     builder.Services.AddScoped<IValidator<FilterCriteria>, FilterCriteriaValidator>();
     builder.Services.AddScoped<IClassifierService, ClassifierService>();
+    builder.Services.AddAutoMapper(typeof(MappingProfile));
 }

@@ -7,9 +7,5 @@ public interface IClassifierService
 {
     Task<IEnumerable<ClassifierInfo>> GetAllClassifiers(CancellationToken cancellationToken);
 
-    Task<ClassifierInfo> GetClassifierByLevelAndCode(Level level, string code, CancellationToken cancellationToken);
-    Task<ClassifierInfo> GetClassifierByLevelAndCodeWithChildren(Level level, string code, CancellationToken cancellationToken);
-
-    Task<IEnumerable<ClassifierInfo>> GetClassifiersByLevel(Level level, CancellationToken cancellationToken);
-    Task<IEnumerable<ClassifierInfo>> GetClassifiersByLevelWithChildren(Level level, CancellationToken cancellationToken);
+    Task<IEnumerable<GuidedSearchClassifiersWithPageContent>> GetGuidedSearchClassifiersByLevelAndParentCodes(Level level, string[] parentCodes, CancellationToken cancellationToken);
 }
