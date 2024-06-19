@@ -10,8 +10,8 @@ public static class HealthCheck
         services.AddHealthChecks()
             .AddDbContextCheck<AppDbContext>();
 
-        services.AddHealthChecks()
-            .AddNpgSql(healthQuery: "select 1", name: "Postgre", failureStatus: HealthStatus.Unhealthy, tags: new[] { "Ncea Classifiers", "Database" })
-            .AddApplicationInsightsPublisher();
+        //services.AddHealthChecks()
+        //    .AddNpgSql(healthQuery: "select 1", name: "Postgre", failureStatus: HealthStatus.Unhealthy, tags: new[] { "Ncea Classifiers", "Database" })
+        //    .AddApplicationInsightsPublisher();
     }
 }
