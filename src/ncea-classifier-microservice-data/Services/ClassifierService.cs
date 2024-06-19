@@ -56,29 +56,6 @@ public class ClassifierService : IClassifierService
             .OrderBy(x => x.ThemeCode);
 
         return classifierGroups;
-    }    
-
-    private static GuidedSearchClassifiersWithPageContent CreateGuidedSearchClassifiersWithPageContent(IGrouping<ClassifierGroupCode, GuidedSearchClassifierInfo> grp, List<SearchPageContent> pageContentBlocks)
-    {
-        var sectionTitle = string.Empty;
-        var sectionIntroduction = string.Empty;
-
-        if(pageContentBlocks.Any(x => x.ThemeCode == grp.Key.ThemeCode))
-        {
-            var pageContent = pageContentBlocks.FirstOrDefault(x => x.ThemeCode == grp.Key.ThemeCode)!;
-            sectionTitle = pageContent.SectionTitle;
-            sectionIntroduction = pageContent.SectionIntroduction;
-        }
-
-        return new GuidedSearchClassifiersWithPageContent
-        {
-            ThemeCode = grp.Key.ThemeCode,
-            ThemeName = grp.Key.ThemeName,
-            SectionTitle = sectionTitle,
-            SectionIntroduction = sectionIntroduction,
-            Level = grp.Key.Level,
-            Classifiers = grp.Select(x => x).ToList()
-        };
     }
 
     private async Task<IEnumerable<GuidedSearchClassifierInfo>> GetGuidedSearchClassifierInfo(Level level, string[] parentCodes, CancellationToken cancellationToken)
