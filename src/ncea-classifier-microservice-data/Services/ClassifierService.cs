@@ -3,7 +3,6 @@ using Ncea.Classifier.Microservice.Data.Services.Contracts;
 using Ncea.Classifier.Microservice.Domain.Models;
 using Ncea.Classifier.Microservice.Domain.Enums;
 using Ncea.Classifier.Microservice.Data.Entities;
-using Ncea.Classifier.Microservice.Data.Models;
 
 namespace Ncea.Classifier.Microservice.Data.Services;
 
