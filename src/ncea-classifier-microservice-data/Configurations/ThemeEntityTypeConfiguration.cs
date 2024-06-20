@@ -11,8 +11,7 @@ public class ThemeEntityTypeConfiguration : ClassifierBaseEntityTypeConfiguratio
         builder
             .HasMany(x => x.Categories)
             .WithOne(x => x.Theme)
-            .HasForeignKey(x => x.ThemeCode)
-            .IsRequired(true);
+            .HasForeignKey(x => x.ThemeCode);
 
         builder
             .HasMany(x => x.SearchPageContentBlocks)
@@ -22,10 +21,12 @@ public class ThemeEntityTypeConfiguration : ClassifierBaseEntityTypeConfiguratio
 
         builder
             .Property(b => b.CreatedAt)
-            .HasColumnOrder(5);
+            .HasColumnOrder(5)
+            .IsRequired(false);
 
         builder
             .Property(b => b.UpdatedAt)
-            .HasColumnOrder(6);
+            .HasColumnOrder(6)
+            .IsRequired(false);
     }
 }

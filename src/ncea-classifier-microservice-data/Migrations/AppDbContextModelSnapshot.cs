@@ -33,7 +33,6 @@ namespace Ncea.Classifier.Microservice.Data.Migrations
                         .HasColumnOrder(6);
 
                     b.Property<string>("Definition")
-                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnOrder(4);
 
@@ -80,14 +79,9 @@ namespace Ncea.Classifier.Microservice.Data.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnOrder(6);
 
-                    b.Property<string>("SectionIntroduction")
+                    b.Property<string>("Key")
                         .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnOrder(3);
-
-                    b.Property<string>("SectionTitle")
-                        .IsRequired()
-                        .HasColumnType("text")
+                        .HasColumnType("varchar(100)")
                         .HasColumnOrder(2);
 
                     b.Property<int>("Step")
@@ -101,6 +95,10 @@ namespace Ncea.Classifier.Microservice.Data.Migrations
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnOrder(7);
+
+                    b.Property<string>("Value")
+                        .HasColumnType("text")
+                        .HasColumnOrder(3);
 
                     b.HasKey("Id");
 
@@ -125,7 +123,6 @@ namespace Ncea.Classifier.Microservice.Data.Migrations
                         .HasColumnOrder(6);
 
                     b.Property<string>("Definition")
-                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnOrder(4);
 
@@ -164,7 +161,6 @@ namespace Ncea.Classifier.Microservice.Data.Migrations
                         .HasColumnOrder(5);
 
                     b.Property<string>("Definition")
-                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnOrder(4);
 

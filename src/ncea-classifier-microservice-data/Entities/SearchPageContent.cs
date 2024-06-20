@@ -4,8 +4,8 @@ namespace Ncea.Classifier.Microservice.Data.Entities;
 
 public class SearchPageContent : BaseEntity
 {
-    public string SectionTitle { get; set; } = string.Empty;
-    public string SectionIntroduction { get; set; } = string.Empty;
+    public PageContentKey Key { get; set; }
+    public string Value { get; set; } = string.Empty;
 
     public string? ThemeCode { get; set; }
     public Theme? Theme { get; set; }

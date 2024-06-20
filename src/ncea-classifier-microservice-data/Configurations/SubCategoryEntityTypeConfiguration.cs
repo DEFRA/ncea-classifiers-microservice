@@ -14,10 +14,12 @@ public class SubCategoryEntityTypeConfiguration : ClassifierBaseEntityTypeConfig
 
         builder
             .Property(b => b.CreatedAt)
-            .HasColumnOrder(6);
+            .HasColumnOrder(6)
+            .IsRequired(false);
 
         builder
             .Property(b => b.UpdatedAt)
-            .HasColumnOrder(7);
+            .HasColumnOrder(7)
+            .IsRequired(false);
     }
 }

@@ -20,7 +20,7 @@ namespace Ncea.Classifier.Microservice.Data.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Code = table.Column<string>(type: "varchar(10)", nullable: false),
                     Name = table.Column<string>(type: "varchar(500)", nullable: false),
-                    Definition = table.Column<string>(type: "text", nullable: false),
+                    Definition = table.Column<string>(type: "text", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
@@ -37,7 +37,7 @@ namespace Ncea.Classifier.Microservice.Data.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Code = table.Column<string>(type: "varchar(10)", nullable: false),
                     Name = table.Column<string>(type: "varchar(500)", nullable: false),
-                    Definition = table.Column<string>(type: "text", nullable: false),
+                    Definition = table.Column<string>(type: "text", nullable: true),
                     ThemeCode = table.Column<string>(type: "varchar(10)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
@@ -59,8 +59,8 @@ namespace Ncea.Classifier.Microservice.Data.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    SectionTitle = table.Column<string>(type: "text", nullable: false),
-                    SectionIntroduction = table.Column<string>(type: "text", nullable: false),
+                    Key = table.Column<string>(type: "varchar(100)", nullable: false),
+                    Value = table.Column<string>(type: "text", nullable: true),
                     ThemeCode = table.Column<string>(type: "varchar(10)", nullable: true),
                     Step = table.Column<int>(type: "integer", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
@@ -84,7 +84,7 @@ namespace Ncea.Classifier.Microservice.Data.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Code = table.Column<string>(type: "varchar(10)", nullable: false),
                     Name = table.Column<string>(type: "varchar(500)", nullable: false),
-                    Definition = table.Column<string>(type: "text", nullable: false),
+                    Definition = table.Column<string>(type: "text", nullable: true),
                     CategoryCode = table.Column<string>(type: "varchar(10)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)

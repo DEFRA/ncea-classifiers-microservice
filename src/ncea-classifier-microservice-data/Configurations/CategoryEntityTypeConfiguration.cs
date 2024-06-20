@@ -11,8 +11,7 @@ public class CategoryEntityTypeConfiguration : ClassifierBaseEntityTypeConfigura
         builder
             .HasMany(x => x.SubCategories)
             .WithOne(x => x.Category)
-            .HasForeignKey(x => x.CategoryCode)
-            .IsRequired(true);
+            .HasForeignKey(x => x.CategoryCode);
 
         builder
             .Property(b => b.ThemeCode)
@@ -20,10 +19,12 @@ public class CategoryEntityTypeConfiguration : ClassifierBaseEntityTypeConfigura
 
         builder
             .Property(b => b.CreatedAt)
-            .HasColumnOrder(6);
+            .HasColumnOrder(6)
+            .IsRequired(false);
 
         builder
             .Property(b => b.UpdatedAt)
-            .HasColumnOrder(7);
+            .HasColumnOrder(7)
+            .IsRequired(false);
     }
 }

@@ -3,6 +3,7 @@ using Ncea.Classifier.Microservice.Data.Services.Contracts;
 using Ncea.Classifier.Microservice.Domain.Models;
 using Ncea.Classifier.Microservice.Domain.Enums;
 using Ncea.Classifier.Microservice.Data.Entities;
+using Ncea.Classifier.Microservice.Data.Enums;
 
 namespace Ncea.Classifier.Microservice.Data.Services;
 
@@ -39,7 +40,7 @@ public class ClassifierService : IClassifierService
         var distinctThemeCodes = classifiers.Select(x => x.ThemeCode).Distinct();
 
         var pageContentBlocks = await _dbContext.SearchPageContentBlocks
-            .Where(x => x.Step == (Enums.SearchStep)level && (distinctThemeCodes != null || distinctThemeCodes!.Contains(x.ThemeCode)))
+            .Where(x => x.Step == (SearchStep)level && (distinctThemeCodes != null || distinctThemeCodes!.Contains(x.ThemeCode)))
             .ToListAsync(cancellationToken);
 
         var classifierGroups = classifiers.GroupBy(x => new { x.ThemeCode, x.ThemeName, x.Level })
@@ -47,8 +48,8 @@ public class ClassifierService : IClassifierService
             {
                 ThemeCode = grp.Key.ThemeCode,
                 ThemeName = grp.Key.ThemeName,
-                SectionTitle = GetSectionTitle(grp.Key.ThemeCode, pageContentBlocks),
-                SectionIntroduction = GetSectionIntroduction(grp.Key.ThemeCode, pageContentBlocks),
+                SectionTitle = GetPageContentByTheme(grp.Key.ThemeCode, PageContentKey.SectionTitle, pageContentBlocks),
+                SectionIntroduction = GetPageContentByTheme(grp.Key.ThemeCode, PageContentKey.SectionIntroduction, pageContentBlocks),
                 Level = grp.Key.Level,
                 Classifiers = (grp.Key.Level != Level.Theme ) ? grp.Select(x => x).ToList(): null
             })
@@ -132,27 +133,15 @@ public class ClassifierService : IClassifierService
         classifiers.Add(classifierSubCategory);
     }
 
-    private static string GetSectionTitle(string themeCode, List<SearchPageContent> pageContentBlocks)
+    private static string GetPageContentByTheme(string themeCode, PageContentKey contentKey ,List<SearchPageContent> pageContentBlocks)
     {
         var result = string.Empty;
 
-        if (pageContentBlocks.Any(x => x.ThemeCode == themeCode))
+        var contentBlocks = pageContentBlocks.Where(x => x.ThemeCode == themeCode && x.Key == contentKey);
+
+        if (contentBlocks.Any())
         {
-            var pageContent = pageContentBlocks.FirstOrDefault(x => x.ThemeCode == themeCode)!;
-            result = pageContent.SectionTitle;
-        }
-
-        return result;
-    }
-
-    private static string GetSectionIntroduction(string themeCode, List<SearchPageContent> pageContentBlocks)
-    {
-        var result = string.Empty;
-
-        if (pageContentBlocks.Any(x => x.ThemeCode == themeCode))
-        {
-            var pageContent = pageContentBlocks.FirstOrDefault(x => x.ThemeCode == themeCode)!;
-            result = pageContent.SectionIntroduction;
+            result = contentBlocks.FirstOrDefault()!.Value;
         }
 
         return result;

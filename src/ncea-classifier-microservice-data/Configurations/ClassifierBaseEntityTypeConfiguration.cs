@@ -17,14 +17,12 @@ public abstract class ClassifierBaseEntityTypeConfiguration<T> : IEntityTypeConf
             .UseIdentityColumn()
             .HasColumnName("Id")
             .HasColumnType("int")
-            .HasColumnOrder(1)
-            .IsRequired();
+            .HasColumnOrder(1);
 
         builder
             .Property(b => b.Code)
             .HasColumnType("varchar(10)")
-            .HasColumnOrder(2)
-            .IsRequired();
+            .HasColumnOrder(2);
 
         builder
             .Property(b => b.Name)
@@ -36,7 +34,7 @@ public abstract class ClassifierBaseEntityTypeConfiguration<T> : IEntityTypeConf
             .Property(b => b.Definition)
             .HasColumnType("text")
             .HasColumnOrder(4)
-            .IsRequired();        
+            .IsRequired(false);        
 
         Configure(builder);
     }
