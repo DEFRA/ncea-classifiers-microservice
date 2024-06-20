@@ -4,8 +4,7 @@
     {        
         public string Code { get; set; } = null!;
         public string Name { get; set; } = null!;
-        public int Level { get; set; }
-        public string Definition { get; set; } = string.Empty;
+        public int Level { get; set; }        
         public List<ClassifierInfo> Classifiers { get; set; } = [];
     }
 }
