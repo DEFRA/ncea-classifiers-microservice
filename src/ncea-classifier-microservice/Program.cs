@@ -20,6 +20,7 @@ using Ncea.Classifier.Microservice.Services;
 using Ncea.Classifier.Microservice.Middlewares;
 using Ncea.Classifier.Microservice.Filters;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,36 +36,29 @@ builder.Services.ConfigureHealthChecks(Configuration);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-//builder.Services.AddSwaggerGen(o => o.OperationFilter<AddRequiredHeaderParameter>());
+builder.Services.AddSwaggerGen(o => o.OperationFilter<AddRequiredHeaderParameter>());
 
 var app = builder.Build();
 
-//if (app.Environment.IsDevelopment())
-//{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-//}
+app.UseSwagger();
+app.UseSwaggerUI();
 
-//HealthCheck Middleware
 app.MapHealthChecks("/api/isAlive", new HealthCheckOptions()
 {
     Predicate = _ => true,
-    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-});
-app.MapHealthChecks("/api/ready", new HealthCheckOptions
-{
-    Predicate = healthCheck => healthCheck.Tags.Contains("ready")
-});
-
-app.MapHealthChecks("/api/live", new HealthCheckOptions
-{
-    Predicate = _ => false
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
+    ResultStatusCodes =
+    {
+        [HealthStatus.Healthy] = StatusCodes.Status200OK,
+        [HealthStatus.Degraded] = StatusCodes.Status200OK,
+        [HealthStatus.Unhealthy] = StatusCodes.Status503ServiceUnavailable
+    }
 });
 
-//app.UseWhen(context => context.Request.Path.StartsWithSegments("/api/classifiers"), appBuilder =>
-//{
-//    appBuilder.UseMiddleware<ApiKeyAuthMiddleware>();
-//});
+app.UseWhen(context => context.Request.Path.StartsWithSegments("/api/classifiers"), appBuilder =>
+{
+    appBuilder.UseMiddleware<ApiKeyAuthMiddleware>();
+});
 
 app.UseHttpsRedirection();
 
