@@ -62,6 +62,8 @@ app.UseWhen(context => context.Request.Path.StartsWithSegments("/api/classifiers
 
 app.UseHttpsRedirection();
 
+app.UseCors("CorsPolicy");
+
 app.UseAuthorization();
 
 app.MapControllers();
@@ -140,6 +142,16 @@ void ApplyMigrations()
 
 static void ConfigureServices(WebApplicationBuilder builder)
 {
+    builder.Services.AddCors(options =>
+    {
+        options.AddPolicy("CorsPolicy", builder =>
+        {
+            builder.AllowAnyOrigin()
+                   .AllowAnyMethod()
+                   .AllowAnyHeader();
+        });
+    });
+
     builder.Services.Configure<ApiBehaviorOptions>(options =>
     {
         options.SuppressInferBindingSourcesForParameters = true;
