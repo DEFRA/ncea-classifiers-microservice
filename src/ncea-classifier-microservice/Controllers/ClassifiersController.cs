@@ -7,7 +7,7 @@ using AutoMapper;
 namespace Ncea.Classifier.Microservice.Controllers;
 
 [ApiController]
-[Route("api/classifiers")]
+[Route("api")]
 public class ClassifiersController : ControllerBase
 {
     private readonly IClassifierService _classifierService;
@@ -21,7 +21,7 @@ public class ClassifiersController : ControllerBase
         _logger = logger;
     }
 
-    [HttpGet]
+    [HttpGet("vocabulary")]
     [ProducesResponseType<IEnumerable<ClassifierInfo>>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -34,18 +34,17 @@ public class ClassifiersController : ControllerBase
 
         return Ok(classifiers);
     }
-
     
-    [HttpGet("level/{LevelId}")]
+    [HttpGet("classifiers")]
     [ProducesResponseType<IEnumerable<GuidedSearchClassifiersWithPageContent>>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetClassifiersByLevel(FilterCriteria filterCriteria, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetClassifiersByLevel([FromQuery] FilterCriteria filterCriteria, CancellationToken cancellationToken)
     {
         var parentCodes = (filterCriteria.Parents != null) ? filterCriteria.Parents.Split(',').Select(x => x.Trim()).ToArray() : [];
 
-        var result = await _classifierService.GetGuidedSearchClassifiersByLevelAndParentCodes((Domain.Enums.Level)filterCriteria.LevelId, parentCodes, cancellationToken);
+        var result = await _classifierService.GetGuidedSearchClassifiersByLevelAndParentCodes((Domain.Enums.Level)filterCriteria.Level, parentCodes, cancellationToken);
 
         var classifiers = _mapper.Map<List<GuidedSearchClassifiersWithPageContent>>(result);
 

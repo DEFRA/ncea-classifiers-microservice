@@ -50,7 +50,7 @@ public class ClassifierService : IClassifierService
                 SectionTitle = GetSectionTitle(grp.Key.ThemeCode, pageContentBlocks),
                 SectionIntroduction = GetSectionIntroduction(grp.Key.ThemeCode, pageContentBlocks),
                 Level = grp.Key.Level,
-                Classifiers = grp.Select(x => x).ToList()
+                Classifiers = (grp.Key.Level != Level.Theme ) ? grp.Select(x => x).ToList(): null
             })
             .OrderBy(x => x.ThemeCode);
 
@@ -89,43 +89,45 @@ public class ClassifierService : IClassifierService
 
     private void CreateThemeClassifier(Theme theme, List<ClassifierInfo> classifiers)
     {
-        var children = new List<ClassifierInfo>();
+        var hasChildren = theme.Categories.Any();
+
+        var children = hasChildren ? new List<ClassifierInfo>() : null;
 
         var classifierTheme = new ClassifierInfo(theme.Code, theme.Name, Level.Theme, theme.Definition, children);
 
         classifiers.Add(classifierTheme);
 
-        if (theme.Categories != null && theme.Categories.Any())
+        if (theme.Categories != null && hasChildren)
         {
             foreach (var category in theme.Categories)
             {
-                CreateCategoryClassifier(category, children);
+                CreateCategoryClassifier(category, children!);
             }
         }
     }
 
     private void CreateCategoryClassifier(Category category, List<ClassifierInfo> classifiers)
     {
-        var children = new List<ClassifierInfo>();
+        var hasChildren = category.SubCategories.Any();
+
+        var children = hasChildren ? new List<ClassifierInfo>() : null;
 
         var classifierCategory = new ClassifierInfo(category.Code, category.Name, Level.Category, category.Definition, children);
 
         classifiers.Add(classifierCategory);
 
-        if (category.SubCategories != null && category.SubCategories.Any())
+        if (category.SubCategories != null && hasChildren)
         {
             foreach (var subCategory in category.SubCategories)
             {
-                CreateSubCategoryClassifier(subCategory, children);
+                CreateSubCategoryClassifier(subCategory, children!);
             }
         }
     }
 
     private void CreateSubCategoryClassifier(SubCategory subCategory, List<ClassifierInfo> classifiers)
     {
-        var children = new List<ClassifierInfo>();
-
-        var classifierSubCategory = new ClassifierInfo(subCategory.Code, subCategory.Name, Level.SubCategory, subCategory.Definition, children);
+        var classifierSubCategory = new ClassifierInfo(subCategory.Code, subCategory.Name, Level.SubCategory, subCategory.Definition, null);
 
         classifiers.Add(classifierSubCategory);
     }

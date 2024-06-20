@@ -10,12 +10,12 @@ public class ClassifierInfo
         Name = name;
         Level = level;
         Definition = definition;
-        Classifiers = children ?? [];
+        Classifiers = children;
     }
 
     public string Code { get; }
     public string Name { get; }
     public Level Level { get; }
     public string Definition { get; }
-    public List<ClassifierInfo> Classifiers { get; }
+    public List<ClassifierInfo>? Classifiers { get; }
 }

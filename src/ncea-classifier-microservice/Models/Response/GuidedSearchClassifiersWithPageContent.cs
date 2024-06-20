@@ -8,6 +8,6 @@ namespace Ncea.Classifier.Microservice.Models.Response
         public string? SectionTitle { get; set; }
         public string? SectionIntroduction { get; set; }
         public int Level { get; set; }
-        public List<GuidedSearchClassifier> Classifiers { get; set; } = [];
+        public List<GuidedSearchClassifier>? Classifiers { get; set; }
     }
 }

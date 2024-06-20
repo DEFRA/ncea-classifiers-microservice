@@ -7,7 +7,7 @@ public class FilterCriteriaValidator : AbstractValidator<FilterCriteria>
 {
     public FilterCriteriaValidator()
     {
-        RuleFor(x => x.LevelId)
+        RuleFor(x => x.Level)
             .InclusiveBetween(1, 3);
 
         When(c => c.Parents != null, () => {

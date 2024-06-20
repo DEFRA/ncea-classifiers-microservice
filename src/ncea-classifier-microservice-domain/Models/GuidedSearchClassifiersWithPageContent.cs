@@ -9,5 +9,5 @@ public class GuidedSearchClassifiersWithPageContent
     public string? SectionTitle { get; set; }
     public string? SectionIntroduction { get; set; }
     public Level Level { get; set; }
-    public List<GuidedSearchClassifierInfo> Classifiers { get; set; } = [];
+    public List<GuidedSearchClassifierInfo>? Classifiers { get; set; }
 }

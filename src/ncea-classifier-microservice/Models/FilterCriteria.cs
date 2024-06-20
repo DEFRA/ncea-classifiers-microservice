@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Ncea.Classifier.Microservice.Models;
 
 public class FilterCriteria
-{
-    [FromRoute]
-    public int LevelId { get; set; }
+{    
+    [BindRequired]
+    public int Level { get; set; }
 
-    [FromQuery]
     public string? Parents { get; set; }
 }
