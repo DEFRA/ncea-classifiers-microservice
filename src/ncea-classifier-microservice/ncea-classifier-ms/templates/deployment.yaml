@@ -47,11 +47,11 @@ spec:
           #     port: http
           livenessProbe:
             httpGet:
-              path: /api/live
+              path: /api/isAlive
               port: http
           readinessProbe:
             httpGet:
-              path: /api/ready
+              path: /api/isAlive
               port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
