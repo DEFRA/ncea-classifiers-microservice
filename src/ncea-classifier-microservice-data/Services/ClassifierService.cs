@@ -40,9 +40,7 @@ public class ClassifierService : IClassifierService
         var distinctThemeCodes = classifiers.Select(x => x.ThemeCode).Distinct();
 
         var pageContentBlocks = await _dbContext.SearchPageContentBlocks
-            .Where(x => x.Step == (SearchStep)level 
-            //&& (distinctThemeCodes != null || distinctThemeCodes!.Contains(x.ThemeCode))
-            )
+            .Where(x => x.Step == (SearchStep)level && (distinctThemeCodes != null || distinctThemeCodes!.Contains(x.ThemeCode)))
             .ToListAsync(cancellationToken);
 
         var classifierGroups = classifiers.GroupBy(x => new { x.ThemeCode, x.ThemeName, x.Level })

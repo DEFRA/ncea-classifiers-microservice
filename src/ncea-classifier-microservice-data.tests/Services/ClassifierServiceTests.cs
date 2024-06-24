@@ -8,7 +8,7 @@ namespace Ncea.Classifier.Microservice.Data.Tests.Services;
 public class ClassifierServiceTests : IDisposable
 {
     private readonly AppDbContext _dbContext;
-    private readonly IClassifierService _classifierService;
+    private readonly ClassifierService _classifierService;
 
     public ClassifierServiceTests()
     {
@@ -34,8 +34,8 @@ public class ClassifierServiceTests : IDisposable
 
         // Assert
         result.Count().Should().Be(2); // Theme
-        result.First().Classifiers!.Count().Should().Be(1); // Category
-        result.First().Classifiers!.First().Classifiers!.Count().Should().Be(1); // SubCategory
+        result.First().Classifiers!.Count.Should().Be(1); // Category
+        result.First().Classifiers!.First().Classifiers!.Count.Should().Be(1); // SubCategory
         result.First().Classifiers!.First().Classifiers!.First().Classifiers.Should().BeNull();
     }
 
@@ -82,14 +82,14 @@ public class ClassifierServiceTests : IDisposable
         result.First().ThemeName.Should().Be("test-theme-name-1");
         result.First().SectionTitle.Should().Be("<html>section-title-2</html>");
         result.First().SectionIntroduction.Should().Be("<html>section-introduction-2</html>");
-        result.First().Classifiers!.Count().Should().Be(1);
+        result.First().Classifiers!.Count.Should().Be(1);
         result.First().Classifiers![0].Code.Should().Be("test-category-1");
 
         result.Last().ThemeCode.Should().Be("test-theme-2");
         result.Last().ThemeName.Should().Be("test-theme-name-2");
         result.Last().SectionTitle.Should().BeEmpty();
         result.Last().SectionIntroduction.Should().BeEmpty();
-        result.Last().Classifiers!.Count().Should().Be(1);
+        result.Last().Classifiers!.Count.Should().Be(1);
         result.Last().Classifiers![0].Code.Should().Be("test-category-2");
     }
 
@@ -108,7 +108,7 @@ public class ClassifierServiceTests : IDisposable
         result.First().ThemeName.Should().Be("test-theme-name-1");
         result.First().SectionTitle.Should().Be("<html>section-title-2</html>");
         result.First().SectionIntroduction.Should().Be("<html>section-introduction-2</html>");
-        result.First().Classifiers!.Count().Should().Be(1);
+        result.First().Classifiers!.Count.Should().Be(1);
         result.First().Classifiers![0].Code.Should().Be("test-category-1");
     }
 
@@ -127,14 +127,14 @@ public class ClassifierServiceTests : IDisposable
         result.First().ThemeName.Should().Be("test-theme-name-1");
         result.First().SectionTitle.Should().Be("<html>section-title-3</html>");
         result.First().SectionIntroduction.Should().Be("<html>section-introduction-3</html>");
-        result.First().Classifiers!.Count().Should().Be(1);
+        result.First().Classifiers!.Count.Should().Be(1);
         result.First().Classifiers![0].Code.Should().Be("test-subcategory-1");
 
         result.Last().ThemeCode.Should().Be("test-theme-2");
         result.Last().ThemeName.Should().Be("test-theme-name-2");
         result.Last().SectionTitle.Should().BeEmpty();
         result.Last().SectionIntroduction.Should().BeEmpty();
-        result.Last().Classifiers!.Count().Should().Be(1);
+        result.Last().Classifiers!.Count.Should().Be(1);
         result.Last().Classifiers![0].Code.Should().Be("test-subcategory-2");
     }
 
@@ -153,7 +153,7 @@ public class ClassifierServiceTests : IDisposable
         result.First().ThemeName.Should().Be("test-theme-name-1");
         result.First().SectionTitle.Should().Be("<html>section-title-3</html>");
         result.First().SectionIntroduction.Should().Be("<html>section-introduction-3</html>");
-        result.First().Classifiers!.Count().Should().Be(1);
+        result.First().Classifiers!.Count.Should().Be(1);
         result.First().Classifiers![0].Code.Should().Be("test-subcategory-1");
     }
 
@@ -184,5 +184,7 @@ public class ClassifierServiceTests : IDisposable
     {
         _dbContext.Database.EnsureDeleted();
         _dbContext.Dispose();
+
+        GC.SuppressFinalize(this);
     }
 }
