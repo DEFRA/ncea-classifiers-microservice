@@ -27,7 +27,7 @@ public class ClassifierServiceTests : IDisposable
     public async Task GetAllClassifiers_WhenClassifierVocabularyExists_ReturnClassifierVocabularyWithThemeCategorySubCategory()
     {
         // Arrange
-        SeedInitialData();
+        await SeedInitialData();
 
         // Act
         var result = await _classifierService.GetAllClassifiers(default);
@@ -53,7 +53,7 @@ public class ClassifierServiceTests : IDisposable
     public async Task GetGuidedSearchClassifiersByLevelAndParentCodes_WhenLevelOneIsRequested_ReturnClassifiersForLevelOne()
     {
         // Arrange
-        SeedInitialData();
+        await SeedInitialData();
 
         // Act
         var result = await _classifierService.GetGuidedSearchClassifiersByLevelAndParentCodes(Domain.Enums.Level.Theme, [], default);
@@ -71,7 +71,7 @@ public class ClassifierServiceTests : IDisposable
     public async Task GetGuidedSearchClassifiersByLevelAndParentCodes_WhenLevelTwoIsRequestedWithoutParent_ReturnClassifiersForLevelTwo()
     {
         // Arrange
-        SeedInitialData();
+        await SeedInitialData();
 
         // Act
         var result = await _classifierService.GetGuidedSearchClassifiersByLevelAndParentCodes(Domain.Enums.Level.Category, [], default);
@@ -97,7 +97,7 @@ public class ClassifierServiceTests : IDisposable
     public async Task GetGuidedSearchClassifiersByLevelAndParentCodes_WhenLevelTwoIsRequestedWithParent_ReturnClassifiersForLevelTwo()
     {
         // Arrange
-        SeedInitialData();
+        await SeedInitialData();
 
         // Act
         var result = await _classifierService.GetGuidedSearchClassifiersByLevelAndParentCodes(Domain.Enums.Level.Category, ["test-theme-1"], default);
@@ -116,7 +116,7 @@ public class ClassifierServiceTests : IDisposable
     public async Task GetGuidedSearchClassifiersByLevelAndParentCodes_WhenLevelThreeIsRequestedWithoutParent_ReturnClassifiersForLevelThree()
     {
         // Arrange
-        SeedInitialData();
+        await SeedInitialData();
 
         // Act
         var result = await _classifierService.GetGuidedSearchClassifiersByLevelAndParentCodes(Domain.Enums.Level.SubCategory, [], default);
@@ -142,7 +142,7 @@ public class ClassifierServiceTests : IDisposable
     public async Task GetGuidedSearchClassifiersByLevelAndParentCodes_WhenLevelThreeIsRequestedWithParent_ReturnClassifiersForLevelThree()
     {
         // Arrange
-        SeedInitialData();
+        await SeedInitialData();
 
         // Act
         var result = await _classifierService.GetGuidedSearchClassifiersByLevelAndParentCodes(Domain.Enums.Level.SubCategory, ["test-category-1"], default);
@@ -157,7 +157,7 @@ public class ClassifierServiceTests : IDisposable
         result.First().Classifiers![0].Code.Should().Be("test-subcategory-1");
     }
 
-    private void SeedInitialData()
+    private async Task SeedInitialData()
     {
         _dbContext.Themes.Add(new Entities.Theme() { Code = "test-theme-1", Name = "test-theme-name-1", Definition = "test-theme-def-1" });
         _dbContext.Themes.Add(new Entities.Theme() { Code = "test-theme-2", Name = "test-theme-name-2", Definition = "test-theme-def-2" });
@@ -177,7 +177,7 @@ public class ClassifierServiceTests : IDisposable
         _dbContext.SearchPageContentBlocks.Add(new Entities.SearchPageContent() { Key = Enums.PageContentKey.SectionTitle, Value = "<html>section-title-3</html>", ThemeCode = "test-theme-1", Step = Enums.SearchStep.Three });
         _dbContext.SearchPageContentBlocks.Add(new Entities.SearchPageContent() { Key = Enums.PageContentKey.SectionIntroduction, Value = "<html>section-introduction-3</html>", ThemeCode = "test-theme-1", Step = Enums.SearchStep.Three });
 
-        _dbContext.SaveChanges();
+        await _dbContext.SaveChangesAsync(default);
     }
 
     public void Dispose()
