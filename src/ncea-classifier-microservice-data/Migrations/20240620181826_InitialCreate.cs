@@ -7,8 +7,9 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Ncea.Classifier.Microservice.Data.Migrations
 {
-    [ExcludeFromCodeCoverage]
+
     /// <inheritdoc />
+    [ExcludeFromCodeCoverage]
     public partial class InitialCreate : Migration
     {
         /// <inheritdoc />

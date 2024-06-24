@@ -6,8 +6,9 @@ using System.Globalization;
 
 namespace Ncea.Classifier.Microservice.Data.Migrations
 {
-    [ExcludeFromCodeCoverage]
+
     /// <inheritdoc />
+    [ExcludeFromCodeCoverage]
     public partial class InsertSeedData : Migration
     {
         /// <inheritdoc />

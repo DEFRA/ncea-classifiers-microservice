@@ -22,6 +22,8 @@ using Ncea.Classifier.Microservice.Filters;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System.Diagnostics.CodeAnalysis;
+using IdentityModel.OidcClient;
+using Microsoft.Net.Http.Headers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -144,11 +146,13 @@ static void ConfigureServices(WebApplicationBuilder builder)
 {
     builder.Services.AddCors(options =>
     {
-        options.AddPolicy("CorsPolicy", builder =>
+        options.AddPolicy("CorsPolicy", policy =>
         {
-            builder.AllowAnyOrigin()
-                   .AllowAnyMethod()
-                   .AllowAnyHeader();
+            policy.WithOrigins("http://*.azure.defra.cloud")
+            .SetIsOriginAllowedToAllowWildcardSubdomains()
+            .WithHeaders(HeaderNames.ContentType, "X-API-Key")
+            .WithMethods("GET");
+
         });
     });
 
