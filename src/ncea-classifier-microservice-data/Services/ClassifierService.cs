@@ -60,7 +60,7 @@ public class ClassifierService : IClassifierService
 
     private async Task<IEnumerable<GuidedSearchClassifierInfo>> GetGuidedSearchClassifierInfo(Level level, string[] parentCodes, CancellationToken cancellationToken)
     {
-        var classifiers = new List<GuidedSearchClassifierInfo>();
+        List<GuidedSearchClassifierInfo> classifiers;
 
         if (level == Level.Category)
         {

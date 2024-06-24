@@ -1,10 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
 #nullable disable
 
 namespace Ncea.Classifier.Microservice.Data.Migrations
 {
+    [ExcludeFromCodeCoverage]
     /// <inheritdoc />
     public partial class InsertSeedData : Migration
     {

@@ -1,11 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
+﻿using System.Text.Json.Serialization;
 
 namespace Ncea.Classifier.Microservice.Models;
 
 public class FilterCriteria
-{    
-    [BindRequired]
+{   
+    [JsonRequired]
     public int Level { get; set; }
 
     public string? Parents { get; set; }
