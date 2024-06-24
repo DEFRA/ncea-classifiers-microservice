@@ -66,7 +66,7 @@ public class ClassifierService : IClassifierService
         {
             classifiers = await _dbContext.Categories
                 .Include(x => x.Theme)
-                .Where(x => !parentCodes.Any() || parentCodes.Contains(x.ThemeCode))
+                .Where(x => parentCodes.Length != 0 || parentCodes.Contains(x.ThemeCode))
                 .Select(x => new GuidedSearchClassifierInfo(x.Code, x.Name, Level.Category, x.Definition, x.ThemeCode, x.Theme.Name, x.ThemeCode, x.Theme.Name, null))
             .ToListAsync(cancellationToken);
         }
@@ -74,7 +74,7 @@ public class ClassifierService : IClassifierService
         {
             classifiers = await _dbContext.SubCategories
                 .Include(x => x.Category)
-                .Where(x => !parentCodes.Any() || parentCodes.Contains(x.CategoryCode))
+                .Where(x => parentCodes.Length != 0 || parentCodes.Contains(x.CategoryCode))
                 .Select(x => new GuidedSearchClassifierInfo(x.Code, x.Name, Level.SubCategory, x.Definition, x.Category.Theme.Code, x.Category.Theme.Name, x.CategoryCode, x.Category.Name, null))
                 .ToListAsync(cancellationToken);
         }
