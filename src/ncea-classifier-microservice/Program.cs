@@ -22,7 +22,6 @@ using Ncea.Classifier.Microservice.Filters;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System.Diagnostics.CodeAnalysis;
-using IdentityModel.OidcClient;
 using Microsoft.Net.Http.Headers;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -119,9 +118,9 @@ static void ConfigureDataServices(WebApplicationBuilder builder, ConfigurationMa
     }));    
 }
 
-static NpgsqlDataSourceBuilder SetUpDataSourceBuilderConfig(NpgsqlDataSourceBuilder dataSourceBuilder)
+static void SetUpDataSourceBuilderConfig(NpgsqlDataSourceBuilder dataSourceBuilder)
 {
-    return dataSourceBuilder.UsePeriodicPasswordProvider(async (_, ct) =>
+    dataSourceBuilder.UsePeriodicPasswordProvider(async (_, ct) =>
     {
         DefaultAzureCredential credential = new();
         TokenRequestContext ctx = new(["https://ossrdbms-aad.database.windows.net/.default"]);
@@ -148,11 +147,10 @@ static void ConfigureServices(WebApplicationBuilder builder)
     {
         options.AddPolicy("CorsPolicy", policy =>
         {
-            policy.WithOrigins("http://*.azure.defra.cloud")
+            policy.WithOrigins("https://*.defra.cloud")
             .SetIsOriginAllowedToAllowWildcardSubdomains()
             .WithHeaders(HeaderNames.ContentType, "X-API-Key")
             .WithMethods("GET");
-
         });
     });
 

@@ -66,7 +66,7 @@ public class ClassifierService : IClassifierService
         {
             classifiers = await _dbContext.Categories
                 .Include(x => x.Theme)
-                .Where(x => !parentCodes.Any() || parentCodes.Contains(x.ThemeCode))
+                .Where(x => parentCodes.Count() != 0 || parentCodes.Contains(x.ThemeCode))
                 .Select(x => new GuidedSearchClassifierInfo(x.Code, x.Name, Level.Category, x.Definition, x.ThemeCode, x.Theme.Name, x.ThemeCode, x.Theme.Name, null))
             .ToListAsync(cancellationToken);
         }
@@ -74,7 +74,7 @@ public class ClassifierService : IClassifierService
         {
             classifiers = await _dbContext.SubCategories
                 .Include(x => x.Category)
-                .Where(x => !parentCodes.Any() || parentCodes.Contains(x.CategoryCode))
+                .Where(x => parentCodes.Count() != 0 || parentCodes.Contains(x.CategoryCode))
                 .Select(x => new GuidedSearchClassifierInfo(x.Code, x.Name, Level.SubCategory, x.Definition, x.Category.Theme.Code, x.Category.Theme.Name, x.CategoryCode, x.Category.Name, null))
                 .ToListAsync(cancellationToken);
         }
@@ -90,7 +90,7 @@ public class ClassifierService : IClassifierService
 
     private void CreateThemeClassifier(Theme theme, List<ClassifierInfo> classifiers)
     {
-        var hasChildren = theme.Categories.Any();
+        var hasChildren = theme.Categories.Count() != 0;
 
         var children = hasChildren ? new List<ClassifierInfo>() : null;
 
@@ -109,7 +109,7 @@ public class ClassifierService : IClassifierService
 
     private void CreateCategoryClassifier(Category category, List<ClassifierInfo> classifiers)
     {
-        var hasChildren = category.SubCategories.Any();
+        var hasChildren = category.SubCategories.Count() != 0;
 
         var children = hasChildren ? new List<ClassifierInfo>() : null;
 
@@ -126,7 +126,7 @@ public class ClassifierService : IClassifierService
         }
     }
 
-    private void CreateSubCategoryClassifier(SubCategory subCategory, List<ClassifierInfo> classifiers)
+    private static void CreateSubCategoryClassifier(SubCategory subCategory, List<ClassifierInfo> classifiers)
     {
         var classifierSubCategory = new ClassifierInfo(subCategory.Code, subCategory.Name, Level.SubCategory, subCategory.Definition, null);
 
@@ -139,7 +139,7 @@ public class ClassifierService : IClassifierService
 
         var contentBlocks = pageContentBlocks.Where(x => x.ThemeCode == themeCode && x.Key == contentKey);
 
-        if (contentBlocks.Any())
+        if (contentBlocks.Count() != 0)
         {
             result = contentBlocks.FirstOrDefault()!.Value;
         }
