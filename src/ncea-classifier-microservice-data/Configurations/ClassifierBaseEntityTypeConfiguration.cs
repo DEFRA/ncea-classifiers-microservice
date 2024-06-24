@@ -1,10 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 using Ncea.Classifier.Microservice.Data.Entities;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Ncea.Classifier.Microservice.Data.Configurations;
 
-
+[ExcludeFromCodeCoverage]
 public abstract class ClassifierBaseEntityTypeConfiguration<T> : IEntityTypeConfiguration<T> where T : ClassifierBaseEntity
 {
     void IEntityTypeConfiguration<T>.Configure(EntityTypeBuilder<T> builder)

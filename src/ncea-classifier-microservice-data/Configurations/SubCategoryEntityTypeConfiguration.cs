@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Ncea.Classifier.Microservice.Data.Entities;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Ncea.Classifier.Microservice.Data.Configurations;
 
+[ExcludeFromCodeCoverage]
 public class SubCategoryEntityTypeConfiguration : ClassifierBaseEntityTypeConfiguration<SubCategory>
 {
     protected override void Configure(EntityTypeBuilder<SubCategory> builder)

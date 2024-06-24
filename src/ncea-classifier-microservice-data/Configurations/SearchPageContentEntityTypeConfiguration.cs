@@ -1,9 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 using Ncea.Classifier.Microservice.Data.Entities;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Ncea.Classifier.Microservice.Data.Configurations;
 
+[ExcludeFromCodeCoverage]
 public class SearchPageContentEntityTypeConfiguration : IEntityTypeConfiguration<SearchPageContent>
 {
     public void Configure(EntityTypeBuilder<SearchPageContent> builder)

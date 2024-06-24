@@ -40,7 +40,9 @@ public class ClassifierService : IClassifierService
         var distinctThemeCodes = classifiers.Select(x => x.ThemeCode).Distinct();
 
         var pageContentBlocks = await _dbContext.SearchPageContentBlocks
-            .Where(x => x.Step == (SearchStep)level && (distinctThemeCodes != null || distinctThemeCodes!.Contains(x.ThemeCode)))
+            .Where(x => x.Step == (SearchStep)level 
+            //&& (distinctThemeCodes != null || distinctThemeCodes!.Contains(x.ThemeCode))
+            )
             .ToListAsync(cancellationToken);
 
         var classifierGroups = classifiers.GroupBy(x => new { x.ThemeCode, x.ThemeName, x.Level })
@@ -60,32 +62,46 @@ public class ClassifierService : IClassifierService
 
     private async Task<IEnumerable<GuidedSearchClassifierInfo>> GetGuidedSearchClassifierInfo(Level level, string[] parentCodes, CancellationToken cancellationToken)
     {
-        List<GuidedSearchClassifierInfo> classifiers;
-
         if (level == Level.Category)
         {
-            classifiers = await _dbContext.Categories
-                .Include(x => x.Theme)
-                .Where(x => parentCodes.Length != 0 || parentCodes.Contains(x.ThemeCode))
-                .Select(x => new GuidedSearchClassifierInfo(x.Code, x.Name, Level.Category, x.Definition, x.ThemeCode, x.Theme.Name, x.ThemeCode, x.Theme.Name, null))
-            .ToListAsync(cancellationToken);
+            return await getCategoryClassifiers(parentCodes, cancellationToken);
         }
         else if (level == Level.SubCategory)
         {
-            classifiers = await _dbContext.SubCategories
-                .Include(x => x.Category)
-                .Where(x => parentCodes.Length != 0 || parentCodes.Contains(x.CategoryCode))
-                .Select(x => new GuidedSearchClassifierInfo(x.Code, x.Name, Level.SubCategory, x.Definition, x.Category.Theme.Code, x.Category.Theme.Name, x.CategoryCode, x.Category.Name, null))
-                .ToListAsync(cancellationToken);
+            return await GetSubCategoryClassifiers(parentCodes, cancellationToken);
         }
         else
         {
-            classifiers = await _dbContext.Themes
+            return await _dbContext.Themes
                 .Select(x => new GuidedSearchClassifierInfo(x.Code, x.Name, Level.Theme, x.Definition, x.Code, x.Name, string.Empty, string.Empty, null))
-            .ToListAsync(cancellationToken);
+                .ToListAsync(cancellationToken);
         }
+    }
 
-        return classifiers;
+    private async Task<IEnumerable<GuidedSearchClassifierInfo>> GetSubCategoryClassifiers(string[] parentCodes, CancellationToken cancellationToken)
+    {
+        var query = _dbContext.SubCategories.AsQueryable();
+        if (parentCodes.Length != 0)
+        {
+            query = query.Where(x => parentCodes.Contains(x.CategoryCode));
+        }
+        return await query
+            .Include(x => x.Category)
+            .Select(x => new GuidedSearchClassifierInfo(x.Code, x.Name, Level.SubCategory, x.Definition, x.Category.Theme.Code, x.Category.Theme.Name, x.CategoryCode, x.Category.Name, null))
+            .ToListAsync(cancellationToken);
+    }
+
+    private async Task<IEnumerable<GuidedSearchClassifierInfo>> getCategoryClassifiers(string[] parentCodes, CancellationToken cancellationToken)
+    {
+        var query = _dbContext.Categories.AsQueryable();
+        if (parentCodes.Length != 0)
+        {
+            query = query.Where(x => parentCodes.Contains(x.ThemeCode));
+        }
+        return await query
+            .Include(x => x.Theme)
+            .Select(x => new GuidedSearchClassifierInfo(x.Code, x.Name, Level.Category, x.Definition, x.ThemeCode, x.Theme.Name, x.ThemeCode, x.Theme.Name, null))
+            .ToListAsync(cancellationToken);
     }
 
     private static void CreateThemeClassifier(Theme theme, List<ClassifierInfo> classifiers)

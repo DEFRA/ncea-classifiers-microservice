@@ -9,7 +9,7 @@ public class TestHelper
     public TestHelper()
     {
         var builder = new DbContextOptionsBuilder<AppDbContext>();
-        builder.UseInMemoryDatabase(databaseName: "PostGreDbInMemory");
+        builder.UseInMemoryDatabase(databaseName: "PostgresSqlDbInMemory");
 
         var dbContextOptions = builder.Options;
         appDbContext = new AppDbContext(dbContextOptions);
