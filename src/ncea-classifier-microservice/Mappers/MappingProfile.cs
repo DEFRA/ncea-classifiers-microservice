@@ -2,7 +2,7 @@
 using Ncea.Classifier.Microservice.Domain.Models;
 using Ncea.Classifier.Microservice.Models.Response;
 
-namespace Ncea.Classifier.Microservice;
+namespace Ncea.Classifier.Microservice.Mappers;
 
 public class MappingProfile : Profile
 {

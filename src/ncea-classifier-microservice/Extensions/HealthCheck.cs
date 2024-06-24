@@ -1,8 +1,10 @@
 ﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Ncea.Classifier.Microservice.Data;
+using System.Diagnostics.CodeAnalysis;
 
-namespace Ncea.Classifier.Microservice;
+namespace Ncea.Classifier.Microservice.Extensions;
 
+[ExcludeFromCodeCoverage]
 public static class HealthCheck
 {
     private static readonly string[] _tags = ["Ncea Classifiers", "Database"];

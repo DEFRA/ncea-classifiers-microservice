@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Ncea.Classifier.Microservice;
 using Ncea.Classifier.Microservice.Data;
 using Microsoft.Extensions.Logging.ApplicationInsights;
 using Microsoft.ApplicationInsights.DependencyCollector;
@@ -23,6 +22,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.Net.Http.Headers;
+using Ncea.Classifier.Microservice.Extensions;
+using Ncea.Classifier.Microservice.Mappers;
 
 var builder = WebApplication.CreateBuilder(args);
 
