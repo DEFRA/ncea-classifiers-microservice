@@ -12,7 +12,7 @@ steps:
       projectKey: '$(sonarProjectKeyClassifierMicroservice)'
       projectName: '$(sonarProjectNameClassifierMicroservice)'
       extraProperties: |
-          sonar.exclusions=**/obj/**,**/*.dll,**/*.xml,**/*.yaml,**/DockerFile, **/Migrations/**
+          sonar.exclusions=**/obj/**,**/*.dll,**/*.xml,**/*.yaml,**/DockerFile, **/Migrations/**, **/SeedData/**
           sonar.coverage.exclusions=**/*.xml,**/*.yaml,**/DockerFile,**/Program.cs, **/Migrations/*.cs
           sonar.dotnet.excludeGeneratedCode=true
           sonar.cs.opencover.reportsPaths=$(Agent.TempDirectory)/*/coverage.opencover.xml
