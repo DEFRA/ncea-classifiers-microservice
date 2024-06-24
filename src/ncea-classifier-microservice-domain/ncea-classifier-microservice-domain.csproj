@@ -1,8 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <ItemGroup>
-    <AssemblyAttribute Include="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute" />
-  </ItemGroup>
-
+  
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <RootNamespace>Ncea.Classifier.Microservice.Domain</RootNamespace>

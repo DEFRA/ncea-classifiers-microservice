@@ -21,10 +21,10 @@ using Ncea.Classifier.Microservice.Middlewares;
 using Ncea.Classifier.Microservice.Filters;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using System.Diagnostics.CodeAnalysis;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 var Configuration = builder.Configuration;
 
 ConfigureKeyVault(builder);
@@ -70,7 +70,7 @@ app.MapControllers();
 
 ApplyMigrations();
 
-app.Run();
+await app.RunAsync();
 
 static void ConfigureKeyVault(WebApplicationBuilder builder)
 {
@@ -161,3 +161,6 @@ static void ConfigureServices(WebApplicationBuilder builder)
     builder.Services.AddScoped<IClassifierService, ClassifierService>();
     builder.Services.AddAutoMapper(typeof(MappingProfile));
 }
+
+[ExcludeFromCodeCoverage]
+public static partial class Program { }
