@@ -5,7 +5,7 @@ using System.Net;
 
 namespace Ncea.Classifier.Microservice.ExceptionHandlers;
 
-internal sealed class GlobalExceptionHandler : IExceptionHandler
+public class GlobalExceptionHandler : IExceptionHandler
 {
     private const string ExceptionTitle = "An unexpected error occurred";
     private readonly ILogger<GlobalExceptionHandler> _logger;
@@ -35,7 +35,7 @@ internal sealed class GlobalExceptionHandler : IExceptionHandler
                     Detail = argumentNullException.Message,
                     Instance = $"{httpContext.Request.Method} {httpContext.Request.Path}",
                 };
-                _logger.LogError(argumentNullException, "Exception occured : {Message}", argumentNullException.Message);
+                _logger.LogError(argumentNullException, "Exception occured : {notfoundException}", argumentNullException.Message);
                 break;
 
             case ValidationException validationException:
@@ -47,7 +47,7 @@ internal sealed class GlobalExceptionHandler : IExceptionHandler
                     Detail = validationException.Message,
                     Instance = $"{httpContext.Request.Method} {httpContext.Request.Path}",
                 };
-                _logger.LogError(validationException, "Exception occured : {Message}", validationException.Message);
+                _logger.LogError(validationException, "Exception occured : {validationErrorMessage}", validationException.Message);
                 break;
 
             case UnauthorizedAccessException authorizedException:
@@ -59,7 +59,7 @@ internal sealed class GlobalExceptionHandler : IExceptionHandler
                     Detail = authorizedException.Message,
                     Instance = $"{httpContext.Request.Method} {httpContext.Request.Path}",
                 };
-                _logger.LogError(authorizedException, "Exception occured : {Message}", authorizedException.Message);
+                _logger.LogError(authorizedException, "Exception occured : {unauthorizedException}", authorizedException.Message);
                 break;
 
             default:
@@ -71,7 +71,7 @@ internal sealed class GlobalExceptionHandler : IExceptionHandler
                     Detail = exception.Message,
                     Instance = $"{httpContext.Request.Method} {httpContext.Request.Path}"
                 };
-                _logger.LogError(exception, "Exception occured : {Message}", exception.Message);
+                _logger.LogError(exception, "Exception occured : {internalError}", exception.Message);
                 break;
         }
 
