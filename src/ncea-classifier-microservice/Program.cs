@@ -24,6 +24,7 @@ using System.Diagnostics.CodeAnalysis;
 using Microsoft.Net.Http.Headers;
 using Ncea.Classifier.Microservice.Extensions;
 using Ncea.Classifier.Microservice.Mappers;
+using Ncea.Classifier.Microservice.ExceptionHandlers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -62,9 +63,9 @@ app.UseWhen(context => context.Request.Path.StartsWithSegments("/api/classifiers
     appBuilder.UseMiddleware<ApiKeyAuthMiddleware>();
 });
 
-app.UseHttpsRedirection();
+app.UseExceptionHandler();
 
-app.UseCors("CorsPolicy");
+app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
@@ -144,21 +145,14 @@ void ApplyMigrations()
 
 static void ConfigureServices(WebApplicationBuilder builder)
 {
-    builder.Services.AddCors(options =>
-    {
-        options.AddPolicy("CorsPolicy", policy =>
-        {
-            policy.WithOrigins("https://*.defra.cloud")
-            .SetIsOriginAllowedToAllowWildcardSubdomains()
-            .WithHeaders(HeaderNames.ContentType, "X-API-Key")
-            .WithMethods("GET");
-        });
-    });
+    builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+    builder.Services.AddProblemDetails();
 
     builder.Services.Configure<ApiBehaviorOptions>(options =>
     {
         options.SuppressInferBindingSourcesForParameters = true;
     });
+
     builder.Services.AddTransient<IApiKeyValidationService, ApiKeyValidationService>();
     builder.Services.AddScoped<IValidator<FilterCriteria>, FilterCriteriaValidator>();
     builder.Services.AddScoped<IClassifierService, ClassifierService>();

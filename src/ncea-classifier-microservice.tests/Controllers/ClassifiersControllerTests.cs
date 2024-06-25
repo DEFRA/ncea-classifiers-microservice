@@ -30,7 +30,7 @@ public class ClassifiersControllerTests
         classifierServiceMock.Setup(x => x.GetAllClassifiers(It.IsAny<CancellationToken>()))
             .ReturnsAsync(new List<Domain.Models.ClassifierInfo>());
 
-        var controller = new ClassifiersController(classifierServiceMock.Object, _mapper, loggerMock.Object);
+        var controller = new ClassifiersController(classifierServiceMock.Object, _mapper);
         controller.ModelState.AddModelError("LevelId", "Required");
 
         // Act
@@ -52,7 +52,7 @@ public class ClassifiersControllerTests
                 new Domain.Models.ClassifierInfo("theme-code-1", "theme-name-1", Domain.Enums.Level.Theme,"theme-def-1", null)
             });
 
-        var controller = new ClassifiersController(classifierServiceMock.Object, _mapper, loggerMock.Object);
+        var controller = new ClassifiersController(classifierServiceMock.Object, _mapper);
 
         // Act
         var result = await controller.GetAllClassifiers(It.IsAny<CancellationToken>());
@@ -72,7 +72,7 @@ public class ClassifiersControllerTests
         classifierServiceMock.Setup(x => x.GetGuidedSearchClassifiersByLevelAndParentCodes(It.IsAny<Level>(), It.IsAny<string[]>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new List<Domain.Models.GuidedSearchClassifiersWithPageContent>());
 
-        var controller = new ClassifiersController(classifierServiceMock.Object, _mapper, loggerMock.Object);
+        var controller = new ClassifiersController(classifierServiceMock.Object, _mapper);
         controller.ModelState.AddModelError("LevelId", "Required");
 
         // Act
@@ -97,7 +97,7 @@ public class ClassifiersControllerTests
                 }
             });
 
-        var controller = new ClassifiersController(classifierServiceMock.Object, _mapper, loggerMock.Object);
+        var controller = new ClassifiersController(classifierServiceMock.Object, _mapper);
 
         // Act
         var result = await controller.GetClassifiersByLevel(new Models.FilterCriteria(), It.IsAny<CancellationToken>());
@@ -123,7 +123,7 @@ public class ClassifiersControllerTests
                 }
             });
 
-        var controller = new ClassifiersController(classifierServiceMock.Object, _mapper, loggerMock.Object);
+        var controller = new ClassifiersController(classifierServiceMock.Object, _mapper);
 
         // Act
         var result = await controller.GetClassifiersByLevel(new Models.FilterCriteria() { Level = (int)Level.SubCategory, Parents = "a, b,c"}, It.IsAny<CancellationToken>());

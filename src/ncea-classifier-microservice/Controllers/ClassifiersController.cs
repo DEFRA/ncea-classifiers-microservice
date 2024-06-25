@@ -12,13 +12,11 @@ public class ClassifiersController : ControllerBase
 {
     private readonly IClassifierService _classifierService;
     private readonly IMapper _mapper;
-    private readonly ILogger<ClassifiersController> _logger;
 
-    public ClassifiersController(IClassifierService classifierService, IMapper mapper, ILogger<ClassifiersController> logger)
+    public ClassifiersController(IClassifierService classifierService, IMapper mapper)
     {
         _classifierService = classifierService;
         _mapper = mapper;
-        _logger = logger;
     }
 
     [HttpGet("vocabulary")]

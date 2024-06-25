@@ -1,6 +1,0 @@
-@ncea_classifier_microservice_HostAddress = http://localhost:5083
-
-GET {{ncea_classifier_microservice_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
