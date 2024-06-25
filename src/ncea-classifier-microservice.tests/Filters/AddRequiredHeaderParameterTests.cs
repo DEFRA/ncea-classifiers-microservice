@@ -46,4 +46,24 @@ public class AddRequiredHeaderParameterTests
         var result = _operation.Parameters.Any(p => p.Name == Constants.ApiKeyHeaderName);
         result.Should().BeTrue();
     }
+
+    [Fact]
+    public void GivenApplyFilter_AssignsPropertiesWhenParametersAreNull_FromActionAttribute()
+    {
+        // Arrange
+        var operationFiltercontext = new OperationFilterContext(
+            new ApiDescription(),
+            _schemaGenerator,
+            _schemaRepository,
+            _methodInfo);
+        _operation.Parameters = null;
+
+        // Act
+        var filter = new AddRequiredHeaderParameter();
+        filter.Apply(_operation, operationFiltercontext);
+
+        //Assert
+        var result = _operation.Parameters!.Any(p => p.Name == Constants.ApiKeyHeaderName);
+        result.Should().BeTrue();
+    }
 }

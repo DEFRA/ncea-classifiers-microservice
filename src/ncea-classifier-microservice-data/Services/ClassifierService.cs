@@ -27,7 +27,7 @@ public class ClassifierService : IClassifierService
 
         foreach(var theme in themes)
         {
-            CreateThemeClassifier(theme, classifiers);
+            BuildThemeClassifier(theme, classifiers);
         }
 
         return classifiers;
@@ -102,7 +102,7 @@ public class ClassifierService : IClassifierService
             .ToListAsync(cancellationToken);
     }
 
-    private static void CreateThemeClassifier(Theme theme, List<ClassifierInfo> classifiers)
+    private static void BuildThemeClassifier(Theme theme, List<ClassifierInfo> classifiers)
     {
         var hasChildren = theme.Categories.Count != 0;
 
@@ -116,12 +116,12 @@ public class ClassifierService : IClassifierService
         {
             foreach (var category in theme.Categories)
             {
-                CreateCategoryClassifier(category, children!);
+                BuildCategoryClassifier(category, children!);
             }
         }
     }
 
-    private static void CreateCategoryClassifier(Category category, List<ClassifierInfo> classifiers)
+    private static void BuildCategoryClassifier(Category category, List<ClassifierInfo> classifiers)
     {
         var hasChildren = category.SubCategories.Count != 0;
 
@@ -135,12 +135,12 @@ public class ClassifierService : IClassifierService
         {
             foreach (var subCategory in category.SubCategories)
             {
-                CreateSubCategoryClassifier(subCategory, children!);
+                BuildSubCategoryClassifier(subCategory, children!);
             }
         }
     }
 
-    private static void CreateSubCategoryClassifier(SubCategory subCategory, List<ClassifierInfo> classifiers)
+    private static void BuildSubCategoryClassifier(SubCategory subCategory, List<ClassifierInfo> classifiers)
     {
         var classifierSubCategory = new ClassifierInfo(subCategory.Code, subCategory.Name, Level.SubCategory, subCategory.Definition, null);
 

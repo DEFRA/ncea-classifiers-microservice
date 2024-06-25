@@ -40,6 +40,43 @@ public class ClassifierServiceTests : IDisposable
     }
 
     [Fact]
+    public async Task GetAllClassifiers_WhenOnlyThemeClassifierVocabularyExists_ReturnClassifierVocabularyWithTheme()
+    {
+        // Arrange
+        _dbContext.Themes.Add(new Entities.Theme() { Code = "test-theme-1", Name = "test-theme-name-1", Definition = "test-theme-def-1" });
+        _dbContext.Themes.Add(new Entities.Theme() { Code = "test-theme-2", Name = "test-theme-name-2", Definition = "test-theme-def-2" });
+        await _dbContext.SaveChangesAsync(default);
+
+        // Act
+        var result = await _classifierService.GetAllClassifiers(default);
+
+        // Assert
+        result.Count().Should().Be(2); // Theme
+        result.First().Classifiers!.Should().BeNull();
+        result.Last().Classifiers!.Should().BeNull();
+    }
+
+    [Fact]
+    public async Task GetAllClassifiers_WhenThemeAndCategoryClassifierVocabularyExists_ReturnClassifierVocabularyWithThemeCategory()
+    {
+        // Arrange
+        _dbContext.Themes.Add(new Entities.Theme() { Code = "test-theme-1", Name = "test-theme-name-1", Definition = "test-theme-def-1" });
+        _dbContext.Themes.Add(new Entities.Theme() { Code = "test-theme-2", Name = "test-theme-name-2", Definition = "test-theme-def-2" });
+        _dbContext.Categories.Add(new Entities.Category() { Code = "test-category-1", Name = "test-category-name-1", Definition = "test-category-def-1", ThemeCode = "test-theme-1" });
+        
+        await _dbContext.SaveChangesAsync(default);
+
+        // Act
+        var result = await _classifierService.GetAllClassifiers(default);
+
+        // Assert
+        result.Count().Should().Be(2); // Theme
+        result.First().Classifiers!.Count.Should().Be(1); // Category
+        result.Last().Classifiers!.Should().BeNull();
+        result.First().Classifiers!.First().Classifiers!.Should().BeNull(); // SubCategory;
+    }
+
+    [Fact]
     public async Task GetAllClassifiers_WhenClassifierVocabularyNotExists_ReturnEmptyArray()
     {
         // Act

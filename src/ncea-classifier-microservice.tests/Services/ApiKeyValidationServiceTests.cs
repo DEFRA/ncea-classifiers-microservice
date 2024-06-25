@@ -73,4 +73,47 @@ public class ApiKeyValidationServiceTests
         // Assert
         result.Should().BeFalse();
     }
+
+    [Fact]
+    public void GivenIsValidApiKey_WhenApiKeyConfigurationNotAvailable_ThenReturnFalse()
+    {
+        // Arrange
+        var apiKey = "api-key-xx";
+
+        // Act
+        var configApiKey = new Dictionary<string, string>
+        {
+            {"nceaClassifierMicroServiceApiKey", ""}
+        };
+
+        var configuration = new ConfigurationBuilder()
+            .AddInMemoryCollection(configApiKey!)
+            .Build();
+
+        var apiKeyValidationService = new ApiKeyValidationService(configuration);
+        var result = apiKeyValidationService.IsValidApiKey(apiKey);
+
+        // Assert
+        result.Should().BeFalse();
+    }
+
+    [Fact]
+    public void GivenIsValidApiKey_WhenApiKeyConfigurationNotExists_ThenReturnFalse()
+    {
+        // Arrange
+        var apiKey = "api-key-xx";
+
+        // Act
+        var configApiKey = new Dictionary<string, string>();
+
+        var configuration = new ConfigurationBuilder()
+            .AddInMemoryCollection(configApiKey!)
+            .Build();
+
+        var apiKeyValidationService = new ApiKeyValidationService(configuration);
+        var result = apiKeyValidationService.IsValidApiKey(apiKey);
+
+        // Assert
+        result.Should().BeFalse();
+    }
 }

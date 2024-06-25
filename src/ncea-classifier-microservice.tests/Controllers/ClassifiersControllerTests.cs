@@ -108,4 +108,30 @@ public class ClassifiersControllerTests
         var classifier = returnValue.FirstOrDefault();
         Assert.Equal("test-theme-code", classifier!.ThemeCode);
     }
+
+    [Fact]
+    public async Task GetClassifiersByLevel_Return200OkResult_WhenLevelIdAndParentCodesGiven()
+    {
+        // Arrange
+        var classifierServiceMock = new Mock<IClassifierService>();
+        classifierServiceMock.Setup(x => x.GetGuidedSearchClassifiersByLevelAndParentCodes(It.IsAny<Level>(), It.IsAny<string[]>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new List<Domain.Models.GuidedSearchClassifiersWithPageContent>()
+            {
+                new Domain.Models.GuidedSearchClassifiersWithPageContent()
+                {
+                    ThemeCode = "test-theme-code"
+                }
+            });
+
+        var controller = new ClassifiersController(classifierServiceMock.Object, _mapper, loggerMock.Object);
+
+        // Act
+        var result = await controller.GetClassifiersByLevel(new Models.FilterCriteria() { Level = (int)Level.SubCategory, Parents = "a, b,c"}, It.IsAny<CancellationToken>());
+
+        // Assert
+        var okResult = Assert.IsType<OkObjectResult>(result);
+        var returnValue = Assert.IsType<List<Models.Response.GuidedSearchClassifiersWithPageContent>>(okResult.Value);
+        var classifier = returnValue.FirstOrDefault();
+        Assert.Equal("test-theme-code", classifier!.ThemeCode);
+    }
 }
