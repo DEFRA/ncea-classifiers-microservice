@@ -7,6 +7,7 @@ namespace Ncea.Classifier.Microservice.ExceptionHandlers;
 
 internal sealed class GlobalExceptionHandler : IExceptionHandler
 {
+    private const string ExceptionTitle = "An unexpected error occurred";
     private readonly ILogger<GlobalExceptionHandler> _logger;
 
     public GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger)
@@ -30,11 +31,11 @@ internal sealed class GlobalExceptionHandler : IExceptionHandler
                 {
                     Status = (int)HttpStatusCode.NotFound,
                     Type = argumentNullException.GetType().Name,
-                    Title = "An unexpected error occurred",
+                    Title = ExceptionTitle,
                     Detail = argumentNullException.Message,
                     Instance = $"{httpContext.Request.Method} {httpContext.Request.Path}",
                 };
-                _logger.LogError(argumentNullException, $"Exception occured : {argumentNullException.Message}");
+                _logger.LogError(argumentNullException, "Exception occured : {Message}", argumentNullException.Message);
                 break;
 
             case ValidationException validationException:
@@ -42,11 +43,11 @@ internal sealed class GlobalExceptionHandler : IExceptionHandler
                 {
                     Status = (int)HttpStatusCode.BadRequest,
                     Type = validationException.GetType().Name,
-                    Title = "An unexpected error occurred",
+                    Title = ExceptionTitle,
                     Detail = validationException.Message,
                     Instance = $"{httpContext.Request.Method} {httpContext.Request.Path}",
                 };
-                _logger.LogError(validationException, $"Exception occured : {validationException.Message}");
+                _logger.LogError(validationException, "Exception occured : {Message}", validationException.Message);
                 break;
 
             case UnauthorizedAccessException authorizedException:
@@ -54,11 +55,11 @@ internal sealed class GlobalExceptionHandler : IExceptionHandler
                 {
                     Status = (int)HttpStatusCode.BadRequest,
                     Type = authorizedException.GetType().Name,
-                    Title = "An unexpected error occurred",
+                    Title = ExceptionTitle,
                     Detail = authorizedException.Message,
                     Instance = $"{httpContext.Request.Method} {httpContext.Request.Path}",
                 };
-                _logger.LogError(authorizedException, $"Exception occured : {authorizedException.Message}");
+                _logger.LogError(authorizedException, "Exception occured : {Message}", authorizedException.Message);
                 break;
 
             default:
@@ -66,11 +67,11 @@ internal sealed class GlobalExceptionHandler : IExceptionHandler
                 {
                     Status = (int)HttpStatusCode.InternalServerError,
                     Type = exception.GetType().Name,
-                    Title = "An unexpected error occurred",
+                    Title = ExceptionTitle,
                     Detail = exception.Message,
                     Instance = $"{httpContext.Request.Method} {httpContext.Request.Path}"
                 };
-                _logger.LogError(exception, $"Exception occured : {exception.Message}");
+                _logger.LogError(exception, "Exception occured : {Message}", exception.Message);
                 break;
         }
 
