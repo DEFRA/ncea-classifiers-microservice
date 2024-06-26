@@ -61,6 +61,8 @@ public class ClassifiersControllerTests
         var classifierServiceMock = new Mock<IClassifierService>();
         classifierServiceMock.Setup(x => x.GetGuidedSearchClassifiersByLevelAndParentCodes(It.IsAny<Level>(), It.IsAny<string[]>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new List<Domain.Models.GuidedSearchClassifiersWithPageContent>());
+        classifierServiceMock.Setup(x => x.AreParentCodesValid(It.IsAny<Level>(), It.IsAny<string[]>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(true);
 
         var controller = new ClassifiersController(classifierServiceMock.Object, _validator, _mapper);
 
@@ -78,6 +80,8 @@ public class ClassifiersControllerTests
         var classifierServiceMock = new Mock<IClassifierService>();
         classifierServiceMock.Setup(x => x.GetGuidedSearchClassifiersByLevelAndParentCodes(It.IsAny<Level>(), It.IsAny<string[]>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new List<Domain.Models.GuidedSearchClassifiersWithPageContent>());
+        classifierServiceMock.Setup(x => x.AreParentCodesValid(It.IsAny<Level>(), It.IsAny<string[]>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(true);
 
         var controller = new ClassifiersController(classifierServiceMock.Object, _validator, _mapper);
 
@@ -95,6 +99,27 @@ public class ClassifiersControllerTests
         var classifierServiceMock = new Mock<IClassifierService>();
         classifierServiceMock.Setup(x => x.GetGuidedSearchClassifiersByLevelAndParentCodes(It.IsAny<Level>(), It.IsAny<string[]>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new List<Domain.Models.GuidedSearchClassifiersWithPageContent>());
+        classifierServiceMock.Setup(x => x.AreParentCodesValid(It.IsAny<Level>(), It.IsAny<string[]>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(true);
+
+        var controller = new ClassifiersController(classifierServiceMock.Object, _validator, _mapper);
+
+        // Act
+        var result = await controller.GetClassifiersByLevel(new Models.FilterCriteria() { Level = 0 }, It.IsAny<CancellationToken>());
+
+        // Assert
+        Assert.IsType<BadRequestObjectResult>(result);
+    }
+
+    [Fact]
+    public async Task GetClassifiersByLevel_ReturnsBadRequestResult_WhenGivenParentCodesAreNotInTheSystem()
+    {
+        // Arrange
+        var classifierServiceMock = new Mock<IClassifierService>();
+        classifierServiceMock.Setup(x => x.GetGuidedSearchClassifiersByLevelAndParentCodes(It.IsAny<Level>(), It.IsAny<string[]>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new List<Domain.Models.GuidedSearchClassifiersWithPageContent>());
+        classifierServiceMock.Setup(x => x.AreParentCodesValid(It.IsAny<Level>(), It.IsAny<string[]>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(false);
 
         var controller = new ClassifiersController(classifierServiceMock.Object, _validator, _mapper);
 
@@ -118,6 +143,8 @@ public class ClassifiersControllerTests
                     ThemeCode = "test-theme-code"
                 }
             });
+        classifierServiceMock.Setup(x => x.AreParentCodesValid(It.IsAny<Level>(), It.IsAny<string[]>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(true);
 
         var controller = new ClassifiersController(classifierServiceMock.Object, _validator, _mapper);
 
@@ -144,6 +171,8 @@ public class ClassifiersControllerTests
                     ThemeCode = "test-theme-code"
                 }
             });
+        classifierServiceMock.Setup(x => x.AreParentCodesValid(It.IsAny<Level>(), It.IsAny<string[]>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(true);
 
         var controller = new ClassifiersController(classifierServiceMock.Object, _validator, _mapper);
 

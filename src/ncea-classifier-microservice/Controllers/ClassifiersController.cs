@@ -41,13 +41,20 @@ public class ClassifiersController : ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> GetClassifiersByLevel([FromQuery] FilterCriteria filterCriteria, CancellationToken cancellationToken)
     {
-        var validationResult = await _validator.ValidateAsync(filterCriteria);
+        var validationResult = await _validator.ValidateAsync(filterCriteria, cancellationToken);
         if (!validationResult.IsValid)
         {
             return BadRequest(validationResult.Errors);
         }
 
         var parentCodes = (filterCriteria.Parents != null) ? filterCriteria.Parents.Split(',').Select(x => x.Trim()).ToArray() : [];
+
+        var isValidRequest = await _classifierService.AreParentCodesValid((Domain.Enums.Level)filterCriteria.Level, parentCodes, cancellationToken);
+
+        if(!isValidRequest)
+        {
+            return BadRequest("The given Parent values are not valid");
+        }
 
         var result = await _classifierService.GetGuidedSearchClassifiersByLevelAndParentCodes((Domain.Enums.Level)filterCriteria.Level, parentCodes, cancellationToken);
 

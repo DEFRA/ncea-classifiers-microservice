@@ -31,7 +31,30 @@ public class ClassifierService : IClassifierService
         }
 
         return classifiers;
-    }    
+    }
+
+    public async Task<bool> AreParentCodesValid(Level level, string[] parentCodes, CancellationToken cancellationToken)
+    {
+        if(parentCodes.Length == 0)
+        {
+            return true;
+        }
+
+        if(level == Level.Theme)
+        {
+            return false;
+        }
+        else if(level == Level.Category)
+        {
+            return await _dbContext.Themes.AnyAsync(x => parentCodes.Contains(x.Code));
+        }
+        else if (level == Level.SubCategory)
+        {
+            return await _dbContext.Categories.AnyAsync(x => parentCodes.Contains(x.Code));
+        }
+
+        return true;
+    }
 
     public async Task<IEnumerable<GuidedSearchClassifiersWithPageContent>> GetGuidedSearchClassifiersByLevelAndParentCodes(Level level, string[] parentCodes, CancellationToken cancellationToken)
     {
