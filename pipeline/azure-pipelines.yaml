@@ -34,8 +34,8 @@ stages:
 - stage: 'dev'
   displayName: 'Deploy to Dev'
   dependsOn: Build
-  condition: and(succeeded(), and(eq(variables.isMain, true), eq(variables.deployToDev, true)))
-  #condition: and(succeeded(), eq(variables.deployToDev, true))
+  #condition: and(succeeded(), and(eq(variables.isMain, true), eq(variables.deployToDev, true)))
+  condition: and(succeeded(), eq(variables.deployToDev, true))
   jobs:
   - deployment: Deploy
     pool:

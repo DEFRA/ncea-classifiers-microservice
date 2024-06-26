@@ -29,9 +29,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 var Configuration = builder.Configuration;
 
+var dbConnectionStringFromAppSettings = Configuration.GetConnectionString("DefaultConnection");
+
+
 ConfigureKeyVault(builder);
 ConfigureLogging(builder);
-ConfigureDataServices(builder, Configuration);
+ConfigureDataServices(builder, Configuration, dbConnectionStringFromAppSettings);
 ConfigureServices(builder);
 builder.Services.ConfigureHealthChecks(Configuration);
 
@@ -103,9 +106,14 @@ static void ConfigureLogging(WebApplicationBuilder builder)
     });
 }
 
-static void ConfigureDataServices(WebApplicationBuilder builder, ConfigurationManager Configuration)
+void ConfigureDataServices(WebApplicationBuilder builder, ConfigurationManager Configuration, string dbConnectionStringFromAppSettings)
 {
-    var dataSourceBuilder = new NpgsqlDataSourceBuilder(Configuration.GetConnectionString("DefaultConnection"));
+    var dbConnectionString = Configuration.GetConnectionString("DefaultConnection");
+    if (builder.Environment.IsDevelopment())
+    {
+        dbConnectionString = dbConnectionStringFromAppSettings;
+    }
+    var dataSourceBuilder = new NpgsqlDataSourceBuilder(dbConnectionString);
     SetUpDataSourceBuilderConfig(dataSourceBuilder);
     
     var datasource = dataSourceBuilder.Build();
@@ -114,7 +122,7 @@ static void ConfigureDataServices(WebApplicationBuilder builder, ConfigurationMa
         options.UseNpgsql(datasource);
     });
 
-    builder.Services.AddNpgsqlDataSource(Configuration.GetConnectionString("DefaultConnection")!, (Action<NpgsqlDataSourceBuilder>)(dataSourceBuilder =>
+    builder.Services.AddNpgsqlDataSource(dbConnectionString!, (Action<NpgsqlDataSourceBuilder>)(dataSourceBuilder =>
     {
         SetUpDataSourceBuilderConfig(dataSourceBuilder);
     }));    
