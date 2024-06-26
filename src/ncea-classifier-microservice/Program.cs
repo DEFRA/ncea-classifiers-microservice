@@ -106,10 +106,10 @@ static void ConfigureLogging(WebApplicationBuilder builder)
     });
 }
 
-void ConfigureDataServices(WebApplicationBuilder builder, ConfigurationManager Configuration, string dbConnectionStringFromAppSettings)
+void ConfigureDataServices(WebApplicationBuilder builder, ConfigurationManager Configuration, string? dbConnectionStringFromAppSettings)
 {
     var dbConnectionString = Configuration.GetConnectionString("DefaultConnection");
-    if (builder.Environment.IsDevelopment())
+    if (builder.Environment.IsDevelopment() && dbConnectionStringFromAppSettings != null)
     {
         dbConnectionString = dbConnectionStringFromAppSettings;
     }
