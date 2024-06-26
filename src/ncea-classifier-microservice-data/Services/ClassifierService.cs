@@ -48,12 +48,10 @@ public class ClassifierService : IClassifierService
         {
             return await _dbContext.Themes.AnyAsync(x => parentCodes.Contains(x.Code));
         }
-        else if (level == Level.SubCategory)
+        else
         {
             return await _dbContext.Categories.AnyAsync(x => parentCodes.Contains(x.Code));
         }
-
-        return true;
     }
 
     public async Task<IEnumerable<GuidedSearchClassifiersWithPageContent>> GetGuidedSearchClassifiersByLevelAndParentCodes(Level level, string[] parentCodes, CancellationToken cancellationToken)

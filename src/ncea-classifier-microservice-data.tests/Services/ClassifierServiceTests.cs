@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using FluentAssertions;
 using Ncea.Classifier.Microservice.Data.Services;
-using Ncea.Classifier.Microservice.Data.Services.Contracts;
 
 namespace Ncea.Classifier.Microservice.Data.Tests.Services;
 
@@ -192,6 +191,84 @@ public class ClassifierServiceTests : IDisposable
         result.First().SectionIntroduction.Should().Be("<html>section-introduction-3</html>");
         result.First().Classifiers!.Count.Should().Be(1);
         result.First().Classifiers![0].Code.Should().Be("test-subcategory-1");
+    }
+
+    [Fact]
+    public async Task GetGuidedSearchClassifiersByLevelAndParentCodes_WhenLevelOneIsRequestedWithoutParent_ReturnFalse()
+    {
+        // Arrange
+        await SeedInitialData();
+
+        // Act
+        var result = await _classifierService.AreParentCodesValid(Domain.Enums.Level.Theme, [], default);
+
+        // Assert
+        result.Should().BeTrue();
+    }
+
+    [Fact]
+    public async Task GetGuidedSearchClassifiersByLevelAndParentCodes_WhenLevelOneIsRequestedWithParent_ReturnFalse()
+    {
+        // Arrange
+        await SeedInitialData();
+
+        // Act
+        var result = await _classifierService.AreParentCodesValid(Domain.Enums.Level.Theme, ["test-category-1"], default);
+
+        // Assert
+        result.Should().BeFalse();
+    }
+
+    [Fact]
+    public async Task GetGuidedSearchClassifiersByLevelAndParentCodes_WhenLevelTwoIsRequestedWithValidParent_ReturnFalse()
+    {
+        // Arrange
+        await SeedInitialData();
+
+        // Act
+        var result = await _classifierService.AreParentCodesValid(Domain.Enums.Level.Category, ["test-theme-1", "test-theme-2"], default);
+
+        // Assert
+        result.Should().BeTrue();
+    }
+
+    [Fact]
+    public async Task GetGuidedSearchClassifiersByLevelAndParentCodes_WhenLevelTwoIsRequestedWithInValidParent_ReturnFalse()
+    {
+        // Arrange
+        await SeedInitialData();
+
+        // Act
+        var result = await _classifierService.AreParentCodesValid(Domain.Enums.Level.Category, ["test-category-1", "test-category-2"], default);
+
+        // Assert
+        result.Should().BeFalse();
+    }
+
+    [Fact]
+    public async Task GetGuidedSearchClassifiersByLevelAndParentCodes_WhenLevelThreeIsRequestedWithValidParent_ReturnFalse()
+    {
+        // Arrange
+        await SeedInitialData();
+
+        // Act
+        var result = await _classifierService.AreParentCodesValid(Domain.Enums.Level.SubCategory, ["test-category-1", "test-category-2"], default);
+
+        // Assert
+        result.Should().BeTrue();
+    }
+
+    [Fact]
+    public async Task GetGuidedSearchClassifiersByLevelAndParentCodes_WhenLevelThreeIsRequestedWithInValidParent_ReturnFalse()
+    {
+        // Arrange
+        await SeedInitialData();
+
+        // Act
+        var result = await _classifierService.AreParentCodesValid(Domain.Enums.Level.SubCategory, ["test-subcategory-1", "test-subcategory-2"], default);
+
+        // Assert
+        result.Should().BeFalse();
     }
 
     private async Task SeedInitialData()
