@@ -46,11 +46,11 @@ public class ClassifierService : IClassifierService
         }
         else if(level == Level.Category)
         {
-            return await _dbContext.Themes.AnyAsync(x => parentCodes.Contains(x.Code));
+            return await _dbContext.Themes.AnyAsync(x => parentCodes.Contains(x.Code), cancellationToken);
         }
         else
         {
-            return await _dbContext.Categories.AnyAsync(x => parentCodes.Contains(x.Code));
+            return await _dbContext.Categories.AnyAsync(x => parentCodes.Contains(x.Code), cancellationToken);
         }
     }
 

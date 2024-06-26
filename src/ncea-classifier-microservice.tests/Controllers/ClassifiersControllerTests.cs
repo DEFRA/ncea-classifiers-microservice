@@ -124,7 +124,7 @@ public class ClassifiersControllerTests
         var controller = new ClassifiersController(classifierServiceMock.Object, _validator, _mapper);
 
         // Act
-        var result = await controller.GetClassifiersByLevel(new Models.FilterCriteria() { Level = 0 }, It.IsAny<CancellationToken>());
+        var result = await controller.GetClassifiersByLevel(new Models.FilterCriteria() { Level = 2 }, It.IsAny<CancellationToken>());
 
         // Assert
         Assert.IsType<BadRequestObjectResult>(result);
