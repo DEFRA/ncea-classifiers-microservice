@@ -1,45 +1,35 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+using FluentValidation;
 using Moq;
 using Ncea.Classifier.Microservice.Controllers;
 using Ncea.Classifier.Microservice.Data.Services.Contracts;
 using Ncea.Classifier.Microservice.Domain.Enums;
 using Ncea.Classifier.Microservice.Mappers;
+using Ncea.Classifier.Microservice.Models;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Ncea.Classifier.Microservice.Validations;
 
 namespace Ncea.Classifier.Microservice.Tests.Controllers;
 
 public class ClassifiersControllerTests
 {
     private readonly IMapper _mapper;
-    private readonly Mock<ILogger<ClassifiersController>> loggerMock;
+    private readonly IValidator<FilterCriteria> _validator;
 
     public ClassifiersControllerTests()
     {
-        loggerMock = new Mock<ILogger<ClassifiersController>>();
+        var serviceCollection = new ServiceCollection();
+        serviceCollection.AddScoped<IValidator<FilterCriteria>, FilterCriteriaValidator>();        
+        // Create the ServiceProvider
+        var serviceProvider = serviceCollection.BuildServiceProvider();
+        
+        _validator = serviceProvider.GetRequiredService<IValidator<FilterCriteria>>();
 
         var configuration = new MapperConfiguration(cfg => cfg.AddProfile(new MappingProfile()));
         _mapper = new Mapper(configuration);
-    }
-
-    [Fact]
-    public async Task GetAllClassifiers_ReturnsBadRequestResult_WhenModelStateIsInvalid()
-    {
-        // Arrange
-        var classifierServiceMock = new Mock<IClassifierService>();
-        classifierServiceMock.Setup(x => x.GetAllClassifiers(It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new List<Domain.Models.ClassifierInfo>());
-
-        var controller = new ClassifiersController(classifierServiceMock.Object, _mapper);
-        controller.ModelState.AddModelError("LevelId", "Required");
-
-        // Act
-        var result = await controller.GetAllClassifiers(It.IsAny<CancellationToken>());
-
-        // Assert
-        var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
-        Assert.IsType<SerializableError>(badRequestResult.Value);
-    }
+    }       
 
     [Fact]
     public async Task GetAllClassifiers_Returns200OkResult_WhenModelStateIsValid()
@@ -52,7 +42,7 @@ public class ClassifiersControllerTests
                 new Domain.Models.ClassifierInfo("theme-code-1", "theme-name-1", Domain.Enums.Level.Theme,"theme-def-1", null)
             });
 
-        var controller = new ClassifiersController(classifierServiceMock.Object, _mapper);
+        var controller = new ClassifiersController(classifierServiceMock.Object, _validator, _mapper);
 
         // Act
         var result = await controller.GetAllClassifiers(It.IsAny<CancellationToken>());
@@ -65,26 +55,58 @@ public class ClassifiersControllerTests
     }
 
     [Fact]
-    public async Task GetClassifiersByLevel_ReturnsBadRequestResult_WhenModelStateIsInvalid()
+    public async Task GetClassifiersByLevel_ReturnsBadRequestResult_WhenLevelIdIsNotGiven()
     {
         // Arrange
         var classifierServiceMock = new Mock<IClassifierService>();
         classifierServiceMock.Setup(x => x.GetGuidedSearchClassifiersByLevelAndParentCodes(It.IsAny<Level>(), It.IsAny<string[]>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new List<Domain.Models.GuidedSearchClassifiersWithPageContent>());
 
-        var controller = new ClassifiersController(classifierServiceMock.Object, _mapper);
-        controller.ModelState.AddModelError("LevelId", "Required");
+        var controller = new ClassifiersController(classifierServiceMock.Object, _validator, _mapper);
 
         // Act
         var result = await controller.GetClassifiersByLevel(new Models.FilterCriteria(), It.IsAny<CancellationToken>());
 
         // Assert
-        var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
-        Assert.IsType<SerializableError>(badRequestResult.Value);
+        Assert.IsType<BadRequestObjectResult>(result);
     }
 
     [Fact]
-    public async Task GetClassifiersByLevel_Return200OkResult_WhenModelStateValid()
+    public async Task GetClassifiersByLevel_ReturnsBadRequestResult_WhenLevelIdOutsideRange()
+    {
+        // Arrange
+        var classifierServiceMock = new Mock<IClassifierService>();
+        classifierServiceMock.Setup(x => x.GetGuidedSearchClassifiersByLevelAndParentCodes(It.IsAny<Level>(), It.IsAny<string[]>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new List<Domain.Models.GuidedSearchClassifiersWithPageContent>());
+
+        var controller = new ClassifiersController(classifierServiceMock.Object, _validator, _mapper);
+
+        // Act
+        var result = await controller.GetClassifiersByLevel(new Models.FilterCriteria() { Level = 5 }, It.IsAny<CancellationToken>());
+
+        // Assert
+        Assert.IsType<BadRequestObjectResult>(result);
+    }
+
+    [Fact]
+    public async Task GetClassifiersByLevel_ReturnsBadRequestResult_WhenLevelIdZero()
+    {
+        // Arrange
+        var classifierServiceMock = new Mock<IClassifierService>();
+        classifierServiceMock.Setup(x => x.GetGuidedSearchClassifiersByLevelAndParentCodes(It.IsAny<Level>(), It.IsAny<string[]>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new List<Domain.Models.GuidedSearchClassifiersWithPageContent>());
+
+        var controller = new ClassifiersController(classifierServiceMock.Object, _validator, _mapper);
+
+        // Act
+        var result = await controller.GetClassifiersByLevel(new Models.FilterCriteria() { Level = 0 }, It.IsAny<CancellationToken>());
+
+        // Assert
+        Assert.IsType<BadRequestObjectResult>(result);
+    }
+
+    [Fact]
+    public async Task GetClassifiersByLevel_Return200OkResult_WhenLevelIdWithInRange()
     {
         // Arrange
         var classifierServiceMock = new Mock<IClassifierService>();
@@ -97,10 +119,10 @@ public class ClassifiersControllerTests
                 }
             });
 
-        var controller = new ClassifiersController(classifierServiceMock.Object, _mapper);
+        var controller = new ClassifiersController(classifierServiceMock.Object, _validator, _mapper);
 
         // Act
-        var result = await controller.GetClassifiersByLevel(new Models.FilterCriteria(), It.IsAny<CancellationToken>());
+        var result = await controller.GetClassifiersByLevel(new Models.FilterCriteria() { Level = 2 }, It.IsAny<CancellationToken>());
 
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result);
@@ -123,10 +145,10 @@ public class ClassifiersControllerTests
                 }
             });
 
-        var controller = new ClassifiersController(classifierServiceMock.Object, _mapper);
+        var controller = new ClassifiersController(classifierServiceMock.Object, _validator, _mapper);
 
         // Act
-        var result = await controller.GetClassifiersByLevel(new Models.FilterCriteria() { Level = (int)Level.SubCategory, Parents = "a, b,c"}, It.IsAny<CancellationToken>());
+        var result = await controller.GetClassifiersByLevel(new Models.FilterCriteria() { Level = (int)Level.SubCategory, Parents = "a,b,c"}, It.IsAny<CancellationToken>());
 
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result);

@@ -3,6 +3,7 @@ using Ncea.Classifier.Microservice.Models;
 using Ncea.Classifier.Microservice.Models.Response;
 using Ncea.Classifier.Microservice.Data.Services.Contracts;
 using AutoMapper;
+using FluentValidation;
 
 namespace Ncea.Classifier.Microservice.Controllers;
 
@@ -10,12 +11,14 @@ namespace Ncea.Classifier.Microservice.Controllers;
 [Route("api")]
 public class ClassifiersController : ControllerBase
 {
+    private readonly IValidator<FilterCriteria> _validator;
     private readonly IClassifierService _classifierService;
     private readonly IMapper _mapper;
 
-    public ClassifiersController(IClassifierService classifierService, IMapper mapper)
+    public ClassifiersController(IClassifierService classifierService, IValidator<FilterCriteria> validator, IMapper mapper)
     {
         _classifierService = classifierService;
+        _validator = validator;
         _mapper = mapper;
     }
 
@@ -25,11 +28,6 @@ public class ClassifiersController : ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> GetAllClassifiers(CancellationToken cancellationToken)
     {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
-
         var result = await _classifierService.GetAllClassifiers(cancellationToken);
 
         var classifiers = _mapper.Map<List<ClassifierInfo>>(result);
@@ -43,9 +41,10 @@ public class ClassifiersController : ControllerBase
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> GetClassifiersByLevel([FromQuery] FilterCriteria filterCriteria, CancellationToken cancellationToken)
     {
-        if (!ModelState.IsValid)
+        var validationResult = await _validator.ValidateAsync(filterCriteria);
+        if (!validationResult.IsValid)
         {
-            return BadRequest(ModelState);
+            return BadRequest(validationResult.Errors);
         }
 
         var parentCodes = (filterCriteria.Parents != null) ? filterCriteria.Parents.Split(',').Select(x => x.Trim()).ToArray() : [];

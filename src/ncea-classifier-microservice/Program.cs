@@ -21,7 +21,6 @@ using Ncea.Classifier.Microservice.Filters;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System.Diagnostics.CodeAnalysis;
-using Microsoft.Net.Http.Headers;
 using Ncea.Classifier.Microservice.Extensions;
 using Ncea.Classifier.Microservice.Mappers;
 using Ncea.Classifier.Microservice.ExceptionHandlers;
@@ -37,6 +36,7 @@ ConfigureServices(builder);
 builder.Services.ConfigureHealthChecks(Configuration);
 
 builder.Services.AddControllers();
+builder.Services.AddValidatorsFromAssemblyContaining<FilterCriteriaValidator>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSwaggerGen(o => o.OperationFilter<AddRequiredHeaderParameter>());
@@ -58,7 +58,7 @@ app.MapHealthChecks("/api/isAlive", new HealthCheckOptions()
     }
 });
 
-app.UseWhen(context => context.Request.Path.StartsWithSegments("/api/classifiers"), appBuilder =>
+app.UseWhen(context => !context.Request.Path.StartsWithSegments("/api/isAlive"), appBuilder =>
 {
     appBuilder.UseMiddleware<ApiKeyAuthMiddleware>();
 });
@@ -153,8 +153,8 @@ static void ConfigureServices(WebApplicationBuilder builder)
         options.SuppressInferBindingSourcesForParameters = true;
     });
 
-    builder.Services.AddTransient<IApiKeyValidationService, ApiKeyValidationService>();
     builder.Services.AddScoped<IValidator<FilterCriteria>, FilterCriteriaValidator>();
+    builder.Services.AddTransient<IApiKeyValidationService, ApiKeyValidationService>();
     builder.Services.AddScoped<IClassifierService, ClassifierService>();
     builder.Services.AddAutoMapper(typeof(MappingProfile));
 }
