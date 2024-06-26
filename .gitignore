@@ -22,3 +22,4 @@
 **/project.lock.json
 **/*.csproj.user
 
+/src/ncea-classifier-microservice/Dockerfile
