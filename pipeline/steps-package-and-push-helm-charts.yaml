@@ -1,0 +1,16 @@
+steps:
+
+- task: HelmDeploy@0
+  displayName: Helm package
+  condition: and(succeeded(), or(eq(variables['isMain'], 'true'), eq(variables['isPullRequest'], 'true')))
+  inputs:
+    command: package
+    chartPath: $(chartPath)
+    chartVersion: $(Build.BuildNumber)
+    destination: $(Build.ArtifactStagingDirectory)
+
+- task: PublishPipelineArtifact@1
+  condition: and(succeeded(), or(eq(variables['isMain'], 'true'), eq(variables['isPullRequest'], 'true')))
+  inputs:
+    targetPath: $(Build.ArtifactStagingDirectory)/ncea-classifier-ms-$(Build.BuildNumber).tgz
+    artifactName: charts

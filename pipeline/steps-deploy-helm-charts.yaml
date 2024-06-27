@@ -1,0 +1,74 @@
+parameters:
+  - name: releaseName
+    type: string
+  - name: armServiceConnection
+    type: string
+
+steps:
+
+- task: DownloadPipelineArtifact@2
+  displayName: 'Download Helm Charts'
+  condition: succeeded()
+  inputs:
+    buildType: 'current'
+    artifact: charts
+
+- task: ExtractFiles@1
+  inputs:
+    archiveFilePatterns: '$(Pipeline.Workspace)/charts/*.tgz'
+    cleanDestinationFolder: true
+    overwriteExistingFiles: true
+    destinationFolder: '$(Pipeline.Workspace)/chart'
+
+- task: HelmDeploy@0
+  displayName: Helm lint
+  condition: succeeded()
+  inputs:
+    connectionType: Azure Resource Manager
+    azureSubscriptionEndpoint: ${{ parameters.armServiceConnection }}
+    azureResourceGroup: $(aksResourceGroupName)
+    kubernetesCluster : $(aksClusterName)
+    command: lint
+    arguments: '$(Pipeline.Workspace)/chart/ncea-classifier-ms -f $(Pipeline.Workspace)/chart/ncea-classifier-ms/values/values.yaml'
+
+- task: KubeloginInstaller@0
+  inputs:
+    kubeloginVersion: 'latest'
+
+- task: HelmDeploy@0
+  displayName: 'Helm Deploy'
+  condition: succeeded()
+  inputs:
+    connectionType: Azure Resource Manager
+    azureSubscriptionEndpoint: ${{ parameters.armServiceConnection }}
+    azureResourceGroup: $(aksResourceGroupName)
+    kubernetesCluster : $(aksClusterName)
+    releaseName: ${{ parameters.releaseName }}
+    namespace: $(aksNamespace)
+    command: 'upgrade'
+    chartType: 'FilePath'
+    chartPath: '$(Pipeline.Workspace)/ncea-classifier-ms-$(Build.BuildNumber).tgz'
+    valueFile: $(Pipeline.Workspace)/chart/ncea-classifier-ms/values/values.yaml
+    overrideValues: |
+        image.repository=$(containerRepositoryFullPath)
+        image.tag=$(imageTag)
+        serviceAccount.name=$(serviceAccountClassifier)
+        ingress.hosts[0].host=$(hostName)
+        env.keyVaultUri=$(keyVaultUri)
+        autoscaling.enabled=$(autoScalingEnabled)
+        autoscaling.maxReplicas=$(autoScalingMaxReplicas)
+    install: true
+    # force: true
+    arguments: --debug
+
+- task: HelmDeploy@0
+  displayName: 'Helm Rollback'
+  condition: failed()
+  inputs:
+    connectionType: Azure Resource Manager
+    azureSubscriptionEndpoint: ${{ parameters.armServiceConnection }}
+    azureResourceGroup: $(aksResourceGroupName)
+    kubernetesCluster : $(aksClusterName) 
+    namespace: $(aksNamespace)
+    command: 'rollback'
+    arguments: ${{ parameters.releaseName }} --timeout=30m --debug

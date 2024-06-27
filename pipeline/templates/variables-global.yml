@@ -1,0 +1,28 @@
+variables:
+  - name : isMain
+    value: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
+  - name : isPullRequest
+    value: $[startsWith(variables['Build.SourceBranch'], 'refs/pull/')]
+
+  - ${{ if startsWith(variables['Build.SourceBranch'], 'refs/heads/feature/') }}:
+    - name : branchName
+      value: $[ replace(variables['Build.SourceBranch'], 'refs/heads/', '') ]
+  - ${{ if startsWith(variables['Build.SourceBranch'], 'refs/pull/') }}:
+    - name : branchName
+      value: $[ replace(variables['System.PullRequest.SourceBranch'], 'refs/heads/', '') ]
+  - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+    - name : branchName
+      value: 'main'
+
+  - name : branch
+    value: $[replace(variables['branchName'], '/', '-')]
+
+  - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+    - name : imageTag
+      value: $(Build.BuildNumber)
+  - ${{ else }}:
+    - name : imageTag
+      value: $(Build.BuildNumber)_$(branch)
+
+  - name : chartPath
+    value: 'src/ncea-classifier-microservice/ncea-classifier-ms'
