@@ -24,6 +24,9 @@ using System.Diagnostics.CodeAnalysis;
 using Ncea.Classifier.Microservice.Extensions;
 using Ncea.Classifier.Microservice.Mappers;
 using Ncea.Classifier.Microservice.ExceptionHandlers;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Identity.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,12 +34,14 @@ var Configuration = builder.Configuration;
 
 var dbConnectionStringFromAppSettings = Configuration.GetConnectionString("DefaultConnection");
 
-
 ConfigureKeyVault(builder);
 ConfigureLogging(builder);
 ConfigureDataServices(builder, Configuration, dbConnectionStringFromAppSettings);
 ConfigureServices(builder);
 builder.Services.ConfigureHealthChecks(Configuration);
+
+//builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+//    .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
 
 builder.Services.AddControllers();
 builder.Services.AddValidatorsFromAssemblyContaining<FilterCriteriaValidator>();
@@ -70,6 +75,7 @@ app.UseExceptionHandler();
 
 app.UseHttpsRedirection();
 
+//app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
