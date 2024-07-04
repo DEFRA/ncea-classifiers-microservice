@@ -9,8 +9,19 @@
     <UserSecretsId>67561bbc-9b35-4476-94bc-03b5855ce1bd</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>.</DockerfileContext>
-  </PropertyGroup>
+  </PropertyGroup>  <ItemGroup>
+    <Content Remove="ClassifierApiClient.json" />
+  </ItemGroup>
 
+  <ItemGroup>
+    <None Include="ClassifierApiClient.json">
+      <Generator>NSwagCodeGenerator</Generator>
+      <LastGenOutput>ClassifierApiClient.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+
+  
   <ItemGroup>
     <PackageReference Include="AspNetCore.HealthChecks.Publisher.ApplicationInsights" Version="8.0.1" />
     <PackageReference Include="AutoMapper" Version="13.0.1" />
@@ -34,12 +45,26 @@
     <PackageReference Include="Microsoft.ApplicationInsights.SnapshotCollector" Version="1.4.6" />
     <PackageReference Include="Microsoft.Extensions.Logging.ApplicationInsights" Version="2.22.0" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.19.5" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Npgsql.DependencyInjection" Version="8.0.3" />
+    <PackageReference Include="NSwag.AspNetCore" Version="14.0.8" />
+    <PackageReference Include="NSwag.MSBuild" Version="14.0.8">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ncea-classifier-microservice-data\ncea-classifier-microservice-data.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="ClassifierApiClient.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ClassifierApiClient.json</DependentUpon>
+    </Compile>
   </ItemGroup>
 
 </Project>

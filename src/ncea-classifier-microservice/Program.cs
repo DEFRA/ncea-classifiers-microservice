@@ -31,7 +31,6 @@ var Configuration = builder.Configuration;
 
 var dbConnectionStringFromAppSettings = Configuration.GetConnectionString("DefaultConnection");
 
-
 ConfigureKeyVault(builder);
 ConfigureLogging(builder);
 ConfigureDataServices(builder, Configuration, dbConnectionStringFromAppSettings);
