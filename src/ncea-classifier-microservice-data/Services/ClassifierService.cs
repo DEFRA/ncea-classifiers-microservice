@@ -46,12 +46,19 @@ public class ClassifierService : IClassifierService
         }
         else if(level == Level.Category)
         {
-            return await _dbContext.Themes.AllAsync(x => parentCodes.Contains(x.Code), cancellationToken);
+            var validCodes = await _dbContext.Themes.Select(x => x.Code).ToListAsync(cancellationToken);
+            return CheckParentCodeExistence(parentCodes, validCodes);
         }
         else
         {
-            return await _dbContext.Categories.AllAsync(x => parentCodes.Contains(x.Code), cancellationToken);
+            var validCodes = await _dbContext.Categories.Select(x => x.Code).ToListAsync(cancellationToken);
+            return CheckParentCodeExistence(parentCodes, validCodes);
         }
+    }
+
+    private static bool CheckParentCodeExistence(string[] parentCodes, List<string> validCodes)
+    {
+        return Array.TrueForAll(parentCodes, validCodes.Contains);
     }
 
     public async Task<IEnumerable<GuidedSearchClassifiersWithPageContent>> GetGuidedSearchClassifiersByLevelAndParentCodes(Level level, string[] parentCodes, CancellationToken cancellationToken)
