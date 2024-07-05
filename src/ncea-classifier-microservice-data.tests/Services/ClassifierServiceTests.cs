@@ -194,7 +194,7 @@ public class ClassifierServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task GetGuidedSearchClassifiersByLevelAndParentCodes_WhenLevelOneIsRequestedWithoutParent_ReturnFalse()
+    public async Task AreParentCodesValid_WhenLevelOneIsRequestedWithoutParent_ReturnFalse()
     {
         // Arrange
         await SeedInitialData();
@@ -207,7 +207,7 @@ public class ClassifierServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task GetGuidedSearchClassifiersByLevelAndParentCodes_WhenLevelOneIsRequestedWithParent_ReturnFalse()
+    public async Task AreParentCodesValid_WhenLevelOneIsRequestedWithParent_ReturnFalse()
     {
         // Arrange
         await SeedInitialData();
@@ -220,7 +220,7 @@ public class ClassifierServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task GetGuidedSearchClassifiersByLevelAndParentCodes_WhenLevelTwoIsRequestedWithValidParent_ReturnFalse()
+    public async Task AreParentCodesValid_WhenLevelTwoIsRequestedWithValidParent_ReturnFalse()
     {
         // Arrange
         await SeedInitialData();
@@ -233,20 +233,20 @@ public class ClassifierServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task GetGuidedSearchClassifiersByLevelAndParentCodes_WhenLevelTwoIsRequestedWithInValidParent_ReturnFalse()
+    public async Task AreParentCodesValid_WhenLevelTwoIsRequestedWithInValidParent_ReturnFalse()
     {
         // Arrange
         await SeedInitialData();
 
         // Act
-        var result = await _classifierService.AreParentCodesValid(Domain.Enums.Level.Category, ["test-category-1", "test-category-2"], default);
+        var result = await _classifierService.AreParentCodesValid(Domain.Enums.Level.Category, ["test-theme-1", "test-category-2"], default);
 
         // Assert
         result.Should().BeFalse();
     }
 
     [Fact]
-    public async Task GetGuidedSearchClassifiersByLevelAndParentCodes_WhenLevelThreeIsRequestedWithValidParent_ReturnFalse()
+    public async Task AreParentCodesValid_WhenLevelThreeIsRequestedWithValidParent_ReturnFalse()
     {
         // Arrange
         await SeedInitialData();
@@ -259,13 +259,13 @@ public class ClassifierServiceTests : IDisposable
     }
 
     [Fact]
-    public async Task GetGuidedSearchClassifiersByLevelAndParentCodes_WhenLevelThreeIsRequestedWithInValidParent_ReturnFalse()
+    public async Task AreParentCodesValid_WhenLevelThreeIsRequestedWithInValidParent_ReturnFalse()
     {
         // Arrange
         await SeedInitialData();
 
         // Act
-        var result = await _classifierService.AreParentCodesValid(Domain.Enums.Level.SubCategory, ["test-subcategory-1", "test-subcategory-2"], default);
+        var result = await _classifierService.AreParentCodesValid(Domain.Enums.Level.SubCategory, ["test-category-1", "test-subcategory-2"], default);
 
         // Assert
         result.Should().BeFalse();

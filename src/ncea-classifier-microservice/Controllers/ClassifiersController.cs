@@ -53,7 +53,7 @@ public class ClassifiersController : ControllerBase
 
         if(!isValidRequest)
         {
-            return BadRequest("The given Parent values are not valid");
+            return BadRequest("One or more given parent codes are not valid");
         }
 
         var result = await _classifierService.GetGuidedSearchClassifiersByLevelAndParentCodes((Domain.Enums.Level)filterCriteria.Level, parentCodes, cancellationToken);
