@@ -95,11 +95,12 @@ public class ClassifierServiceTests : IDisposable
         var result = await _classifierService.GetGuidedSearchClassifiersByLevelAndParentCodes(Domain.Enums.Level.Theme, [], default);
 
         // Assert
-        result.Count().Should().Be(2);
-        result.First().ThemeCode.Should().Be("test-theme-1");
-        result.First().ThemeName.Should().Be("test-theme-name-1");
-        result.First().SectionTitle.Should().Be("<html>section-title-1</html>");
-        result.First().SectionIntroduction.Should().Be("<html>section-introduction-1</html>");
+        result.Count().Should().Be(1);
+        result.First().SectionTitle.Should().BeEmpty();
+        result.First().SectionIntroduction.Should().BeEmpty();
+        result.First().Classifiers!.Count().Should().Be(2);
+        result.First().Classifiers!.First().ThemeCode.Should().Be("test-theme-1");
+        result.First().Classifiers!.First().ThemeName.Should().Be("test-theme-name-1");
     }
 
     [Fact]
