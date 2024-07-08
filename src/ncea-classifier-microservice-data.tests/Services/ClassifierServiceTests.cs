@@ -98,7 +98,7 @@ public class ClassifierServiceTests : IDisposable
         result.Count().Should().Be(1);
         result.First().SectionTitle.Should().BeEmpty();
         result.First().SectionIntroduction.Should().BeEmpty();
-        result.First().Classifiers!.Count().Should().Be(2);
+        result.First().Classifiers!.Count.Should().Be(2);
         result.First().Classifiers!.First().ThemeCode.Should().Be("test-theme-1");
         result.First().Classifiers!.First().ThemeName.Should().Be("test-theme-name-1");
     }
