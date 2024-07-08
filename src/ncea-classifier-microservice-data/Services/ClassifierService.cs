@@ -79,7 +79,7 @@ public class ClassifierService : IClassifierService
                 SectionTitle = GetPageContentByTheme(grp.Key.ThemeCode, PageContentKey.SectionTitle, pageContentBlocks),
                 SectionIntroduction = GetPageContentByTheme(grp.Key.ThemeCode, PageContentKey.SectionIntroduction, pageContentBlocks),
                 Level = grp.Key.Level,
-                Classifiers = (grp.Key.Level != Level.Theme ) ? grp.Select(x => x).ToList(): null
+                Classifiers = grp.Select(x => x).ToList()
             })
             .OrderBy(x => x.ThemeCode);
 

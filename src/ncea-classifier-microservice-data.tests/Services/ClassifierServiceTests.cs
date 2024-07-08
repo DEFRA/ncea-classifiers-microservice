@@ -100,7 +100,6 @@ public class ClassifierServiceTests : IDisposable
         result.First().ThemeName.Should().Be("test-theme-name-1");
         result.First().SectionTitle.Should().Be("<html>section-title-1</html>");
         result.First().SectionIntroduction.Should().Be("<html>section-introduction-1</html>");
-        result.First().Classifiers.Should().BeNull();
     }
 
     [Fact]
