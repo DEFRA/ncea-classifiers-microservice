@@ -71,7 +71,9 @@ public class ClassifierService : IClassifierService
             .Where(x => x.Step == (SearchStep)level && (distinctThemeCodes != null || distinctThemeCodes!.Contains(x.ThemeCode)))
             .ToListAsync(cancellationToken);
 
-        var classifierGroups = classifiers.GroupBy(x => new { x.ThemeCode, x.ThemeName, x.Level })
+        if(level != Level.Theme)
+        {
+            var classifierGroups = classifiers.GroupBy(x => new { x.ThemeCode, x.ThemeName, x.Level })
             .Select(grp => new GuidedSearchClassifiersWithPageContent
             {
                 ThemeCode = grp.Key.ThemeCode,
@@ -83,7 +85,19 @@ public class ClassifierService : IClassifierService
             })
             .OrderBy(x => x.ThemeCode);
 
-        return classifierGroups;
+            return classifierGroups;
+        }
+
+        return
+        [
+            new GuidedSearchClassifiersWithPageContent
+            {
+                SectionTitle = string.Empty,
+                SectionIntroduction = string.Empty,
+                Level = Level.Theme,
+                Classifiers  = classifiers.ToList()
+            }
+        ];
     }
 
     private async Task<IEnumerable<GuidedSearchClassifierInfo>> GetGuidedSearchClassifierInfo(Level level, string[] parentCodes, CancellationToken cancellationToken)
