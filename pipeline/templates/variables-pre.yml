@@ -1,4 +1,4 @@
 variables:
 - group: azureVariables-pre
 - group: classifierMicroserviceVariables-pre
-- group: acrTest
+- group: pipelineVariables

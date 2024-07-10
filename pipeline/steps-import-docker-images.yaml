@@ -9,12 +9,12 @@ steps:
     scriptLocation: inlineScript
     inlineScript: |
       az account set --subscription $(azureServiceConnection)
-      PASSWORD=$(az acr login --name $(preAcr) --expose-token --output tsv --query accessToken)
+      PASSWORD=$(az acr login --name $(acrContainerRegistryPre) --expose-token --output tsv --query accessToken)
       echo "Logging into ACR"
-      docker login $(preAcr) -u $(acrUser) -p $PASSWORD
+      docker login $(acrContainerRegistryPre) -u $(acrUser) -p $PASSWORD
       echo "importing container"
       az acr import \
-        --name $(preAcrShort) \
+        --name $(acrContainerRegistryPreShort) \
         --source $(acrContainerRegistry)/$(acrContainerRepositoryClassifierMicroservice):$(imageTag) \
         --image $(acrContainerRepositoryClassifierMicroservice):$(imageTag) \
-        --registry $(devAcrResourceID)
+        --registry $(acrContainerRegistryDevResourceId)
