@@ -15,6 +15,8 @@ variables:
     value: true
   - name : deployToTest
     value: true
+  - name : deployToPreProd
+    value: false
 
 stages:
 - stage: 'Build'
@@ -70,3 +72,26 @@ stages:
               parameters:
                 releaseName: ncea-classifier-ms-test
                 armServiceConnection: AZR-NCE-TST
+
+  - stage: 'preprod'
+  displayName: 'Deploy to preprod'
+  dependsOn: test
+  condition: and(succeeded(), eq(variables.deployToPreProd, true))
+  jobs:
+  - deployment: Deploy
+    pool:
+      name: DEFRA-COMMON-ubuntu2204-SSV5
+    variables:
+      - template: templates/variables-preprod.yml
+    environment: preprod 
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - template: steps-import-docker-images.yaml
+              parameters:
+                azureServiceConnection: AZR-NCE-PRE1
+            - template: steps-deploy-helm-charts.yaml
+              parameters:
+                releaseName: ncea-classifier-ms-preprod
+                armServiceConnection: AZR-NCE-PRE1
