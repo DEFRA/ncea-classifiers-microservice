@@ -5,11 +5,11 @@ steps:
   displayName: 'Import Docker Image from DevAcr to PreProd ACR'
   condition: succeeded()
   inputs:
-    azureSubscription: $(azureServiceConnectionForAcr)
+    azureSubscription: $(azureSubscriptionPre)
     scriptType: bash
     scriptLocation: inlineScript
     inlineScript: |
-      az account set --subscription $(azureServiceConnectionForAcr)
+      az account set --subscription $(azureSubscriptionPre)
       PASSWORD=$(az acr login --name $(acrContainerRegistryPre) --expose-token --output tsv --query accessToken)
       echo "Logging into ACR"
       docker login $(acrContainerRegistryPre) -u $(acrUser) -p $PASSWORD
