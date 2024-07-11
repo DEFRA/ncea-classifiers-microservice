@@ -1,0 +1,21 @@
+
+steps:
+
+- task: AzureCLI@2
+  displayName: 'Import Docker Image from DevAcr to PreProd ACR'
+  condition: succeeded()
+  inputs:
+    azureSubscription: $(azureServiceConnectionForAcr)
+    scriptType: bash
+    scriptLocation: inlineScript
+    inlineScript: |
+      az account set --subscription $(azureServiceConnectionForAcr)
+      PASSWORD=$(az acr login --name $(acrContainerRegistryPre) --expose-token --output tsv --query accessToken)
+      echo "Logging into ACR"
+      docker login $(acrContainerRegistryPre) -u $(acrUser) -p $PASSWORD
+      echo "importing container"
+      az acr import \
+        --name $(acrContainerRegistryPreShort) \
+        --source $(acrContainerRepositoryClassifierMicroservice):$(imageTag) \
+        --image $(acrContainerRepositoryClassifierMicroservice):$(imageTag) \
+        --registry $(acrContainerRegistryDevResourceId)
