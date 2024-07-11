@@ -12,7 +12,7 @@ variables:
   - name : azureServiceConnectionForDevAcr
     value: AZR-NCE-DEV1
   - name : azureServiceConnectionForPreAcr
-    value: AZR-NCE-PRE
+    value: AZR-NCE-PRE1
   - name : deployToDev
     value: true
   - name : deployToTest
