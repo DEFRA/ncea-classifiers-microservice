@@ -16,7 +16,7 @@ variables:
   - name : deployToTest
     value: true
   - name : deployToPre
-    value: false
+    value: true
 
 stages:
 - stage: 'Build'
@@ -89,9 +89,7 @@ stages:
         deploy:
           steps:
             - template: steps-import-docker-images.yaml
-              parameters:
-                azureServiceConnection: AZR-NCE-PRE
-            - template: steps-deploy-helm-charts.yaml
-              parameters:
-                releaseName: ncea-classifier-ms-pre
-                armServiceConnection: AZR-NCE-PRE
+        # # - template: steps-deploy-helm-charts.yaml
+        # #   parameters:
+        # #     releaseName: ncea-classifier-ms-pre
+        # #     armServiceConnection: AZR-NCE-PRE
