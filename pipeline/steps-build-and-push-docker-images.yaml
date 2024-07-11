@@ -9,7 +9,7 @@ steps:
     scriptLocation: inlineScript
     inlineScript: |
       echo "setting Azure Subscription"
-      az account set --subscription $(azureServiceConnectionForDevAcr)
+      az account set --subscription $(azureSubscriptionDev)
       PASSWORD=$(az acr login --name $(acrContainerRegistry) --expose-token --output tsv --query accessToken)
       echo "Logging into ACR"
       docker login $(acrContainerRegistry) -u $(acrUser) -p $PASSWORD
