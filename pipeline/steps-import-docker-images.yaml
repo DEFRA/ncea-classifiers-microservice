@@ -19,6 +19,6 @@ steps:
       echo "importing container"
       az acr import \
         --name $(acrContainerRegistryPreShort) \
-        --source $(acrContainerRegistry)/$(acrContainerRepositoryClassifierMicroservice):$(imageTag) \
+        --source $(acrContainerRepositoryClassifierMicroservice):$(imageTag) \
         --image $(acrContainerRepositoryClassifierMicroservice):$(imageTag) \
         --registry $(acrContainerRegistryDevResourceId)
