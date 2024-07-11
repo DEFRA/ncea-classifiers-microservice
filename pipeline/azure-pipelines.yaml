@@ -73,7 +73,7 @@ stages:
                 releaseName: ncea-classifier-ms-test
                 armServiceConnection: AZR-NCE-TST
 
-  - stage: 'pre'
+- stage: 'pre'
   displayName: 'Deploy to preprod'
   dependsOn: test
   condition: and(succeeded(), eq(variables.deployToPre, true))
