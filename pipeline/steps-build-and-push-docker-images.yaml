@@ -4,12 +4,12 @@ steps:
   displayName: 'Docker Build And Push'
   condition: succeeded()
   inputs:
-    azureSubscription: $(azureSubscriptionDev) 
+    azureSubscription: $(azureServiceConnectionForDevAcr) 
     scriptType: bash
     scriptLocation: inlineScript
     inlineScript: |
       echo "setting Azure Subscription"
-      az account set --subscription $(azureSubscriptionDev)
+      az account set --subscription $(azureServiceConnectionForDevAcr)
       PASSWORD=$(az acr login --name $(acrContainerRegistry) --expose-token --output tsv --query accessToken)
       echo "Logging into ACR"
       docker login $(acrContainerRegistry) -u $(acrUser) -p $PASSWORD
