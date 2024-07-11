@@ -1,3 +1,7 @@
+parameters:
+  - name: azureServiceConnection
+    type: string
+
 steps:
 
 - task: AzureCLI@2
