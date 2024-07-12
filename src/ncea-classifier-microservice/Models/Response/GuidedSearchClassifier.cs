@@ -4,8 +4,7 @@
     {
         public string Code { get; set; } = null!;
         public string Name { get; set; } = null!;
-        public string Definition { get; set; } = string.Empty;
-        public string? ParentCode { get; set; }
-        public string? ParentName { get; set; }
+        public string? Definition { get; set; }
+        public List<GuidedSearchClassifier>? Classifiers { get; set; }
     }
 }
