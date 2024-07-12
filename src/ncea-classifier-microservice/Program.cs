@@ -37,11 +37,7 @@ ConfigureDataServices(builder, Configuration, dbConnectionStringFromAppSettings)
 ConfigureServices(builder);
 builder.Services.ConfigureHealthChecks(Configuration);
 
-builder.Services.AddControllers()
-    .AddJsonOptions(options =>
-{
-    options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
-}); ;
+builder.Services.AddControllers();
 builder.Services.AddValidatorsFromAssemblyContaining<FilterCriteriaValidator>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

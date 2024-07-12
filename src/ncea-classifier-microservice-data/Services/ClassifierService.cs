@@ -71,13 +71,21 @@ public class ClassifierService : IClassifierService
             .Where(x => x.Step == (SearchStep)level && (distinctThemeCodes != null || distinctThemeCodes!.Contains(x.ThemeCode)))
             .ToListAsync(cancellationToken);
 
-        if (level == Level.Category)
+        if(level != Level.Theme)
         {
-            return GetCategoryClassifiersForGuidedSearch(classifiers, pageContentBlocks);
-        }
-        else if (level == Level.SubCategory)
-        {
-            return GetSubCategoryClassifiersForGuidedSearch(classifiers, pageContentBlocks);
+            var classifierGroups = classifiers.GroupBy(x => new { x.ThemeCode, x.ThemeName, x.Level })
+            .Select(grp => new GuidedSearchClassifiersWithPageContent
+            {
+                ThemeCode = grp.Key.ThemeCode,
+                ThemeName = grp.Key.ThemeName,
+                SectionTitle = GetPageContentByTheme(grp.Key.ThemeCode, PageContentKey.SectionTitle, pageContentBlocks),
+                SectionIntroduction = GetPageContentByTheme(grp.Key.ThemeCode, PageContentKey.SectionIntroduction, pageContentBlocks),
+                Level = grp.Key.Level,
+                Classifiers = grp.Select(x => x).ToList()
+            })
+            .OrderBy(x => x.ThemeCode);
+
+            return classifierGroups;
         }
 
         return
@@ -92,51 +100,11 @@ public class ClassifierService : IClassifierService
         ];
     }
 
-    private static IEnumerable<GuidedSearchClassifiersWithPageContent> GetSubCategoryClassifiersForGuidedSearch(IEnumerable<GuidedSearchClassifierInfo> classifiers, List<SearchPageContent> pageContentBlocks)
-    {
-        return classifiers.GroupBy(x => new { x.ThemeCode, x.ThemeName, x.Level })
-                    .Select(grp => new GuidedSearchClassifiersWithPageContent
-                    {
-                        ThemeCode = grp.Key.ThemeCode,
-                        ThemeName = grp.Key.ThemeName,
-                        SectionTitle = GetPageContentByTheme(grp.Key.ThemeCode, PageContentKey.SectionTitle, pageContentBlocks),
-                        SectionIntroduction = GetPageContentByTheme(grp.Key.ThemeCode, PageContentKey.SectionIntroduction, pageContentBlocks),
-                        Level = grp.Key.Level,
-                        Classifiers = grp.Select(x => x)
-                        .GroupBy(g => new { g.ParentCode, g.ParentName })
-                        .Select(grp2 => new GuidedSearchClassifierInfo(grp2.Key.ParentCode,
-                            grp2.Key.ParentName,
-                            Level.Category,
-                            null,
-                            grp.Key.ThemeCode,
-                            grp.Key.ThemeName,
-                            grp.Key.ThemeCode,
-                            grp.Key.ThemeName,
-                            grp2.Any() ? grp2.Select(y => (ClassifierInfo)y).ToList() : null)).ToList()
-                    })
-                    .OrderBy(x => x.ThemeCode);
-    }
-
-    private static IEnumerable<GuidedSearchClassifiersWithPageContent> GetCategoryClassifiersForGuidedSearch(IEnumerable<GuidedSearchClassifierInfo> classifiers, List<SearchPageContent> pageContentBlocks)
-    {
-        return classifiers.GroupBy(x => new { x.ThemeCode, x.ThemeName, x.Level })
-                    .Select(grp => new GuidedSearchClassifiersWithPageContent
-                    {
-                        ThemeCode = grp.Key.ThemeCode,
-                        ThemeName = grp.Key.ThemeName,
-                        SectionTitle = GetPageContentByTheme(grp.Key.ThemeCode, PageContentKey.SectionTitle, pageContentBlocks),
-                        SectionIntroduction = GetPageContentByTheme(grp.Key.ThemeCode, PageContentKey.SectionIntroduction, pageContentBlocks),
-                        Level = grp.Key.Level,
-                        Classifiers = grp.Any() ? grp.Select(x => x).ToList() : null
-                    })
-                    .OrderBy(x => x.ThemeCode);
-    }
-
     private async Task<IEnumerable<GuidedSearchClassifierInfo>> GetGuidedSearchClassifierInfo(Level level, string[] parentCodes, CancellationToken cancellationToken)
     {
         if (level == Level.Category)
         {
-            return await GetCategoryClassifiers(parentCodes, cancellationToken);
+            return await getCategoryClassifiers(parentCodes, cancellationToken);
         }
         else if (level == Level.SubCategory)
         {
@@ -163,7 +131,7 @@ public class ClassifierService : IClassifierService
             .ToListAsync(cancellationToken);
     }
 
-    private async Task<IEnumerable<GuidedSearchClassifierInfo>> GetCategoryClassifiers(string[] parentCodes, CancellationToken cancellationToken)
+    private async Task<IEnumerable<GuidedSearchClassifierInfo>> getCategoryClassifiers(string[] parentCodes, CancellationToken cancellationToken)
     {
         var query = _dbContext.Categories.AsQueryable();
         if (parentCodes.Length != 0)
