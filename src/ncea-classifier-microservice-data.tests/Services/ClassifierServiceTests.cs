@@ -164,14 +164,16 @@ public class ClassifierServiceTests : IDisposable
         result.First().SectionTitle.Should().Be("<html>section-title-3</html>");
         result.First().SectionIntroduction.Should().Be("<html>section-introduction-3</html>");
         result.First().Classifiers!.Count.Should().Be(1);
-        result.First().Classifiers![0].Code.Should().Be("test-subcategory-1");
+        result.First().Classifiers![0].Code.Should().Be("test-category-1");
+        result.First().Classifiers![0].Classifiers![0].Code.Should().Be("test-subcategory-1");
 
         result.Last().ThemeCode.Should().Be("test-theme-2");
         result.Last().ThemeName.Should().Be("test-theme-name-2");
         result.Last().SectionTitle.Should().BeEmpty();
         result.Last().SectionIntroduction.Should().BeEmpty();
         result.Last().Classifiers!.Count.Should().Be(1);
-        result.Last().Classifiers![0].Code.Should().Be("test-subcategory-2");
+        result.Last().Classifiers![0].Code.Should().Be("test-category-2");
+        result.Last().Classifiers![0].Classifiers![0].Code.Should().Be("test-subcategory-2");
     }
 
     [Fact]
@@ -190,7 +192,8 @@ public class ClassifierServiceTests : IDisposable
         result.First().SectionTitle.Should().Be("<html>section-title-3</html>");
         result.First().SectionIntroduction.Should().Be("<html>section-introduction-3</html>");
         result.First().Classifiers!.Count.Should().Be(1);
-        result.First().Classifiers![0].Code.Should().Be("test-subcategory-1");
+        result.First().Classifiers![0].Code.Should().Be("test-category-1");
+        result.First().Classifiers![0].Classifiers![0].Code.Should().Be("test-subcategory-1");
     }
 
     [Fact]

@@ -8,7 +8,12 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
+        AllowNullCollections = true;
+        AllowNullDestinationValues = true;
+
         CreateMap<Domain.Models.ClassifierInfo, Models.Response.ClassifierInfo>()
+            ;
+        CreateMap<Domain.Models.ClassifierInfo, GuidedSearchClassifier>()
             ;
         CreateMap<GuidedSearchClassifierInfo, GuidedSearchClassifier>()
             ;
