@@ -10,7 +10,7 @@ public class GuidedSearchClassifierInfo : ClassifierInfo
         ThemeCode = themeCode;
         ThemeName = themeName;
         ParentCode = parentCode ?? string.Empty;
-        ParentName = parentCode ?? string.Empty;
+        ParentName = parentName ?? string.Empty;
     }
 
     public string ThemeCode { get; set; }
