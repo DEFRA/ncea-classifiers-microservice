@@ -55,7 +55,7 @@ builder.Services.AddControllers()
 builder.Services.AddValidatorsFromAssemblyContaining<FilterCriteriaValidator>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddSwaggerGen(o => o.OperationFilter<AddRequiredHeaderParameter>());
+//builder.Services.AddSwaggerGen(o => o.OperationFilter<AddRequiredHeaderParameter>());
 
 var app = builder.Build();
 
@@ -74,10 +74,10 @@ app.MapHealthChecks("/api/isAlive", new HealthCheckOptions()
     }
 });
 
-app.UseWhen(context => !context.Request.Path.StartsWithSegments("/api/isAlive"), appBuilder =>
-{
-    appBuilder.UseMiddleware<ApiKeyAuthMiddleware>();
-});
+//app.UseWhen(context => !context.Request.Path.StartsWithSegments("/api/isAlive"), appBuilder =>
+//{
+//    appBuilder.UseMiddleware<ApiKeyAuthMiddleware>();
+//});
 
 app.UseExceptionHandler();
 
