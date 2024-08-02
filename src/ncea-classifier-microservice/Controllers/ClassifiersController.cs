@@ -1,12 +1,15 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Ncea.Classifier.Microservice.Models;
 using Ncea.Classifier.Microservice.Models.Response;
 using Ncea.Classifier.Microservice.Data.Services.Contracts;
 using AutoMapper;
 using FluentValidation;
+using Microsoft.Identity.Web.Resource;
 
 namespace Ncea.Classifier.Microservice.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("api")]
 public class ClassifiersController : ControllerBase
@@ -26,6 +29,7 @@ public class ClassifiersController : ControllerBase
     [ProducesResponseType<IEnumerable<ClassifierInfo>>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes:Read")]
     public async Task<IActionResult> GetAllClassifiers(CancellationToken cancellationToken)
     {
         var result = await _classifierService.GetAllClassifiers(cancellationToken);
@@ -39,6 +43,7 @@ public class ClassifiersController : ControllerBase
     [ProducesResponseType<IEnumerable<GuidedSearchClassifiersWithPageContent>>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes:Read")]
     public async Task<IActionResult> GetClassifiersByLevel([FromQuery] FilterCriteria filterCriteria, CancellationToken cancellationToken)
     {
         var validationResult = await _validator.ValidateAsync(filterCriteria, cancellationToken);

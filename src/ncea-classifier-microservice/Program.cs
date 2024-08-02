@@ -24,8 +24,18 @@ using System.Diagnostics.CodeAnalysis;
 using Ncea.Classifier.Microservice.Extensions;
 using Ncea.Classifier.Microservice.Mappers;
 using Ncea.Classifier.Microservice.ExceptionHandlers;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Identity.Web;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddMicrosoftIdentityWebApi(options =>
+    {
+        builder.Configuration.Bind("AzureAd", options);
+        options.TokenValidationParameters.NameClaimType = "name";
+    },
+    options => { builder.Configuration.Bind("AzureAd", options); });
 
 var Configuration = builder.Configuration;
 
@@ -72,6 +82,8 @@ app.UseWhen(context => !context.Request.Path.StartsWithSegments("/api/isAlive"),
 app.UseExceptionHandler();
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
