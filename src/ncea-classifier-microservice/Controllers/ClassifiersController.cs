@@ -9,7 +9,8 @@ using Microsoft.Identity.Web.Resource;
 
 namespace Ncea.Classifier.Microservice.Controllers;
 
-[Authorize]
+[Authorize(Roles = "Api.Read, Api.Write")]
+[RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
 [ApiController]
 [Route("api")]
 public class ClassifiersController : ControllerBase
@@ -29,7 +30,6 @@ public class ClassifiersController : ControllerBase
     [ProducesResponseType<IEnumerable<ClassifierInfo>>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes:Read")]
     public async Task<IActionResult> GetAllClassifiers(CancellationToken cancellationToken)
     {
         var result = await _classifierService.GetAllClassifiers(cancellationToken);
@@ -43,7 +43,6 @@ public class ClassifiersController : ControllerBase
     [ProducesResponseType<IEnumerable<GuidedSearchClassifiersWithPageContent>>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes:Read")]
     public async Task<IActionResult> GetClassifiersByLevel([FromQuery] FilterCriteria filterCriteria, CancellationToken cancellationToken)
     {
         var validationResult = await _validator.ValidateAsync(filterCriteria, cancellationToken);

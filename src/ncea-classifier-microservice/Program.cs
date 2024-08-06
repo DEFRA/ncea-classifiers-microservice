@@ -16,8 +16,6 @@ using Ncea.Classifier.Microservice.Data.Services.Contracts;
 using Ncea.Classifier.Microservice.Data.Services;
 using Ncea.Classifier.Microservice.Services.Contracts;
 using Ncea.Classifier.Microservice.Services;
-using Ncea.Classifier.Microservice.Middlewares;
-using Ncea.Classifier.Microservice.Filters;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System.Diagnostics.CodeAnalysis;
@@ -30,20 +28,13 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddMicrosoftIdentityWebApi(options =>
-    {
-        builder.Configuration.Bind("AzureAd", options);
-        options.TokenValidationParameters.NameClaimType = "name";
-    },
-    options => { builder.Configuration.Bind("AzureAd", options); });
-
 var Configuration = builder.Configuration;
 
 var dbConnectionStringFromAppSettings = Configuration.GetConnectionString("DefaultConnection");
 
 ConfigureKeyVault(builder);
 ConfigureLogging(builder);
+ConfigureAuthentication(builder);
 ConfigureDataServices(builder, Configuration, dbConnectionStringFromAppSettings);
 ConfigureServices(builder);
 builder.Services.ConfigureHealthChecks(Configuration);
@@ -55,11 +46,10 @@ builder.Services.AddControllers()
 });
 builder.Services.AddValidatorsFromAssemblyContaining<FilterCriteriaValidator>();
 builder.Services.AddEndpointsApiExplorer();
-//builder.Services.AddSwaggerGen();
-//builder.Services.AddSwaggerGen(o => o.OperationFilter<AddRequiredHeaderParameter>());
+
 builder.Services.AddSwaggerGen(option =>
 {
-    option.SwaggerDoc("v1", new OpenApiInfo { Title = "Demo API", Version = "v1" });
+    option.SwaggerDoc("v1", new OpenApiInfo { Title = "Classifier API", Version = "v1" });
     option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         In = ParameterLocation.Header,
@@ -102,11 +92,6 @@ app.MapHealthChecks("/api/isAlive", new HealthCheckOptions()
     }
 });
 
-//app.UseWhen(context => !context.Request.Path.StartsWithSegments("/api/isAlive"), appBuilder =>
-//{
-//    appBuilder.UseMiddleware<ApiKeyAuthMiddleware>();
-//});
-
 app.UseExceptionHandler();
 
 app.UseHttpsRedirection();
@@ -147,6 +132,15 @@ static void ConfigureLogging(WebApplicationBuilder builder)
         module.EnableSqlCommandTextInstrumentation = true;
         o.ConnectionString = builder.Configuration.GetValue<string>("ApplicationInsights:ConnectionString");
     });
+}
+
+static void ConfigureAuthentication(WebApplicationBuilder builder)
+{
+    var azureAdSection = builder.Configuration.GetSection("AzureAd");
+    azureAdSection.GetSection("ClientId").Value = builder.Configuration.GetValue<string>("classifier-app-api-clientid");
+
+    builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
 }
 
 void ConfigureDataServices(WebApplicationBuilder builder, ConfigurationManager Configuration, string? dbConnectionStringFromAppSettings)
