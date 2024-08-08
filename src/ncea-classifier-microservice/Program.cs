@@ -16,14 +16,15 @@ using Ncea.Classifier.Microservice.Data.Services.Contracts;
 using Ncea.Classifier.Microservice.Data.Services;
 using Ncea.Classifier.Microservice.Services.Contracts;
 using Ncea.Classifier.Microservice.Services;
-using Ncea.Classifier.Microservice.Middlewares;
-using Ncea.Classifier.Microservice.Filters;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System.Diagnostics.CodeAnalysis;
 using Ncea.Classifier.Microservice.Extensions;
 using Ncea.Classifier.Microservice.Mappers;
 using Ncea.Classifier.Microservice.ExceptionHandlers;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Identity.Web;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +34,7 @@ var dbConnectionStringFromAppSettings = Configuration.GetConnectionString("Defau
 
 ConfigureKeyVault(builder);
 ConfigureLogging(builder);
+ConfigureAuthentication(builder);
 ConfigureDataServices(builder, Configuration, dbConnectionStringFromAppSettings);
 ConfigureServices(builder);
 builder.Services.ConfigureHealthChecks(Configuration);
@@ -44,8 +46,34 @@ builder.Services.AddControllers()
 });
 builder.Services.AddValidatorsFromAssemblyContaining<FilterCriteriaValidator>();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddSwaggerGen(o => o.OperationFilter<AddRequiredHeaderParameter>());
+
+builder.Services.AddSwaggerGen(option =>
+{
+    option.SwaggerDoc("v1", new OpenApiInfo { Title = "Classifier API", Version = "v1" });
+    option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header,
+        Description = "Please enter a valid token",
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        BearerFormat = "JWT",
+        Scheme = "Bearer"        
+    });
+    option.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type=ReferenceType.SecurityScheme,
+                    Id="Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+});
 
 var app = builder.Build();
 
@@ -64,14 +92,11 @@ app.MapHealthChecks("/api/isAlive", new HealthCheckOptions()
     }
 });
 
-app.UseWhen(context => !context.Request.Path.StartsWithSegments("/api/isAlive"), appBuilder =>
-{
-    appBuilder.UseMiddleware<ApiKeyAuthMiddleware>();
-});
-
 app.UseExceptionHandler();
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
@@ -107,6 +132,15 @@ static void ConfigureLogging(WebApplicationBuilder builder)
         module.EnableSqlCommandTextInstrumentation = true;
         o.ConnectionString = builder.Configuration.GetValue<string>("ApplicationInsights:ConnectionString");
     });
+}
+
+static void ConfigureAuthentication(WebApplicationBuilder builder)
+{
+    var azureAdSection = builder.Configuration.GetSection("AzureAd");
+    azureAdSection.GetSection("ClientId").Value = builder.Configuration.GetValue<string>("classifier-app-api-clientid");
+
+    builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
 }
 
 void ConfigureDataServices(WebApplicationBuilder builder, ConfigurationManager Configuration, string? dbConnectionStringFromAppSettings)
