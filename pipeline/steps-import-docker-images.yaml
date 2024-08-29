@@ -15,6 +15,7 @@ steps:
       docker login $(acrContainerRegistryPre) -u $(acrUser) -p $PASSWORD
       echo "importing container"
       az acr import \
+        --force \
         --name $(acrContainerRegistryPreShort) \
         --source $(acrContainerRepositoryClassifierMicroservice):$(imageTag) \
         --image $(acrContainerRepositoryClassifierMicroservice):$(imageTag) \
