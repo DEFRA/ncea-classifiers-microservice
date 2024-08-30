@@ -1,13 +1,10 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 using System.Diagnostics.CodeAnalysis;
-using Microsoft.EntityFrameworkCore.Migrations;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
 namespace Ncea.Classifier.Microservice.Data.Migrations
 {
-
     /// <inheritdoc />
     [ExcludeFromCodeCoverage]
     public partial class ContentUpdate : Migration
@@ -22,7 +19,6 @@ namespace Ncea.Classifier.Microservice.Data.Migrations
                                     UPDATE public.""SearchPageContentBlocks""
                                     SET ""Value"" = ""Value"" || ' Select all that apply.'
                                     WHERE ""Key"" IN ('SectionIntroduction');");
-
         }
 
         /// <inheritdoc />
