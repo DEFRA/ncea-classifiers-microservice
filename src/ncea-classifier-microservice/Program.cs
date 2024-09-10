@@ -14,8 +14,6 @@ using Ncea.Classifier.Microservice.Models;
 using Ncea.Classifier.Microservice.Validations;
 using Ncea.Classifier.Microservice.Data.Services.Contracts;
 using Ncea.Classifier.Microservice.Data.Services;
-using Ncea.Classifier.Microservice.Services.Contracts;
-using Ncea.Classifier.Microservice.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using System.Diagnostics.CodeAnalysis;
@@ -199,7 +197,6 @@ static void ConfigureServices(WebApplicationBuilder builder)
     });
 
     builder.Services.AddScoped<IValidator<FilterCriteria>, FilterCriteriaValidator>();
-    builder.Services.AddTransient<IApiKeyValidationService, ApiKeyValidationService>();
     builder.Services.AddScoped<IClassifierService, ClassifierService>();
     builder.Services.AddAutoMapper(typeof(MappingProfile));
 }
