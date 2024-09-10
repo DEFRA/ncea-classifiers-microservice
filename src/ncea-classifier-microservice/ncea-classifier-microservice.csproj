@@ -9,16 +9,7 @@
     <UserSecretsId>67561bbc-9b35-4476-94bc-03b5855ce1bd</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>.</DockerfileContext>
-  </PropertyGroup>  <ItemGroup>
-    <Content Remove="ClassifierApiClient.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="ClassifierApiClient.json">
-      <Generator>NSwagCodeGenerator</Generator>
-      <LastGenOutput>ClassifierApiClient.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
+  </PropertyGroup>
 
 
   
@@ -57,14 +48,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ncea-classifier-microservice-data\ncea-classifier-microservice-data.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="ClassifierApiClient.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>ClassifierApiClient.json</DependentUpon>
-    </Compile>
   </ItemGroup>
 
 </Project>
