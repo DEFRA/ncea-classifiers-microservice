@@ -62,6 +62,8 @@ spec:
           env:
           - name: KeyVaultUri
             value: "{{ .Values.env.keyVaultUri }}"
+          - name: AzureADTenantId
+            value: "{{ .Values.env.azureADTenantId }}"
       {{- with .Values.volumes }}
       volumes:
         {{- toYaml . | nindent 8 }}

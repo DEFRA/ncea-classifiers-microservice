@@ -55,6 +55,7 @@ steps:
         serviceAccount.name=$(serviceAccountClassifier)
         ingress.hosts[0].host=$(hostName)
         env.keyVaultUri=$(keyVaultUri)
+        env.azureADTenantId=$(azureADTenantId)
         autoscaling.enabled=$(autoScalingEnabled)
         autoscaling.maxReplicas=$(autoScalingMaxReplicas)
     install: true

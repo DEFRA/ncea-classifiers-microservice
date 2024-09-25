@@ -9,16 +9,7 @@
     <UserSecretsId>67561bbc-9b35-4476-94bc-03b5855ce1bd</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <DockerfileContext>.</DockerfileContext>
-  </PropertyGroup>  <ItemGroup>
-    <Content Remove="ClassifierApiClient.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="ClassifierApiClient.json">
-      <Generator>NSwagCodeGenerator</Generator>
-      <LastGenOutput>ClassifierApiClient.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
+  </PropertyGroup>
 
 
   
@@ -28,7 +19,7 @@
     <PackageReference Include="FluentValidation" Version="11.9.2" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.9.2" />
     <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="8.0.6" />
-    <PackageReference Include="Microsoft.Identity.Web" Version="2.19.1" />
+    <PackageReference Include="Microsoft.Identity.Web" Version="3.0.1" />
     <PackageReference Include="Microsoft.Extensions.Azure" Version="1.7.2" />
     <PackageReference Include="Azure.Security.KeyVault.Secrets" Version="4.6.0" />
     <PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.3.0" />
@@ -57,14 +48,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ncea-classifier-microservice-data\ncea-classifier-microservice-data.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="ClassifierApiClient.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>ClassifierApiClient.json</DependentUpon>
-    </Compile>
   </ItemGroup>
 
 </Project>

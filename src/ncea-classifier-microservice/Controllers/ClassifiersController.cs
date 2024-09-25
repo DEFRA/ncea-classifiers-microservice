@@ -1,12 +1,16 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Ncea.Classifier.Microservice.Models;
 using Ncea.Classifier.Microservice.Models.Response;
 using Ncea.Classifier.Microservice.Data.Services.Contracts;
 using AutoMapper;
 using FluentValidation;
+using Microsoft.Identity.Web.Resource;
 
 namespace Ncea.Classifier.Microservice.Controllers;
 
+[Authorize(Roles = "Api.Read, Api.Write")]
+[RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
 [ApiController]
 [Route("api")]
 public class ClassifiersController : ControllerBase
