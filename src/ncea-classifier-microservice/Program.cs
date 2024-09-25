@@ -135,6 +135,7 @@ static void ConfigureLogging(WebApplicationBuilder builder)
 static void ConfigureAuthentication(WebApplicationBuilder builder)
 {
     var azureAdSection = builder.Configuration.GetSection("AzureAd");
+    azureAdSection.GetSection("TenantId").Value = builder.Configuration.GetValue<string>("AzureADTenantId");
     azureAdSection.GetSection("ClientId").Value = builder.Configuration.GetValue<string>("classifier-app-api-clientid");
 
     builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

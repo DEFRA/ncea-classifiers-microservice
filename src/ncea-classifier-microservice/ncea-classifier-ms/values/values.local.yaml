@@ -1,9 +1,9 @@
 replicaCount: 1
 
 image:
-  repository: devnceinfcr1401.azurecr.io/defra/ncea-classifier-ms
+  repository: $(containerRepositoryFullPath)
   pullPolicy: IfNotPresent
-  tag: 20240225.19_feature-308801-create-deployment-pipeline
+  tag: $(imageTag)
 
 imagePullSecrets: []
 nameOverride: ""
@@ -13,7 +13,7 @@ serviceAccount:
   create: false 
   automount: false  
   annotations: {}  
-  name: "saccount-ncea-devnceinfid1401"
+  name: ""
 
 podAnnotations: {}
 podLabels: 
@@ -34,7 +34,7 @@ ingress:
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
     nginx.ingress.kubernetes.io/use-regex: "true"
   hosts:
-    - host: dev-ncea-classifier.azure.defra.cloud
+    - host: 
       paths:
         - path: /
           pathType: Prefix
@@ -60,4 +60,5 @@ tolerations: []
 affinity: {}
 
 env:
-  keyVaultUri: https://devnceinfkvt1401.vault.azure.net/
+  keyVaultUri: 
+  azureADTenantId:
